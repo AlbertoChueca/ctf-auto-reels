@@ -1,0 +1,134 @@
+name: Daily reels
+
+on:
+  schedule:
+    - cron: "0 16 * * *"   # conversion reel (weekly calendar: pain/faq/method/proof explainers) -> 12:00 New York (13:00 PY)
+    - cron: "0 1 * * *"    # challenge reel (insight + puzzle, "send to a chess parent")        -> 21:00 New York (22:00 PY)
+  workflow_dispatch:
+    inputs:
+      level:
+        description: "story = midday slot (calendar), storytag = evening puzzle challenge"
+        type: choice
+        options: [story, storytag]
+        default: story
+      difficulty:
+        description: "Puzzle level (auto = rotates every day)"
+        type: choice
+        options: [auto, basic, intermediate, advanced]
+        default: auto
+      pillar:
+        description: "Reel type (auto = weekly calendar)"
+        type: choice
+        options: [auto, pain, faq, method, proof, story]
+        default: auto
+      dry_run:
+        description: "Only generate the video (do not publish)"
+        type: boolean
+        default: true
+      force:
+        description: "Publish even if the automatic brake paused publishing"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: reels
+  cancel-in-progress: false
+
+jobs:
+  reel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Choose slot
+        id: lvl
+        run: |
+          case "${{ github.event.schedule }}" in
+            "0 16 * * *") L=story ;;
+            "0 1 * * *")  L=storytag ;;
+            *)            L="${{ inputs.level }}" ;;
+          esac
+          echo "level=$L" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: System packages
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg libcairo2 espeak-ng
+
+      - name: Python packages
+        run: pip install -r requirements.txt
+
+      - name: Cache voice models
+        uses: actions/cache@v4
+        with:
+          path: |
+            models
+            ~/.cache/huggingface
+          key: voices-v4
+
+      - name: Download Kokoro voice
+        run: |
+          mkdir -p models
+          [ -f models/kokoro.onnx ] || curl -sSL -o models/kokoro.onnx https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
+          [ -f models/voices.bin ]  || curl -sSL -o models/voices.bin  https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
+
+      - name: Monthly cache key
+        id: month
+        run: echo "m=$(date +%Y-%m)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache puzzle database
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: puzzles-${{ steps.month.outputs.m }}
+          restore-keys: puzzles-
+
+      - name: Generate and publish
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
+          VOICE_ENGINE: gemini
+          LEVEL_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.difficulty || 'auto' }}
+          GEMINI_VOICE: ${{ vars.GEMINI_VOICE || 'Charon' }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+          # Academy decisions (Settings > Secrets and variables > Actions > Variables). Empty = defaults in brand.py
+          PILLAR_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.pillar || 'auto' }}
+          FORCE_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.force || false }}
+          FB_REELS: ${{ vars.FB_REELS || 'on' }}
+          DM_KEYWORD: ${{ vars.DM_KEYWORD || 'PLAN' }}
+          REEL_FORMAT: ${{ vars.REEL_FORMAT }}
+          NARRATOR: ${{ vars.NARRATOR }}
+          CTA_MODE: ${{ vars.CTA_MODE }}
+          CTA_URL: ${{ vars.CTA_URL }}
+          BOOK_URL: ${{ vars.BOOK_URL }}
+          IG_HANDLE: ${{ vars.IG_HANDLE }}
+          COACH_NAME: ${{ vars.COACH_NAME }}
+          YT_MADE_FOR_KIDS: ${{ vars.YT_MADE_FOR_KIDS || 'false' }}
+          REVIEWER: ${{ vars.REVIEWER || 'on' }}
+          LEAD_WEIGHT: ${{ vars.LEAD_WEIGHT || '1.0' }}
+        run: python run_daily.py ${{ steps.lvl.outputs.level }}
+
+      - name: Save video for review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reel-${{ steps.lvl.outputs.level }}
+          path: out/**
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Remember used puzzles and stories
+        if: always()
+        run: |
+          git config user.name "reels-bot"
+          git config user.email "reels-bot@users.noreply.github.com"
+          for f in used.json log.jsonl story_log.json explainer_log.json review_log.jsonl performance.json strategy_arms.json strategy_report.md playbook.md paused.json failures.json; do [ -f "$f" ] && git add "$f"; done
+          git diff --cached --quiet || (git commit -m "Reel ${{ steps.lvl.outputs.level }} $(date +%F)" && (git push || (git pull --rebase && git push)))

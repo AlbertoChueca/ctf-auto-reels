@@ -1,0 +1,44 @@
+name: Comment bot
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # every hour
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only show what it would answer (do not reply)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: comment-bot
+  cancel-in-progress: false
+
+jobs:
+  bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install requests pillow
+      - name: Answer new comments
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          BOT_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+          CTA_URL: ${{ vars.CTA_URL }}
+          DM_KEYWORD: ${{ vars.DM_KEYWORD || 'PLAN' }}
+          KEYWORD_DMS: ${{ vars.KEYWORD_DMS || 'true' }}
+          IG_HANDLE: ${{ vars.IG_HANDLE }}
+        run: python comment_bot.py
+      - name: Save state
+        run: |
+          git config user.name "reels-bot"
+          git config user.email "reels-bot@users.noreply.github.com"
+          git add handled_comments.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "Comment bot $(date +%F-%H%M)" && (git push || (git pull --rebase && git push)))

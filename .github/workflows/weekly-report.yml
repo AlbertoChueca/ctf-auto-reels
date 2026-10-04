@@ -1,0 +1,28 @@
+name: Weekly report
+
+on:
+  schedule:
+    - cron: "0 13 * * 1"   # Mondays 13:00 UTC (10:00 Paraguay)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write            # the report is opened as an Issue -> GitHub emails it to you
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: Build and publish the report
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AC_API_URL: ${{ vars.AC_API_URL }}
+          AC_API_KEY: ${{ secrets.AC_API_KEY }}
+          AC_ORGANIC_TAG: ${{ vars.AC_ORGANIC_TAG || 'organic-instagram' }}
+        run: python report.py
