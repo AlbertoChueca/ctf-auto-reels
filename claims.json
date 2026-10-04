@@ -1,0 +1,14 @@
+[
+  {"id": "avg_gain", "approved": false,
+   "text": "Our students gain on average 300 rating points in their first 3 months.",
+   "numbers": ["300", "three hundred"],
+   "note": "Pon approved: true SOLO si es un dato real y medido. Habilita el bloque de rating que sube y el pilar 'prueba'."},
+  {"id": "fide_titles", "approved": false,
+   "text": "Our students have earned official FIDE titles.",
+   "numbers": [],
+   "note": "Pon approved: true solo si es cierto."},
+  {"id": "limited_spots", "approved": false,
+   "text": "Group spots are limited because groups have 2 to 6 students of the same level.",
+   "numbers": ["2", "6", "two", "six"],
+   "note": "Habilita el bloque de plazas limitadas. Solo si es cierto."}
+]

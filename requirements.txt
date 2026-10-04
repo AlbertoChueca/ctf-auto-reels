@@ -1,0 +1,10 @@
+chess==1.10.0
+cairosvg
+pillow
+numpy
+soundfile
+kokoro-onnx
+zstandard
+requests
+scipy
+faster-whisper==1.1.1
