@@ -6,22 +6,36 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
 
 ## Qué se publica (calendario automático, hora de Nueva York)
 
-| Día | 12:00 – reel de conversión (motion graphics) | 21:00 – reto (insight + puzzle) |
+| Día | 12:00 | 21:00 |
 |---|---|---|
-| Lunes | Dolor → solución | Test para tu hijo |
-| Martes | Error que frena el rating (insight + puzzle) | Test para tu hijo |
-| Miércoles | Pregunta de padres (FAQ) | Envíaselo a otro padre |
-| Jueves | Método / hoja de ruta | Test para tu hijo |
-| Viernes | Dolor → solución | Test para tu hijo |
-| Sábado | Prueba (solo con datos aprobados; si no, método) | Test para tu hijo |
-| Domingo | Pregunta de padres (FAQ) | Test para tu hijo |
+| Lunes | Dolor → solución | Puzzle para tu hijo |
+| Martes | **Éxito de alumno** | **Remix** de un reel anterior |
+| Miércoles | Pregunta de padres (FAQ) | Puzzle para tu hijo |
+| Jueves | **Remix** de un reel anterior | Pregunta de padres (FAQ) |
+| Viernes | Método / hoja de ruta | Puzzle para tu hijo |
+| Sábado | **Éxito de alumno** | Dolor → solución |
+| Domingo | **Remix** de un reel anterior | Puzzle "envíaselo a otro padre" |
 
-**Motion graphics** (`make_explainer.py`): mismo estilo que el vídeo "Stuck in chess?". Gemini solo escribe el
-guion y elige entre 13 bloques de escena ya diseñados (niña frustrada, rating que baja, "lo que no funciona",
-coach, roadmap, pasos del método, insignias, pregunta/respuesta, progreso, trofeo…). El diseño nunca depende de
-que una IA dibuje bien.
+- **Éxito de alumno**: historias reales sacadas SOLO de lo que la Academia ya publica: las páginas de alumnos de la
+  web (`success_sync.py`, cada domingo) y los casos que aparecen en tus propios reels (`content_bank.py`). Rota los
+  casos para no repetir. Por defecto no dice nombres ("one of our students"); con la variable
+  `STUDENT_NAMES=first` usa el nombre de pila que ya aparece en tu web.
+- **Remix**: cada domingo el sistema analiza con Gemini tus reels publicados (los del editor y los automáticos):
+  tema, gancho, puntos clave, por qué funcionó. Los mejores se reexplican de otra forma (otro gancho, otro ángulo)
+  sin repetir la misma idea en 45 días. Todo queda en `content_bank.json`.
+- **Motion graphics** (`make_explainer.py`): estilo del vídeo "Stuck in chess?" con 15 bloques de escena ya
+  diseñados; Gemini solo escribe el guion y elige bloques.
+- **Puzzle**: puzzle de Lichess con cuenta atrás y solución animada.
 
-**Insight + puzzle** (`make_story.py`): ilustraciones de Gemini + puzzle de Lichess para el hijo.
+## 100 % gratis
+- `IMAGE_GEN=off` (por defecto): no se usa generación de imágenes con IA. Los puzzles salen en el formato
+  animado sin ilustraciones. Si algún día quieres el formato con ilustraciones, pon `IMAGE_GEN=on` (tiene coste).
+- Gemini se usa en su capa gratuita (guiones, voz y análisis de vídeos). Si la voz de Gemini supera el límite
+  gratuito, el sistema cambia solo a una voz local gratuita (Kokoro) para que el reel salga igualmente.
+- Instagram, Facebook Reels y el bot usan la API gratuita de Meta.
+- GitHub Actions: un repo privado tiene 2.000 minutos gratis al mes. Con 2 reels/día, el bot cada 2 horas y
+  los trabajos semanales se queda por debajo. Si algún mes se acercara al límite, GitHub avisa por email.
+- YouTube/TikTok vía Zernio es opcional; sin `ZERNIO_API_KEY` simplemente no se publica ahí.
 
 ## Conversión
 - **CTA** que el piloto automático prueba y optimiza: comentar la palabra clave (por defecto `PLAN`), ver la VSL,
@@ -50,8 +64,9 @@ que una IA dibuje bien.
    - `GEMINI_API_KEY` (pon un aviso de presupuesto en Google Cloud; coste estimado 10-20 $/mes).
    - `ZERNIO_API_KEY` (opcional, YouTube/TikTok; necesitas un perfil distinto al de StreakChess).
    - `AC_API_KEY` (opcional, para contar leads orgánicos de ActiveCampaign en el informe).
-3. **Datos aprobados**: en `claims.json` pon `"approved": true` SOLO en las cifras reales y medidas
-   (Elo medio ganado, títulos FIDE, plazas limitadas). En `cases.json`, casos con permiso de la familia.
+3. **Datos aprobados**: `claims.json` ya trae aprobadas las cifras de tu web (250+ alumnos, 30+ campeones
+   nacionales, 15+ países, títulos). `cases.json` trae los casos de Pranav y Vyom de tu web y se amplía solo cada
+   domingo. Pon `"approved": false` en cualquiera que no quieras usar.
 4. **Prueba**: Actions → *Daily reels* → Run workflow → elige `pillar` (pain, faq, method…) con `dry_run`
    marcado. El vídeo queda en *Artifacts*.
 5. Listo. Los horarios corren solos.
@@ -68,6 +83,9 @@ que una IA dibuje bien.
 | `NARRATOR` | `academy` | `coach` = primera persona como entrenador principal. |
 | `LEAD_WEIGHT` | `1.0` | Peso de visitas al perfil/follows en la recompensa. |
 | `AC_API_URL` | — | URL de tu cuenta de ActiveCampaign (para el informe). |
+| `IMAGE_GEN` | `off` | `on` = puzzles con ilustraciones de IA (de pago). |
+| `STUDENT_NAMES` | `none` | `first` = usar el nombre de pila de los alumnos que ya aparecen en tu web. |
+| `BANK_MAX_NEW` | `8` | Vídeos nuevos analizados por semana. |
 
 ## Personajes y logo
 `assets/kit/` contiene los personajes recortados de tu vídeo y `assets/logo_h.png` tu logo, de forma
@@ -77,7 +95,8 @@ mismo nombre (`girl_sad.png`, `girl_thinking.png`, `girl_standing.png`, `girl_tr
 
 ## Workflows
 - *Daily reels*: 2 al día (13:00 y 22:00 hora de Paraguay).
-- *Comment bot*: cada hora, respuestas públicas + DM de palabra clave.
+- *Comment bot*: cada 2 horas, respuestas públicas + DM de palabra clave.
+- *Content bank*: domingos, lee los éxitos de tu web y analiza tus reels publicados.
 - *Weekly report*: lunes 10:00 Paraguay, llega como Issue a tu email.
 - *Story reel test* y *Voice samples*: pruebas sin publicar.
 

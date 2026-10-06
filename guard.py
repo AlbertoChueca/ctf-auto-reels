@@ -35,6 +35,14 @@ def approved_text():
     return "APPROVED CLAIMS (the ONLY result statements allowed, use them exactly):\n" + "\n".join(f"- {c['text']}" for c in a)
 
 
+def cases():
+    """Approved real student cases (website, the account's own reels, or added by hand)."""
+    try:
+        return [c for c in json.load(open(os.path.join(HERE, "cases.json"))) if c.get("approved")]
+    except Exception:
+        return []
+
+
 def has(claim_id):
     return any(c.get("id") == claim_id for c in approved())
 
@@ -44,14 +52,12 @@ def claims_ok(text):
     allowed = set()
     for c in approved():
         allowed |= {str(n).lower() for n in c.get("numbers", [])}
-    try:
-        for c in json.load(open(os.path.join(HERE, "cases.json"))):
-            if c.get("approved"):
-                allowed |= set(re.findall(r"\d[\d,.]*", c.get("text", "")))
-    except Exception:
-        pass
+    for c in cases():
+        allowed |= set(re.findall(r"\d[\d,.]*", c.get("text", "") + " " + " ".join(c.get("facts", []))))
+        allowed |= {str(n).lower() for n in c.get("numbers", [])}
     bad = []
-    for m in CLAIM_RE.finditer(text or ""):
+    text = re.sub(r"\b(one|two|three) of (our|the|my|his|her|their|these|those)\b", " ", text or "", flags=re.I)
+    for m in CLAIM_RE.finditer(text):
         num = m.group(1).lower().strip()
         if num not in allowed and num.replace(",", "") not in allowed:
             bad.append(m.group(0))

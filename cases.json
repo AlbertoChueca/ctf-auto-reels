@@ -1,6 +1,13 @@
 [
-  {
-    "approved": false,
-    "text": "EJEMPLO (cámbialo y pon approved: true solo con permiso de la familia): A 10-year-old student went from 1150 to 1480 USCF in 4 months of group training."
-  }
+  {"id": "pranav", "approved": true, "source": "website", "name": "Pranav",
+   "url": "https://chesstalentsfactory.com/our-students/pranav-sathish/",
+   "text": "From 1100 to 1800+ rating in only 13 months. Later crossed 2300 FIDE rating and earned the National Master title (2023).",
+   "facts": ["From 1100 to 1800+ rating in 13 months", "Crossed 2300 FIDE rating", "National Master title in 2023"],
+   "numbers": ["1100", "1800", "13", "2300", "2023"]},
+  {"id": "vyom", "approved": true, "source": "website", "name": "Vyom",
+   "url": "https://chesstalentsfactory.com/our-students/vyom-vidyarthi/",
+   "text": "California State Champion at 10, National Grade K-6 Champion at 12, FIDE Master and International Master at 14, Pan American Junior Champion at 15.",
+   "facts": ["California State Champion at age 10", "National Master at age 12", "International Master title at age 14",
+             "Pan American Junior Champion at age 15", "North American Junior U20 Champion"],
+   "numbers": ["10", "12", "14", "15", "20", "2017", "2019", "2021", "2022"]}
 ]

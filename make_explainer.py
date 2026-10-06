@@ -61,6 +61,8 @@ BLOCKS = {
     "rating_up":    "rating gain counter (ONLY with an approved claim). params: {}",
     "trophy":       "the child lifts a trophy, confetti. params: {}",
     "limited":      "calendar with spots filling (ONLY with the approved limited_spots claim). params: {}",
+    "before_after": "REAL student rating progress counter. params: {\"from\": int, \"to\": int, \"label\": \"in 13 months\"} - numbers ONLY from TODAY'S STUDENT CASE",
+    "success_timeline": "REAL student milestones appear one by one with medals. params: {\"milestones\": [2-4 items, max 7 words each, ONLY from TODAY'S STUDENT CASE]}",
 }
 
 PILLARS = {
@@ -69,6 +71,10 @@ PILLARS = {
     "faq": [["faq_question"], ["faq_answer"], ["method_steps", "mentor", "roadmap"], ["authority"]],
     "method": [["pain", "rating_drop"], ["roadmap"], ["method_steps"], ["authority"], ["progress", "trophy"]],
     "proof": [["pain", "rating_drop"], ["mentor"], ["rating_up", "progress"], ["trophy"], ["authority"]],
+    "success": [["pain", "rating_drop"], ["before_after", "success_timeline"], ["success_timeline", "method_steps"],
+                ["trophy", "authority"]],
+    "remix": [["pain", "rating_drop", "faq_question"], ["wrong_way", "faq_answer", "mentor"],
+              ["roadmap", "method_steps"], ["authority", "progress", "trophy"]],
 }
 
 PILLAR_BRIEF = {
@@ -82,6 +88,11 @@ PILLAR_BRIEF = {
               "master next, why order matters, assignments between lessons.",
     "proof": "Show credibility using ONLY the approved claims and facts: what changes when a child trains with the "
              "right method.",
+    "success": "Tell the REAL story of TODAY'S STUDENT CASE below: where the child started, what changed with structured "
+               "training, the milestones reached. Use ONLY its facts, exactly. Then connect it to the parent watching "
+               "(it is a pattern, not a promise).",
+    "remix": "Re-explain the IDEA TO REMIX below in a completely new way: a new hook, a new angle, a new example or "
+             "analogy. Do not copy its wording or structure. It must feel like a fresh reel to someone who saw the original.",
 }
 
 
@@ -91,6 +102,8 @@ def allowed_blocks():
         out.discard("rating_up")
     if not guard.has("limited_spots"):
         out.discard("limited")
+    if not guard.cases():
+        out -= {"before_after", "success_timeline"}
     return out                      # a trophy is a symbol of goals: allowed without any number
 
 
@@ -104,6 +117,7 @@ PROMPT = """You write a {secs}-second vertical motion-graphics reel for {name}.
 FACTS you may use freely: {facts}
 
 PILLAR: {pillar}. {brief}
+{context}
 TODAY'S CREATIVE BRIEF (A/B experiment, follow it): hook style = {hook_style}; theme = {theme}.
 {playbook}
 Recent reels (do NOT repeat their idea or headlines): {recent}
@@ -142,7 +156,46 @@ def _recent(n=12):
         return []
 
 
-def write_script(pillar, arms=None):
+NAMES = os.environ.get("STUDENT_NAMES", "none").lower()     # none | first
+
+
+def pick_case():
+    """Least recently featured approved case."""
+    cases = guard.cases()
+    if not cases:
+        return None
+    used = {}
+    for i, r in enumerate(_recent(200)):
+        if r.get("case"):
+            used[r["case"]] = i
+    return min(cases, key=lambda c: used.get(c["id"], -1))
+
+
+def case_text(c):
+    who = (c.get("name") or "one of our students") if NAMES == "first" else "one of our students"
+    return (f"TODAY'S STUDENT CASE (real, published by the academy; refer to the child as \"{who}\", never any other "
+            f"name, never invent anything): {c['text']} | Facts: " + "; ".join(c.get("facts", [])))
+
+
+def context_for(pillar):
+    if pillar == "success":
+        c = pick_case()
+        if c:
+            return case_text(c), {"case": c["id"]}
+    if pillar == "remix":
+        try:
+            import content_bank
+            it = content_bank.pick_remix()
+        except Exception:
+            it = None
+        if it:
+            a = it["analysis"]
+            return (f"IDEA TO REMIX (from one of our past reels; re-explain it, do not copy): {a.get('reusable_idea')} | "
+                    f"Key points: {'; '.join(a.get('key_points', []))} | Why it worked: {a.get('why_it_works')}"), {"remix_of": it["id"]}
+    return "", {}
+
+
+def write_script(pillar, arms=None, context=""):
     import make_story as MS, strategy
     arms = arms or {}
     allowed = allowed_blocks()
@@ -156,7 +209,7 @@ def write_script(pillar, arms=None):
         playbook=("WHAT WORKS FOR OUR AUDIENCE (from real results):\n" + strategy.playbook_text()) if strategy.playbook_text() else "",
         recent="; ".join(f"{r.get('pillar')}: {r.get('title')} ({r.get('headline')})" for r in recent) or "none",
         n=n, slots=_slots_text(pillar, allowed), catalog=json.dumps({k: v for k, v in BLOCKS.items() if k in allowed}),
-        words="75-110")}]}],
+        words="75-110", context=context)}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 1.0}}
     names = MS.TEXT_MODELS + [m for m in MS._available() if "flash" in m and not any(
         x in m for x in ("image", "tts", "live", "audio", "lite"))]
@@ -197,10 +250,23 @@ def validate(sc, pillar):
         for key, k, nw in (("items", 3, 3), ("steps", 3, 4), ("points", 3, 5)):
             if key in p:
                 p[key] = [" ".join(str(x).split()[:nw]) for x in p[key] if str(x).strip()][:k]
+        if s["block"] == "before_after":
+            try:
+                a, b = int(p.get("from")), int(p.get("to"))
+                ok_n, _ = guard.claims_ok(f"{a} rating {b} rating")
+                if not ok_n or b <= a:
+                    raise ValueError
+                p["from"], p["to"] = a, b
+                p["label"] = " ".join(str(p.get("label", "")).split()[:4])
+            except Exception:
+                s["block"] = "success_timeline" if "success_timeline" in allowed else "progress"
+        if s["block"] == "success_timeline":
+            p["milestones"] = [" ".join(str(x).split()[:7]) for x in p.get("milestones", []) if str(x).strip()][:4] or ["Real progress"]
         if s["block"] == "faq_question":
             p["question"] = " ".join(str(p.get("question") or s["headline"]).split()[:8])
         s["params"] = p
     text = " ".join(f"{s['headline']} {s['narration']} {json.dumps(s['params'])}" for s in scenes if s["block"] != "rating_drop")
+    text = re.sub(r"\b(?:age|aged|at)\s+\d+\b", " ", text)       # ages are not result claims
     text += " " + sc.get("caption_hook", "") + " " + sc.get("caption_body", "")
     ok, bad = guard.claims_ok(text)
     if not ok:
@@ -730,10 +796,71 @@ def b_limited(fr, t, dur, s):
     headline(fr, s["headline"], s["highlight"], t, dark=True)
 
 
+def medal(size):
+    def mk():
+        im = Image.new("RGBA", (size, size), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+        d.polygon([(size * .3, 0), (size * .45, size * .45), (size * .55, size * .45), (size * .7, 0)], fill=(60, 110, 200))
+        d.ellipse([size * .18, size * .35, size * .82, size * .99], fill=(247, 190, 40), outline=(205, 140, 20), width=max(3, size // 18))
+        im.alpha_composite(star(int(size * .38), (255, 240, 190)), (int(size * .31), int(size * .48)))
+        return im
+    return cached(("medal", size), mk)
+
+
+def b_before_after(fr, t, dur, s):
+    fr.alpha_composite(bg_orange())
+    p = s["params"]; a, b = p["from"], p["to"]
+    character(fr, "girl_trophy" if t > dur * 0.65 else "girl_standing", W / 2 + 220, 1680,
+              1000 if t > dur * 0.65 else 640, t, 0.0 if t <= dur * 0.65 else dur * 0.65)
+    k = ease_in_out((t - 0.7) / max(1.0, dur - 1.8))
+    val = a + (b - a) * k
+    lt = t - 0.3
+    if lt > 0:
+        c = card(520, 250).copy(); d = ImageDraw.Draw(c)
+        d.text((60, 40), "Rating", font=font(F_HEAD, 46), fill=ORANGE)
+        d.text((60, 96), f"{int(val)}" + ("+" if k >= 1 and "+" in str(p.get("label", "")) else ""), font=font(F_HEAD, 128),
+               fill=(30, 140, 70) if k >= 1 else INK)
+        paste(fr, c, W / 2 - 150, 640, 0.7 + 0.3 * back(lt / 0.45), min(1, lt / 0.15))
+        if p.get("label") and k > 0.3:
+            lab = chip(p["label"], 40, icon="check")
+            paste(fr, lab, W / 2 - 150, 860, back((k - 0.3) / 0.3), 1)
+    headline(fr, s["headline"], s["highlight"], t)
+
+
+def b_success_timeline(fr, t, dur, s):
+    fr.alpha_composite(floor_light())
+    character(fr, "girl_trophy", W - 160, 1660, 720, t, 0.0)
+    ms = s["params"].get("milestones") or []
+    d = ImageDraw.Draw(fr)
+    n = max(1, len(ms))
+    x0, y_top = 110, 600
+    shown = 0
+    for i, m in enumerate(ms):
+        lt = t - (0.5 + i * max(0.55, (dur - 1.6) / n))
+        if lt < 0:
+            continue
+        shown = i + 1
+        y = y_top + i * 200
+        fr.alpha_composite(medal(96), (x0 - 48, int(y - 48 + (1 - back(lt / 0.4)) * 30)))
+        f = font(F_UI, 44); words, lines, cur = m.split(), [], ""
+        for w in words:
+            if cur and f.getlength(cur + " " + w) > 560:
+                lines.append(cur); cur = w
+            else:
+                cur = (cur + " " + w).strip()
+        lines.append(cur)
+        a = int(255 * min(1, lt / 0.2))
+        for li, ln in enumerate(lines):
+            d.text((x0 + 80, y - 26 * len(lines) + li * 54 + 2), ln, font=f, fill=INK + (a,))
+    if shown > 1:
+        d.line([(x0, y_top + 50), (x0, y_top + (shown - 1) * 200 - 50)], fill=ORANGE, width=8)
+    headline(fr, s["headline"], s["highlight"], t)
+
+
 DRAW = {"pain": b_pain, "rating_drop": b_rating_drop, "wrong_way": b_wrong_way, "mentor": b_mentor,
         "roadmap": b_roadmap, "method_steps": b_method_steps, "authority": b_authority,
         "faq_question": b_faq_question, "faq_answer": b_faq_answer, "progress": b_progress,
-        "rating_up": b_rating_up, "trophy": b_trophy, "limited": b_limited}
+        "rating_up": b_rating_up, "trophy": b_trophy, "limited": b_limited,
+        "before_after": b_before_after, "success_timeline": b_success_timeline}
 
 
 def b_cta(fr, t, dur, kind):
@@ -792,7 +919,10 @@ def build(seed, out, pillar="pain", arms=None, mock=None):
     arms = arms or {}
     mock = os.environ.get("STORY_MOCK") == "1" if mock is None else mock
     rng = random.Random(seed)
-    sc = mock_script(pillar) if mock else write_script(pillar, arms)
+    ctx, extra = ("", {}) if mock else context_for(pillar)
+    if pillar in ("success", "remix") and not ctx:
+        pillar = "pain"                                    # nothing to feature yet -> a pain reel instead
+    sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx)
     if not mock and os.environ.get("REVIEWER", "on") != "off":
         sc = review_script(sc, pillar)
     scenes = sc["scenes"]
@@ -873,7 +1003,13 @@ def build(seed, out, pillar="pain", arms=None, mock=None):
         except Exception as e:
             print("explainer review skipped:", e)
     log = _recent(200) + [{"pillar": pillar, "title": sc.get("title"), "headline": scenes[0]["headline"],
-                           "date": time.strftime("%Y-%m-%d")}]
+                           "date": time.strftime("%Y-%m-%d"), **extra}]
+    if extra.get("remix_of"):
+        try:
+            import content_bank; content_bank.mark_remixed(extra["remix_of"])
+        except Exception as e:
+            print("mark_remixed:", e)
+    meta.update(extra)
     json.dump(log[-200:], open(LOG, "w"), indent=0)
     return meta
 

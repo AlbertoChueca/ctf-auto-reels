@@ -45,13 +45,23 @@ if os.environ.get("LEVEL_OVERRIDE", "auto") in LEVELS:      # manual run with a 
 
 # ---- weekly calendar (US date): the midday slot is the conversion reel, the evening slot is the puzzle challenge
 import guard
-CALENDAR = {0: "pain", 1: "story", 2: "faq", 3: "method", 4: "pain", 5: "proof", 6: "faq"}   # Mon..Sun
+# Mon..Sun. Midday = conversion reel, evening = more variety (puzzles + other formats). 14 different reels a week.
+MIDDAY = {0: "pain", 1: "success", 2: "faq", 3: "remix", 4: "method", 5: "success", 6: "remix"}
+EVENING = {0: "puzzle", 1: "remix", 2: "puzzle", 3: "faq", 4: "puzzle", 5: "pain", 6: "puzzle"}
 us_today = (now - datetime.timedelta(hours=5)).date()
+wd = us_today.weekday()
 pillar = os.environ.get("PILLAR_OVERRIDE", "auto")
-if pillar not in ("pain", "faq", "method", "proof", "story"):
-    pillar = CALENDAR[us_today.weekday()] if slot == "story" else "story"
+if pillar not in ("pain", "faq", "method", "proof", "success", "remix", "puzzle", "story"):
+    pillar = MIDDAY[wd] if slot == "story" else EVENING[wd]
+if pillar == "story":
+    pillar = "puzzle"
+if pillar == "puzzle" and slot == "storytag":
+    mode = "tagfriend" if wd == 6 else "level"
 if pillar == "proof" and not (guard.has("avg_gain") or guard.has("fide_titles")):
-    pillar = "method"                                   # no approved proof yet -> method reel instead
+    pillar = "method"
+if pillar == "success" and not guard.cases():
+    pillar = "pain"
+IMAGE_GEN = os.environ.get("IMAGE_GEN", "off") == "on"   # off = free mode: no AI image generation
 why = guard.paused()
 if why and not dry and os.environ.get("FORCE_PUBLISH") != "true":
     print(f"PAUSED: {why}. Delete paused.json (or run with force) to resume.")
@@ -88,7 +98,10 @@ out = f"out/{today}_{slot}_{now.hour:02d}.mp4"
 meta, engine = None, None
 # Every slot gets the premium story reel (same as "Story reel test"). If the story pipeline has a transient
 # problem it is retried once; only then does it fall back so a post always goes out.
-chain = (["explainer", "explainer", "story", "hype"] if pillar != "story" else ["story", "story", "hype", "hype"])
+if pillar != "puzzle":
+    chain = ["explainer", "explainer", "hype"]
+else:
+    chain = ["story", "story", "hype", "hype"] if IMAGE_GEN else ["hype", "hype"]
 errors = []
 for eng in chain:
     try:
@@ -127,7 +140,7 @@ summary = os.environ.get("GITHUB_STEP_SUMMARY")
 if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
         ok = engine == "story"
-        ok = engine in ("story", "explainer") and (engine == "explainer" or pillar == "story")
+        ok = (engine == "explainer" and pillar != "puzzle") or (pillar == "puzzle" and engine in ("story", "hype"))
         f.write(f"## {'✅ Premium reel' if ok else '⚠️ Fallback reel'} · pillar `{pillar}` · engine `{engine}`\n\n"
                 f"- Slot: `{slot}` · level: `{level}` · mode: `{mode}` · CTA: `{arms.get('cta', brand.CTA_MODE)}`\n"
                 f"- Engine: `{engine}` · voice: `{voice_used}` · format: `{brand.FORMAT}` · narrator: `{brand.NARRATOR}`\n"
