@@ -6,15 +6,17 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
 
 ## Qué se publica (calendario automático, hora de Nueva York)
 
+Sin puzzles: todo son reels de motion graphics para padres.
+
 | Día | 12:00 | 21:00 |
 |---|---|---|
-| Lunes | Dolor → solución | Puzzle para tu hijo |
+| Lunes | Dolor → solución | Pregunta de padres (FAQ) |
 | Martes | **Éxito de alumno** | **Remix** de un reel anterior |
-| Miércoles | Pregunta de padres (FAQ) | Puzzle para tu hijo |
-| Jueves | **Remix** de un reel anterior | Pregunta de padres (FAQ) |
-| Viernes | Método / hoja de ruta | Puzzle para tu hijo |
-| Sábado | **Éxito de alumno** | Dolor → solución |
-| Domingo | **Remix** de un reel anterior | Puzzle "envíaselo a otro padre" |
+| Miércoles | Pregunta de padres (FAQ) | Dolor → solución |
+| Jueves | **Remix** de un reel anterior | **Éxito de alumno** |
+| Viernes | Método / hoja de ruta | **Remix** de un reel anterior |
+| Sábado | **Éxito de alumno** | Pregunta de padres (FAQ) |
+| Domingo | **Remix** de un reel anterior | Método / hoja de ruta |
 
 - **Éxito de alumno**: historias reales sacadas SOLO de lo que la Academia ya publica: las páginas de alumnos de la
   web (`success_sync.py`, cada domingo) y los casos que aparecen en tus propios reels (`content_bank.py`). Rota los
@@ -25,11 +27,11 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
   sin repetir la misma idea en 45 días. Todo queda en `content_bank.json`.
 - **Motion graphics** (`make_explainer.py`): estilo del vídeo "Stuck in chess?" con 15 bloques de escena ya
   diseñados; Gemini solo escribe el guion y elige bloques.
-- **Puzzle**: puzzle de Lichess con cuenta atrás y solución animada.
+- **Respaldo**: si el guion de IA falla dos veces, se usa un guion de reserva ya escrito (`evergreen.json`, solo
+  hechos reales de tu web). Siempre sale un reel de la Academia.
 
 ## 100 % gratis
-- `IMAGE_GEN=off` (por defecto): no se usa generación de imágenes con IA. Los puzzles salen en el formato
-  animado sin ilustraciones. Si algún día quieres el formato con ilustraciones, pon `IMAGE_GEN=on` (tiene coste).
+- No se usa generación de imágenes con IA: todo el diseño está hecho en código.
 - Gemini se usa en su capa gratuita (guiones, voz y análisis de vídeos). Si la voz de Gemini supera el límite
   gratuito, el sistema cambia solo a una voz local gratuita (Kokoro) para que el reel salga igualmente.
 - Instagram, Facebook Reels y el bot usan la API gratuita de Meta.
@@ -67,7 +69,7 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
 3. **Datos aprobados**: `claims.json` ya trae aprobadas las cifras de tu web (250+ alumnos, 30+ campeones
    nacionales, 15+ países, títulos). `cases.json` trae los casos de Pranav y Vyom de tu web y se amplía solo cada
    domingo. Pon `"approved": false` en cualquiera que no quieras usar.
-4. **Prueba**: Actions → *Daily reels* → Run workflow → elige `pillar` (pain, faq, method…) con `dry_run`
+4. **Prueba**: Actions → *Daily reels* → Run workflow → elige `pillar` (success, remix, faq…) con `dry_run`
    marcado. El vídeo queda en *Artifacts*.
 5. Listo. Los horarios corren solos.
 
@@ -83,7 +85,6 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
 | `NARRATOR` | `academy` | `coach` = primera persona como entrenador principal. |
 | `LEAD_WEIGHT` | `1.0` | Peso de visitas al perfil/follows en la recompensa. |
 | `AC_API_URL` | — | URL de tu cuenta de ActiveCampaign (para el informe). |
-| `IMAGE_GEN` | `off` | `on` = puzzles con ilustraciones de IA (de pago). |
 | `STUDENT_NAMES` | `none` | `first` = usar el nombre de pila de los alumnos que ya aparecen en tu web. |
 | `BANK_MAX_NEW` | `8` | Vídeos nuevos analizados por semana. |
 
@@ -98,6 +99,6 @@ mismo nombre (`girl_sad.png`, `girl_thinking.png`, `girl_standing.png`, `girl_tr
 - *Comment bot*: cada 2 horas, respuestas públicas + DM de palabra clave.
 - *Content bank*: domingos, lee los éxitos de tu web y analiza tus reels publicados.
 - *Weekly report*: lunes 10:00 Paraguay, llega como Issue a tu email.
-- *Story reel test* y *Voice samples*: pruebas sin publicar.
+- *Voice samples*: escucha voces sin publicar nada.
 
 Pausar todo: Actions → *Daily reels* → "…" → *Disable workflow*.

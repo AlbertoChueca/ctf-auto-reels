@@ -135,7 +135,7 @@ FACTS = ["International Masters", "Small groups of 2-6", "Private 1-on-1 lessons
 PARENT_LINE = (f"{NAME}: online high-performance chess academy led by {COACH}. Small groups and private lessons "
                "with International Masters.")
 
-TAGS = ["chess", "chesspuzzle", "chesstraining", "chesscoach", "chesslessons", "chesskids", "kidschess",
+TAGS = ["chess", "chessparenting", "chesstraining", "chesscoach", "chesslessons", "chesskids", "kidschess",
         "scholasticchess", "chessparents", "chessforkids", "chesstactics", "chessacademy", "uschess", "learnchess",
         "chesstournament", "chessimprovement"]
 
@@ -144,7 +144,7 @@ def hashtags(rng):
     return ["#" + t for t in rng.sample(TAGS, rng.randint(3, 5))]
 
 
-YT_TAGS = ["chess", "chess puzzle", "chess lessons for kids", "chess coach", "chesstalentsfactory"]
+YT_TAGS = ["chess", "chess coaching", "chess lessons for kids", "chess coach", "chesstalentsfactory"]
 
 
 # ---------------------------------------------------------------- logo

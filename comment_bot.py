@@ -1,7 +1,7 @@
 """Answer new comments on recent reels with a short public reply (optional private DM with the academy link).
 
 Runs every hour from GitHub Actions. Uses only the official Instagram API on our own posts.
-- Checks the correct first move (from log.jsonl) and congratulates people who got it.
+- (Puzzle answers are only checked if a reel ever carries a puzzle; the academy reels have none.)
 - One DM per person per week at most (no spam), public replies are varied.
 - Remembers handled comments in handled_comments.json.
 Env: IG_TOKEN. Optional: BOT_DRY_RUN=true (print only).
@@ -29,12 +29,12 @@ PUBLIC_CORRECT = [
     "Excellent! {move} is correct 💪 Parents: free training video in our bio",
 ]
 PUBLIC_OTHER = [
-    "Thanks for playing! ♟️ The full solution is at the end of the video",
-    "Good try! Watch till the end for the answer 👀",
-    "Love it! ♟️ New challenge every day",
-    "Thanks for the comment! 🔥 Check every check and capture first",
-    "Great to see you here! ♟️ Parents: our free training video is in the bio",
-    "Keep calculating! 💪 Another one tomorrow",
+    "Thanks for sharing! ♟️ Comment \"{kw}\" and we'll send you our free training video",
+    "Great point! 🙌 Parents: our free training video is in the bio",
+    "Thank you! ♟️ Follow for more tips for chess parents",
+    "Love this! 💪 Comment \"{kw}\" if you'd like our free video for parents",
+    "Thanks for being here! ♟️ New video for chess parents every day",
+    "Appreciate it! 🔥 Questions about your child's training? Ask below",
 ]
 PUBLIC_KEYWORD = [
     "Sent! 📩 Check your DMs",
@@ -97,7 +97,7 @@ def main():
             move = solutions.get(m["id"])
             ok = got_it(c.get("text", ""), move)
             kw = bool(KW.search(c.get("text", "")))
-            pub = random.choice(PUBLIC_KEYWORD if kw else PUBLIC_CORRECT if ok else PUBLIC_OTHER).format(move=move)
+            pub = random.choice(PUBLIC_KEYWORD if kw else PUBLIC_CORRECT if ok else PUBLIC_OTHER).format(move=move, kw=brand.KEYWORD)
             last_dm = handled["dm"].get(user)
             can_dm = not last_dm or (now - datetime.datetime.fromisoformat(last_dm)).days >= 7
             dm = DM_KEYWORD if kw else (DM_CORRECT if ok else DM_OTHER).format(move=move)

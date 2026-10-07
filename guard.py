@@ -58,7 +58,7 @@ def claims_ok(text):
     bad = []
     text = re.sub(r"\b(one|two|three) of (our|the|my|his|her|their|these|those)\b", " ", text or "", flags=re.I)
     for m in CLAIM_RE.finditer(text):
-        num = m.group(1).lower().strip()
+        num = m.group(1).lower().strip().rstrip(".,")
         if num not in allowed and num.replace(",", "") not in allowed:
             bad.append(m.group(0))
     return (not bad), bad

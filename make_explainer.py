@@ -266,8 +266,8 @@ def validate(sc, pillar):
             p["question"] = " ".join(str(p.get("question") or s["headline"]).split()[:8])
         s["params"] = p
     text = " ".join(f"{s['headline']} {s['narration']} {json.dumps(s['params'])}" for s in scenes if s["block"] != "rating_drop")
-    text = re.sub(r"\b(?:age|aged|at)\s+\d+\b", " ", text)       # ages are not result claims
     text += " " + sc.get("caption_hook", "") + " " + sc.get("caption_body", "")
+    text = re.sub(r"\b(?:age|aged|at)\s+\d+\b", " ", text)       # ages are not result claims
     ok, bad = guard.claims_ok(text)
     if not ok:
         raise ValueError(f"unapproved claims: {bad}")
@@ -914,17 +914,31 @@ def music(total):
 
 
 # ======================================================================= build
-def build(seed, out, pillar="pain", arms=None, mock=None):
+def evergreen_script(pillar):
+    """Pre-written fallback (real facts only), least recently used; same pillar if possible."""
+    lib = json.load(open(os.path.join(HERE, "evergreen.json")))
+    cases = {c["id"] for c in guard.cases()}
+    lib = [x for x in lib if not x.get("case") or x["case"] in cases]
+    used = {r.get("evergreen"): i for i, r in enumerate(_recent(200)) if r.get("evergreen")}
+    same = [x for x in lib if x["pillar"] == pillar] or lib
+    sc = json.loads(json.dumps(min(same, key=lambda x: used.get(x["id"], -1))))
+    return validate(sc, sc["pillar"]), sc["pillar"], {"evergreen": sc["id"], **({"case": sc["case"]} if sc.get("case") else {})}
+
+
+def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
     import voice
     arms = arms or {}
     mock = os.environ.get("STORY_MOCK") == "1" if mock is None else mock
     rng = random.Random(seed)
-    ctx, extra = ("", {}) if mock else context_for(pillar)
-    if pillar in ("success", "remix") and not ctx:
-        pillar = "pain"                                    # nothing to feature yet -> a pain reel instead
-    sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx)
-    if not mock and os.environ.get("REVIEWER", "on") != "off":
-        sc = review_script(sc, pillar)
+    if evergreen:
+        sc, pillar, extra = evergreen_script(pillar)
+    else:
+        ctx, extra = ("", {}) if mock else context_for(pillar)
+        if pillar in ("success", "remix") and not ctx:
+            pillar = "pain"                                # nothing to feature yet -> a pain reel instead
+        sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx)
+        if not mock and os.environ.get("REVIEWER", "on") != "off":
+            sc = review_script(sc, pillar)
     scenes = sc["scenes"]
     kind = arms.get("cta") if arms.get("cta") in brand.CTA else (brand.CTA_MODE if brand.CTA_MODE in brand.CTA else "keyword")
     CT = brand.cta(kind)
@@ -991,7 +1005,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None):
     meta = dict(mode="explainer", pillar=pillar, story=sc.get("title"), hook=sc.get("caption_hook"),
                 headline=scenes[0]["headline"], blocks=[s["block"] for s in scenes], duration=round(total, 1),
                 cta=kind, arms=arms, review_score=None)
-    if not mock and os.environ.get("REVIEWER", "on") != "off":
+    if not mock and not evergreen and os.environ.get("REVIEWER", "on") != "off":
         try:
             import reviewer
             new_cap, rep = reviewer.review_video(out, {"title": sc.get("title")}, cap, kind="explainer")

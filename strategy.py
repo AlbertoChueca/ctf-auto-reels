@@ -23,7 +23,7 @@ DEFAULT_ARMS = {
         "rating_mistake: open on the one habit that keeps a child's rating stuck, stated bluntly",
         "myth: open by busting a common chess-training myth parents believe (more games = more progress, etc.)",
         "what_strong_kids_do: open with what kids who reach 1800-2000 do differently in training",
-        "quick_test: open by daring the parent to show this to their child and time them",
+        "student_story: open with a short real moment from a student's journey (only real, approved facts)",
         "parent_question: open with a question parents ask coaches all the time, then the honest answer",
         "coach_secret: open with a training detail top coaches use and most kids never hear",
         "tournament_moment: open at a tense tournament moment that every chess parent recognises",
@@ -38,9 +38,6 @@ DEFAULT_ARMS = {
         "confidence, focus and school skills that chess builds",
         "why group training with kids of the same level speeds up progress",
     ],
-    "difficulty": ["basic", "intermediate", "advanced"],
-    "think_time": ["fast", "normal", "long"],
-    "story_length": ["short", "normal"],
     "cta": ["keyword", "vsl", "call", "comment"],
 }
 THINK_FACTOR = {"fast": 0.75, "normal": 1.0, "long": 1.3}
