@@ -298,619 +298,8 @@ def mock_script(pillar):
         ]}
 
 
-# ======================================================================= drawing primitives
-_cache = {}
-
-
-def cached(key, fn):
-    if key not in _cache:
-        _cache[key] = fn()
-    return _cache[key]
-
-
-def kit(name, height):
-    def mk():
-        im = Image.open(os.path.join(KIT, name + ".png")).convert("RGBA")
-        return im.resize((int(im.width * height / im.height), height), Image.LANCZOS)
-    return cached(("kit", name, height), mk)
-
-
-def floor_light():
-    """Light wall + perspective black/white chess floor, like the reference video."""
-    def mk():
-        im = Image.new("RGB", (W, H), BG_LIGHT)
-        d = ImageDraw.Draw(im)
-        for y in range(H):                                     # soft vertical gradient
-            k = y / H
-            d.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * k) for a, b in zip((252, 248, 246), (240, 233, 229))))
-        hz = 1240                                             # floor top (horizon of the floor plane)
-        d.rectangle([0, hz - 80, W, hz], fill=(226, 230, 235))  # skirting band
-        zn, zf, S, vx = 1.0, 6.0, 230.0, W / 2               # true perspective: depth z, tile width S at z=1
-        def Y(z): return hz + (H - hz) * (1 / z - 1 / zf) / (1 / zn - 1 / zf)
-        def X(u, z): return vx + u * S / z
-        rows = 12
-        zs = [zf - (zf - zn) * (j / rows) ** 0.75 for j in range(rows + 1)]
-        for j in range(rows):
-            z0, z1 = zs[j], zs[j + 1]
-            for u in range(-14, 14):
-                pts = [(X(u, z0), Y(z0)), (X(u + 1, z0), Y(z0)), (X(u + 1, z1), Y(z1)), (X(u, z1), Y(z1))]
-                d.polygon(pts, fill=(22, 22, 26) if (j + u) % 2 else (247, 247, 249))
-        fog = Image.new("L", (W, H), 0); fd = ImageDraw.Draw(fog)
-        for y in range(hz, H):                                 # soft fog near the horizon, like a studio floor
-            fd.line([(0, y), (W, y)], fill=int(150 * clamp(1 - (y - hz) / 260)))
-        im.paste((236, 236, 240), (0, 0), fog)
-        im = im.filter(ImageFilter.GaussianBlur(0.7))
-        return im.convert("RGBA")
-    return cached("floor_light", mk)
-
-
-def bg_dark():
-    def mk():
-        im = Image.new("RGB", (W, H), (22, 21, 26)); d = ImageDraw.Draw(im)
-        for y in range(0, H, 60):
-            for x in range(0, W, 60):
-                d.ellipse([x - 2, y - 2, x + 2, y + 2], fill=(40, 39, 46))
-        v = Image.new("L", (W, H), 0)
-        ImageDraw.Draw(v).ellipse([-300, 200, W + 300, H - 200], fill=255)
-        dark = Image.new("RGB", (W, H), (10, 10, 12))
-        return Image.composite(im, dark, v.filter(ImageFilter.GaussianBlur(180))).convert("RGBA")
-    return cached("bg_dark", mk)
-
-
-def bg_orange():
-    def mk():
-        im = Image.new("RGB", (W, H)); d = ImageDraw.Draw(im)
-        for y in range(H):
-            k = ease_in_out(clamp((y - 500) / 1300))
-            d.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * k) for a, b in zip((252, 247, 244), (240, 120, 40))))
-        return im.convert("RGBA")
-    return cached("bg_orange", mk)
-
-
-def bg_cta():
-    def mk():
-        import chess
-        im = Image.new("RGBA", (W, H), (222, 226, 232, 255))
-        layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-        for (x, y, s, p) in [(-80, 80, 520, chess.PAWN), (720, -60, 460, chess.KING), (760, 1380, 620, chess.PAWN),
-                             (-120, 1500, 480, chess.KNIGHT), (420, 1640, 360, chess.PAWN)]:
-            pc = R.piece_img(chess.Piece(p, chess.BLACK), s)
-            layer.alpha_composite(pc, (x, y))
-        im.alpha_composite(layer.filter(ImageFilter.GaussianBlur(5)))
-        return im
-    return cached("bg_cta", mk)
-
-
-def shadow(fr, cx, y, w, a=70):
-    sh = cached(("sh", w, a), lambda: _mk_shadow(w, a))
-    fr.alpha_composite(sh, (int(cx - sh.width / 2), int(y - sh.height / 2)))
-
-
-def _mk_shadow(w, a):
-    im = Image.new("RGBA", (w + 80, w // 4 + 80), (0, 0, 0, 0))
-    ImageDraw.Draw(im).ellipse([40, 40, 40 + w, 40 + w // 4], fill=(0, 0, 0, a))
-    return im.filter(ImageFilter.GaussianBlur(16))
-
-
-def paste(fr, im, cx, cy, scale=1.0, alpha=1.0, anchor="center"):
-    if scale <= 0.01 or alpha <= 0.01:
-        return
-    if abs(scale - 1) > 0.004:
-        im = im.resize((max(1, int(im.width * scale)), max(1, int(im.height * scale))), Image.BILINEAR)
-    if alpha < 0.999:
-        im = im.copy(); im.putalpha(im.getchannel("A").point(lambda v: int(v * alpha)))
-    x = int(cx - im.width / 2)
-    y = int(cy - im.height / 2) if anchor == "center" else int(cy - im.height)
-    fr.alpha_composite(im, (x, y)) if 0 <= x and 0 <= y and x + im.width <= W and y + im.height <= H else _safe(fr, im, x, y)
-
-
-def _safe(fr, im, x, y):
-    tmp = Image.new("RGBA", fr.size, (0, 0, 0, 0)); tmp.paste(im, (x, y)); fr.alpha_composite(tmp)
-
-
-def character(fr, name, cx, feet_y, height, t, enter=0.0, slide_from=None):
-    """Puppet-lite animation: pop/slide entrance, breathing and a gentle bob."""
-    lt = t - enter
-    if lt < 0:
-        return
-    im = kit(name, height)
-    k = ease_out(lt / 0.55)
-    x = cx if slide_from is None else slide_from + (cx - slide_from) * k
-    sc = 1.0 if slide_from is not None else 0.85 + 0.15 * back(lt / 0.5)
-    breath = 1 + 0.012 * math.sin(2 * math.pi * lt / 2.6)
-    bob = 5 * math.sin(2 * math.pi * lt / 2.6 + 0.6)
-    shadow(fr, x, feet_y - 6, int(im.width * 0.7), int(70 * min(1, lt / 0.4)))
-    s = sc * breath
-    if abs(s - 1) > 0.004:
-        im = im.resize((int(im.width * sc), int(im.height * s)), Image.BILINEAR)
-    al = min(1, lt / 0.25)
-    if al < 1:
-        im = im.copy(); im.putalpha(im.getchannel("A").point(lambda v: int(v * al)))
-    _safe(fr, im, int(x - im.width / 2), int(feet_y - im.height + bob))
-
-
-def text_img(txt, path, size, fill, maxw=None):
-    k = ("txt", txt, path, size, fill, maxw)
-    def mk():
-        f = font(path, size)
-        words, lines, cur = txt.split(), [], ""
-        for w in words:
-            t2 = (cur + " " + w).strip()
-            if maxw and f.getlength(t2) > maxw and cur:
-                lines.append(cur); cur = w
-            else:
-                cur = t2
-        lines.append(cur)
-        lh = int(size * 1.22)
-        wd = int(max(f.getlength(l) for l in lines)) + 8
-        im = Image.new("RGBA", (wd, lh * len(lines) + 10), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-        for i, l in enumerate(lines):
-            d.text(((wd - f.getlength(l)) / 2, i * lh), l, font=f, fill=fill)
-        return im
-    return cached(k, mk)
-
-
-def headline(fr, text, highlight, t, y=170, size=96, dark=False, maxw=960):
-    """Word-by-word slam-in headline, orange highlight words."""
-    f = font(F_HEAD, size)
-    words = text.split()
-    hl = {h.lower().strip(".,!?") for hh in highlight for h in hh.split()}
-    lines, cur = [], []
-    for w in words:
-        if cur and f.getlength(" ".join(cur + [w])) > maxw:
-            lines.append(cur); cur = [w]
-        else:
-            cur.append(w)
-    if cur:
-        lines.append(cur)
-    if len(lines) > 3:
-        size = int(size * 0.82); return headline(fr, text, highlight, t, y, size, dark, maxw)
-    lh = int(size * 1.18); i = 0
-    for li, line in enumerate(lines):
-        total = f.getlength(" ".join(line)); x = (W - total) / 2
-        for w in line:
-            lt = t - 0.08 * i - 0.05
-            col = ORANGE if w.lower().strip(".,!?") in hl else ((250, 250, 250) if dark else INK)
-            if lt > 0:
-                wi = text_img(w, F_HEAD, size, col)
-                s = 1.0 + 0.35 * (1 - back(lt / 0.32, 2.2))
-                a = min(1, lt / 0.12)
-                paste(fr, wi, x + f.getlength(w) / 2 + 4, y + li * lh + size * 0.6, s, a)
-            x += f.getlength(w + " "); i += 1
-
-
-def subtitle(fr, words, t):
-    """Pill subtitle at the bottom (like the reference): the current phrase, spoken word in white."""
-    if not words:
-        return
-    idx = max([i for i, (ts, _) in enumerate(words) if ts <= t] or [0])
-    start = (idx // 6) * 6
-    chunk = words[start:start + 6]
-    f = font(F_UI, 40)
-    txt = " ".join(w for _, w in chunk)
-    tw = f.getlength(txt)
-    pw, ph = min(980, tw + 70), 92
-    key = ("subbg", int(pw))
-    bgp = cached(key, lambda: _pill_bg(int(pw), ph))
-    x0, y0 = (W - bgp.width) / 2, 1660
-    fr.alpha_composite(bgp, (int(x0), y0))
-    d = ImageDraw.Draw(fr)
-    x = (W - tw) / 2
-    for i, (ts, w) in enumerate(chunk):
-        cur = start + i == idx
-        d.text((x, y0 + 20), w, font=f, fill=(255, 255, 255) if cur or ts <= t else (255, 225, 205))
-        x += f.getlength(w + " ")
-
-
-def _pill_bg(w, h):
-    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
-    ImageDraw.Draw(im).rounded_rectangle([0, 0, w - 1, h - 1], radius=22, fill=(205, 92, 52, 225))
-    return im
-
-
-def card(w, h, border=ORANGE, radius=26, bw=10, fill=(255, 255, 255)):
-    def mk():
-        im = Image.new("RGBA", (w + 40, h + 50), (0, 0, 0, 0))
-        sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
-        ImageDraw.Draw(sh).rounded_rectangle([20, 34, 20 + w, 34 + h], radius=radius, fill=(0, 0, 0, 70))
-        im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(14)))
-        ImageDraw.Draw(im).rounded_rectangle([20, 20, 20 + w, 20 + h], radius=radius, fill=fill,
-                                             outline=border, width=bw)
-        return im
-    return cached(("card", w, h, border, radius, bw, fill), mk)
-
-
-def rating_card(fr, value, cx, cy, t, enter=0.0, color=INK):
-    lt = t - enter
-    if lt < 0:
-        return
-    c = card(380, 210).copy(); d = ImageDraw.Draw(c)
-    d.text((60, 42), "Rating", font=font(F_HEAD, 46), fill=ORANGE)
-    d.text((60, 92), str(int(value)), font=font(F_HEAD, 118), fill=color)
-    paste(fr, c, cx, cy, 0.7 + 0.3 * back(lt / 0.45), min(1, lt / 0.15))
-
-
-def bubble(fr, cx, cy, t, enter=0.0):
-    lt = t - enter
-    if lt < 0:
-        return
-    def mk():
-        im = Image.new("RGBA", (300, 240), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-        for (x, y, r) in [(150, 95, 80), (95, 105, 55), (210, 105, 58), (125, 60, 50), (185, 62, 52)]:
-            d.ellipse([x - r, y - r, x + r, y + r], fill=(214, 220, 228))
-        d.ellipse([60, 185, 90, 215], fill=(214, 220, 228)); d.ellipse([35, 220, 52, 237], fill=(214, 220, 228))
-        return im
-    im = cached("bubble", mk).copy(); d = ImageDraw.Draw(im)
-    for i in range(3):
-        a = 0.5 + 0.5 * math.sin(lt * 6 - i * 0.9)
-        d.ellipse([105 + i * 45 - 13, 92 - 13 - 6 * a, 105 + i * 45 + 13, 92 + 13 - 6 * a], fill=(255, 255, 255))
-    paste(fr, im, cx, cy, back(lt / 0.4), 1)
-
-
-def chip(text, size=40, fg=INK, bg=(255, 255, 255), border=ORANGE, icon=None):
-    def mk():
-        f = font(F_UI, size); tw = f.getlength(text)
-        pad = 34; iw = 70 if icon else 0
-        w, h = int(tw + 2 * pad + iw), int(size * 2.1)
-        im = Image.new("RGBA", (w + 30, h + 40), (0, 0, 0, 0))
-        sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
-        ImageDraw.Draw(sh).rounded_rectangle([15, 26, 15 + w, 26 + h], radius=h // 2, fill=(0, 0, 0, 60))
-        im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(10)))
-        d = ImageDraw.Draw(im)
-        d.rounded_rectangle([15, 15, 15 + w, 15 + h], radius=h // 2, fill=bg, outline=border, width=5)
-        if icon:
-            cx, cy, r = 15 + pad + 24, 15 + h / 2, 24
-            d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=ORANGE)
-            if icon == "check":
-                d.line([(cx - 11, cy + 1), (cx - 3, cy + 9), (cx + 12, cy - 9)], fill=(255, 255, 255), width=6)
-            elif icon == "x":
-                d.line([(cx - 9, cy - 9), (cx + 9, cy + 9)], fill=(255, 255, 255), width=6)
-                d.line([(cx - 9, cy + 9), (cx + 9, cy - 9)], fill=(255, 255, 255), width=6)
-            else:
-                d.text((cx, cy), icon, font=font(F_UI, 30), fill=(255, 255, 255), anchor="mm")
-        d.text((15 + pad + iw, 15 + h / 2), text, font=f, fill=fg, anchor="lm")
-        return im
-    return cached(("chip", text, size, fg, bg, border, icon), mk)
-
-
-def trophy_icon(size):
-    def mk():
-        s = size; im = Image.new("RGBA", (s, s), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-        gold, dark = (247, 190, 40), (205, 140, 20)
-        d.ellipse([s * .1, s * .15, s * .32, s * .45], outline=gold, width=max(3, s // 22))
-        d.ellipse([s * .68, s * .15, s * .9, s * .45], outline=gold, width=max(3, s // 22))
-        d.pieslice([s * .22, -s * .25, s * .78, s * .62], 0, 180, fill=gold)
-        d.rectangle([s * .45, s * .6, s * .55, s * .76], fill=dark)
-        d.rounded_rectangle([s * .3, s * .76, s * .7, s * .9], radius=s // 30, fill=(120, 70, 40))
-        return im
-    return cached(("trophy", size), mk)
-
-
-def star(size, fill):
-    def mk():
-        im = Image.new("RGBA", (size, size), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-        c, r1, r2 = size / 2, size / 2 - 2, size / 4.6
-        pts = [(c + (r1 if i % 2 == 0 else r2) * math.sin(i * math.pi / 5), c - (r1 if i % 2 == 0 else r2) * math.cos(i * math.pi / 5)) for i in range(10)]
-        d.polygon(pts, fill=fill)
-        return im
-    return cached(("star", size, fill), mk)
-
-
-# ======================================================================= blocks: draw(fr, t, dur, scene)
-def b_pain(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    pose = "girl_thinking" if s["params"].get("pose") == "thinking" else "girl_sad"
-    character(fr, pose, W / 2, 1520, 820, t, 0.05)
-    bubble(fr, W / 2 + 290, 640, t, 0.7)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_rating_drop(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    character(fr, "girl_thinking", W / 2, 1540, 800, t, 0.0)
-    a, b = s["params"]["from"], s["params"]["to"]
-    k = ease_in_out((t - 0.6) / max(0.8, dur - 1.6))
-    val = a + (b - a) * k
-    red = (200, 40, 40) if k > 0.05 else INK
-    rating_card(fr, val, W / 2 + 230, 560, t, 0.25, red)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_wrong_way(fr, t, dur, s):
-    fr.alpha_composite(bg_dark())
-    items = s["params"].get("items") or ["Random videos", "Endless blitz", "No plan"]
-    icons = ["play", "bolt", "dice"]
-    for i, it in enumerate(items[:3]):
-        enter = 0.45 + i * max(0.55, (dur - 1.6) / 3)
-        lt = t - enter
-        if lt < 0:
-            continue
-        c = card(800, 230, border=ORANGE, bw=12).copy(); d = ImageDraw.Draw(c)
-        cx, cy = 140, 135
-        d.ellipse([cx - 56, cy - 56, cx + 56, cy + 56], fill=ORANGE)
-        ic = icons[i % 3]
-        if ic == "play":
-            d.polygon([(cx - 18, cy - 28), (cx - 18, cy + 28), (cx + 30, cy)], fill=(255, 255, 255))
-        elif ic == "bolt":
-            d.polygon([(cx + 6, cy - 36), (cx - 22, cy + 6), (cx - 2, cy + 6), (cx - 8, cy + 36), (cx + 22, cy - 8), (cx + 2, cy - 8)], fill=(255, 255, 255))
-        else:
-            d.rounded_rectangle([cx - 28, cy - 28, cx + 28, cy + 28], radius=10, outline=(255, 255, 255), width=6)
-            for dx, dy in [(-12, -12), (12, 12), (0, 0)]:
-                d.ellipse([cx + dx - 5, cy + dy - 5, cx + dx + 5, cy + dy + 5], fill=(255, 255, 255))
-        f = font(F_HEAD, 58 if len(it) < 16 else 48)
-        d.text((230, cy), it, font=f, fill=INK, anchor="lm")
-        strike = clamp((lt - 0.45) / 0.3)
-        if strike > 0:
-            d.line([(210, cy + 4), (210 + (f.getlength(it) + 40) * strike, cy + 4)], fill=(215, 45, 45), width=10)
-        y = 690 + i * 290
-        paste(fr, c, W / 2 + (1 - ease_out(lt / 0.4)) * 700, y, 1, min(1, lt / 0.2))
-    headline(fr, s["headline"], s["highlight"], t, dark=True)
-
-
-def b_mentor(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    character(fr, "girl_standing", W / 2 - 200, 1560, 640, t, 0.0)
-    character(fr, "coach_standing", W / 2 + 190, 1560, 900, t, 0.35, slide_from=W + 300)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_roadmap(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    lt = t - 0.2
-    c = card(560, 640, border=(225, 232, 245), bw=6, fill=(245, 249, 255)).copy(); d = ImageDraw.Draw(c)
-    d.text((300, 90), "Roadmap", font=font(F_HEAD, 64), fill=(28, 40, 80), anchor="mm")
-    n_on = int(clamp((t - 0.8) / max(0.6, dur - 2.0)) * 11)
-    for i in range(12):
-        r, col = divmod(i, 3)
-        cx, cy = 140 + col * 160, 210 + r * 120
-        if i == 11:
-            c.alpha_composite(trophy_icon(110), (int(cx - 55), int(cy - 58)))
-        elif i < n_on:
-            c.alpha_composite(star(80, (110, 170, 245)), (int(cx - 40), int(cy - 40)))
-        else:
-            d.ellipse([cx - 26, cy - 26, cx + 26, cy + 26], fill=(196, 216, 245))
-    if lt > 0:
-        paste(fr, c, W / 2 - 150, 820, 0.8 + 0.2 * back(lt / 0.5), min(1, lt / 0.2))
-    character(fr, "girl_standing", W / 2 + 290, 1580, 600, t, 0.5)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_method_steps(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    character(fr, "coach_standing", W - 170, 1640, 860, t, 0.0)
-    steps = s["params"].get("steps") or ["Find the gaps", "Train in order", "Review every game"]
-    for i, st in enumerate(steps[:3]):
-        enter = 0.6 + i * max(0.6, (dur - 1.8) / 3)
-        lt = t - enter
-        if lt < 0:
-            continue
-        ch = chip(st, 52, icon=str(i + 1))
-        paste(fr, ch, 40 + ch.width / 2 + (1 - ease_out(lt / 0.4)) * -500, 620 + i * 210, 1, min(1, lt / 0.2))
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_authority(fr, t, dur, s):
-    fr.alpha_composite(bg_orange())
-    character(fr, "pair_hands", W / 2, 1640, 700, t, 0.0)
-    nb = len((s["params"].get("badges") or [])[:3])
-    for i, bdg in enumerate((s["params"].get("badges") or [])[:3]):
-        lt = t - (0.5 + i * min(0.55, max(0.3, (dur - 1.4) / max(1, nb))))
-        if lt < 0:
-            continue
-        ch = chip(bdg, 40, icon="check")
-        pos = [(W / 2, 600), (W / 2, 720), (W / 2, 840)][i]
-        paste(fr, ch, pos[0], pos[1], 0.6 + 0.4 * back(lt / 0.4), min(1, lt / 0.15))
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_faq_question(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    character(fr, "girl_thinking", W / 2, 1560, 760, t, 0.4)
-    q = s["params"].get("question") or s["headline"]
-    lt = t - 0.1
-    c = card(900, 360, border=ORANGE, bw=12).copy(); d = ImageDraw.Draw(c)
-    ti = text_img(q, F_HEAD, 66 if len(q) < 34 else 56, INK, maxw=760)
-    c.alpha_composite(ti, (int(470 - ti.width / 2), int(200 - ti.height / 2)))
-    qm = text_img("?", F_HEAD, 140, (255, 255, 255))
-    badge = Image.new("RGBA", (170, 170), (0, 0, 0, 0)); ImageDraw.Draw(badge).ellipse([0, 0, 169, 169], fill=ORANGE)
-    badge.alpha_composite(qm, (int(85 - qm.width / 2), int(78 - qm.height / 2)))
-    if lt > 0:
-        paste(fr, c, W / 2, 470, 0.8 + 0.2 * back(lt / 0.45), min(1, lt / 0.15))
-        paste(fr, badge, W / 2 + 400, 300, back((lt - 0.3) / 0.4), 1 if lt > 0.3 else 0)
-
-
-def b_faq_answer(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    character(fr, "coach_standing", W - 170, 1640, 860, t, 0.0)
-    pts = s["params"].get("points") or ["Small groups", "Same level", "Clear plan"]
-    for i, p in enumerate(pts[:3]):
-        lt = t - (0.6 + i * max(0.6, (dur - 1.8) / 3))
-        if lt < 0:
-            continue
-        ch = chip(p, 50, icon="check")
-        paste(fr, ch, 40 + ch.width / 2 + (1 - ease_out(lt / 0.4)) * -500, 620 + i * 210, 1, min(1, lt / 0.2))
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_progress(fr, t, dur, s):
-    fr.alpha_composite(bg_orange())
-    k = ease_in_out((t - 0.4) / max(1.0, dur - 1.2))
-    d = ImageDraw.Draw(fr)
-    pts = [(140 + i * 80, 1180 - (i * 50 + 60 * math.sin(i * 1.3)) * 1.0) for i in range(11)]
-    n = max(2, int(2 + k * (len(pts) - 2)))
-    d.line(pts[:n], fill=(255, 255, 255), width=16, joint="curve")
-    for p in pts[:n]:
-        d.ellipse([p[0] - 14, p[1] - 14, p[0] + 14, p[1] + 14], fill=ORANGE_D, outline=(255, 255, 255), width=5)
-    tip = pts[n - 1]
-    d.polygon([(tip[0] + 10, tip[1] - 60), (tip[0] + 60, tip[1] - 10), (tip[0] - 10, tip[1] - 10)], fill=(255, 255, 255))
-    character(fr, "girl_standing", W / 2 + 230, 1640, 620, t, 0.2)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_rating_up(fr, t, dur, s):
-    fr.alpha_composite(bg_orange())
-    character(fr, "pair_hands", W / 2, 1660, 900, t, 0.0)
-    gain = 300
-    for c in guard.approved():
-        if c.get("id") == "avg_gain":
-            nums = [int(n) for n in c.get("numbers", []) if str(n).isdigit()]
-            gain = nums[0] if nums else gain
-    k = ease_out((t - 0.6) / max(1.0, dur - 1.6))
-    lt = t - 0.3
-    if lt > 0:
-        c = card(520, 230).copy(); d = ImageDraw.Draw(c)
-        d.text((60, 40), "Avg. rating gain", font=font(F_HEAD, 40), fill=ORANGE)
-        d.text((60, 92), f"+{int(gain * k)}", font=font(F_HEAD, 120), fill=INK)
-        paste(fr, c, W / 2, 600, 0.7 + 0.3 * back(lt / 0.45), min(1, lt / 0.15))
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_trophy(fr, t, dur, s):
-    fr.alpha_composite(bg_orange())
-    rng = random.Random(7)
-    d = ImageDraw.Draw(fr)
-    for i in range(70):
-        x0 = rng.uniform(0, W); sp = rng.uniform(260, 520); ph = rng.uniform(0, 3)
-        y = (rng.uniform(-400, 0) + (t - 0.3) * sp) % (H + 200) - 100
-        if t < 0.3:
-            continue
-        col = rng.choice([(255, 255, 255), (255, 214, 80), (230, 90, 30), (40, 40, 48)])
-        x = x0 + 30 * math.sin(t * 3 + ph)
-        d.rectangle([x, y, x + 14, y + 22], fill=col)
-    character(fr, "girl_trophy", W / 2, 1700, 1150, t, 0.0)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_limited(fr, t, dur, s):
-    fr.alpha_composite(bg_dark())
-    c = card(640, 560, border=(255, 255, 255), bw=4).copy(); d = ImageDraw.Draw(c)
-    d.rectangle([20, 20, 660, 130], fill=(240, 240, 244))
-    for i in range(8):
-        d.rounded_rectangle([90 + i * 70, 0, 106 + i * 70, 60], radius=6, fill=(60, 60, 70))
-    filled = int(clamp((t - 0.6) / max(0.8, dur - 1.6)) * 20)
-    for i in range(28):
-        r, col = divmod(i, 7)
-        x, y = 70 + col * 80, 170 + r * 95
-        d.rounded_rectangle([x, y, x + 60, y + 60], radius=10, fill=(230, 80, 40) if i < filled else (222, 226, 232))
-    paste(fr, c, W / 2, 900, 0.8 + 0.2 * back((t - 0.2) / 0.45), min(1, max(0, t - 0.2) / 0.15))
-    headline(fr, s["headline"], s["highlight"], t, dark=True)
-
-
-def medal(size):
-    def mk():
-        im = Image.new("RGBA", (size, size), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
-        d.polygon([(size * .3, 0), (size * .45, size * .45), (size * .55, size * .45), (size * .7, 0)], fill=(60, 110, 200))
-        d.ellipse([size * .18, size * .35, size * .82, size * .99], fill=(247, 190, 40), outline=(205, 140, 20), width=max(3, size // 18))
-        im.alpha_composite(star(int(size * .38), (255, 240, 190)), (int(size * .31), int(size * .48)))
-        return im
-    return cached(("medal", size), mk)
-
-
-def b_before_after(fr, t, dur, s):
-    fr.alpha_composite(bg_orange())
-    p = s["params"]; a, b = p["from"], p["to"]
-    character(fr, "girl_trophy" if t > dur * 0.65 else "girl_standing", W / 2 + 220, 1680,
-              1000 if t > dur * 0.65 else 640, t, 0.0 if t <= dur * 0.65 else dur * 0.65)
-    k = ease_in_out((t - 0.7) / max(1.0, dur - 1.8))
-    val = a + (b - a) * k
-    lt = t - 0.3
-    if lt > 0:
-        c = card(520, 250).copy(); d = ImageDraw.Draw(c)
-        d.text((60, 40), "Rating", font=font(F_HEAD, 46), fill=ORANGE)
-        d.text((60, 96), f"{int(val)}" + ("+" if k >= 1 and "+" in str(p.get("label", "")) else ""), font=font(F_HEAD, 128),
-               fill=(30, 140, 70) if k >= 1 else INK)
-        paste(fr, c, W / 2 - 150, 640, 0.7 + 0.3 * back(lt / 0.45), min(1, lt / 0.15))
-        if p.get("label") and k > 0.3:
-            lab = chip(p["label"], 40, icon="check")
-            paste(fr, lab, W / 2 - 150, 860, back((k - 0.3) / 0.3), 1)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-def b_success_timeline(fr, t, dur, s):
-    fr.alpha_composite(floor_light())
-    character(fr, "girl_trophy", W - 160, 1660, 720, t, 0.0)
-    ms = s["params"].get("milestones") or []
-    d = ImageDraw.Draw(fr)
-    n = max(1, len(ms))
-    x0, y_top = 110, 600
-    shown = 0
-    for i, m in enumerate(ms):
-        lt = t - (0.5 + i * max(0.55, (dur - 1.6) / n))
-        if lt < 0:
-            continue
-        shown = i + 1
-        y = y_top + i * 200
-        fr.alpha_composite(medal(96), (x0 - 48, int(y - 48 + (1 - back(lt / 0.4)) * 30)))
-        f = font(F_UI, 44); words, lines, cur = m.split(), [], ""
-        for w in words:
-            if cur and f.getlength(cur + " " + w) > 560:
-                lines.append(cur); cur = w
-            else:
-                cur = (cur + " " + w).strip()
-        lines.append(cur)
-        a = int(255 * min(1, lt / 0.2))
-        for li, ln in enumerate(lines):
-            d.text((x0 + 80, y - 26 * len(lines) + li * 54 + 2), ln, font=f, fill=INK + (a,))
-    if shown > 1:
-        d.line([(x0, y_top + 50), (x0, y_top + (shown - 1) * 200 - 50)], fill=ORANGE, width=8)
-    headline(fr, s["headline"], s["highlight"], t)
-
-
-DRAW = {"pain": b_pain, "rating_drop": b_rating_drop, "wrong_way": b_wrong_way, "mentor": b_mentor,
-        "roadmap": b_roadmap, "method_steps": b_method_steps, "authority": b_authority,
-        "faq_question": b_faq_question, "faq_answer": b_faq_answer, "progress": b_progress,
-        "rating_up": b_rating_up, "trophy": b_trophy, "limited": b_limited,
-        "before_after": b_before_after, "success_timeline": b_success_timeline}
-
-
-def b_cta(fr, t, dur, kind):
-    fr.alpha_composite(bg_cta())
-    lg = brand.logo(760)
-    paste(fr, lg, W / 2, 760, 0.85 + 0.15 * back(t / 0.5), min(1, t / 0.2))
-    CT = brand.cta(kind)
-    label = {"keyword": f'COMMENT "{brand.KEYWORD}"', "vsl": "WATCH FREE VIDEO", "call": "BOOK CALL",
-             "comment": "FOLLOW"}.get(kind, "BOOK CALL")
-    lt = t - 0.5
-    if lt > 0:
-        press = 1 - 0.06 * math.exp(-((t - 1.35) * 9) ** 2)
-        b = chip(label, 64, fg=ORANGE_D, border=(255, 255, 255))
-        paste(fr, b, W / 2, 1010, (0.7 + 0.3 * back(lt / 0.45)) * press, min(1, lt / 0.15))
-        sub = text_img(CT["pills"][1] if kind != "keyword" else CT["pills"][1], F_UI, 40, INK)
-        paste(fr, sub, W / 2, 1170, 1, clamp((lt - 0.3) / 0.3))
-        url = text_img("@" + brand.IG_HANDLE if kind == "keyword" else CT["url"](), F_UI, 44, ORANGE_D)
-        paste(fr, url, W / 2, 1250, 1, clamp((lt - 0.5) / 0.3))
-    # cursor that taps the button
-    ct = clamp((t - 0.7) / 0.65)
-    if t > 0.7:
-        cx = W / 2 + 260 - 150 * ease_out(ct); cy = 1140 - 100 * ease_out(ct)
-        d = ImageDraw.Draw(fr)
-        d.polygon([(cx, cy), (cx, cy + 62), (cx + 16, cy + 48), (cx + 30, cy + 76), (cx + 42, cy + 70),
-                   (cx + 28, cy + 44), (cx + 48, cy + 42)], fill=(20, 20, 24), outline=(255, 255, 255))
-
-
-# ======================================================================= audio
-def music(total):
-    """Calm, warm corporate bed: soft pad + gentle plucked arpeggio, 96 bpm."""
-    n = int(total * SR); t = np.arange(n) / SR
-    chords = [(220.0, 277.18, 329.63), (196.0, 246.94, 293.66), (174.61, 220.0, 261.63), (196.0, 246.94, 329.63)]
-    out = np.zeros(n, np.float32)
-    bar = 60 / 96 * 4
-    for i in range(int(total / bar) + 1):
-        a, b = int(i * bar * SR), min(n, int((i + 1) * bar * SR))
-        if a >= n:
-            break
-        tt = t[a:b] - t[a]
-        for f in chords[i % 4]:
-            out[a:b] += 0.022 * np.sin(2 * np.pi * f / 2 * tt) * np.clip(tt / 0.5, 0, 1)
-        for k in range(8):
-            s0 = a + int(k * bar / 8 * SR)
-            if s0 >= n:
-                break
-            f = chords[i % 4][k % 3] * (2 if k % 4 == 3 else 1)
-            ln = min(int(0.5 * SR), n - s0); tk = np.arange(ln) / SR
-            out[s0:s0 + ln] += 0.035 * np.sin(2 * np.pi * f * tk) * np.exp(-tk * 7)
-    fade = np.clip(t / 1.0, 0, 1) * np.clip((total - t) / 1.2, 0, 1)
-    return out * fade
+import design as D
+DRAW = D.DRAW
 
 
 # ======================================================================= build
@@ -930,6 +319,8 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
     arms = arms or {}
     mock = os.environ.get("STORY_MOCK") == "1" if mock is None else mock
     rng = random.Random(seed)
+    kind = arms.get("cta") if arms.get("cta") in brand.CTA else (brand.CTA_MODE if brand.CTA_MODE in brand.CTA else "keyword")
+    director_report = None
     if evergreen:
         sc, pillar, extra = evergreen_script(pillar)
     else:
@@ -938,44 +329,48 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
             pillar = "pain"                                # nothing to feature yet -> a pain reel instead
         sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx)
         if not mock and os.environ.get("REVIEWER", "on") != "off":
-            sc = review_script(sc, pillar)
-    scenes = sc["scenes"]
-    kind = arms.get("cta") if arms.get("cta") in brand.CTA else (brand.CTA_MODE if brand.CTA_MODE in brand.CTA else "keyword")
+            import director                                # 2nd agent: copy chief + art director
+            sc, director_report = director.direct(sc, pillar, ctx, _slots_text(pillar, allowed_blocks()), validate, kind)
+    scenes = [dict(x) for x in sc["scenes"]]
+    scenes[0]["_first"] = False
     CT = brand.cta(kind)
+    # ---- voice: one continuous performance (natural, consistent), split per scene; falls back to line by line
     voice.reset()
-    texts = [s["narration"] for s in scenes] + [CT["say"]]
-    A = voice.say_many(texts, speed=1.04, styles=[s.get("delivery") for s in scenes] + ["warm, confident, inviting"],
-                       one_take=False)
-    PAD = 0.35
-    durs = [max(2.4, len(a) / SR + PAD) for a in A[:-1]] + [max(4.2, len(A[-1]) / SR + 1.4)]
+    texts = [x["narration"] for x in scenes] + [CT["say"]]
+    A = voice.say_many(texts, speed=1.0, styles=[x.get("delivery") for x in scenes] + ["warm, confident, inviting"],
+                       one_take=True)
+    LEAD, PAD = 0.25, 0.45
+    durs = [max(2.6, LEAD + len(a) / SR + PAD) for a in A[:-1]] + [max(4.6, LEAD + len(A[-1]) / SR + 1.6)]
     starts = np.cumsum([0.0] + durs[:-1]); total = float(sum(durs))
     words = []
     for i, a in enumerate(A):
         for ts, w in voice.align(a, texts[i]):
-            words.append((starts[i] + 0.15 + ts, w))
-    # ---- audio mix
+            words.append((starts[i] + LEAD + ts, w))
+    # ---- audio: voice + tonal transitions + soft ticks + chime + ducked music bed (no noise-based effects)
     n = int(total * SR) + SR
     mix = np.zeros(n, np.float32)
     def put(x, at, g=1.0):
-        a = int(at * SR); b = min(n, a + len(x)); mix[a:b] += g * x[:b - a]
+        a0 = max(0, int(at * SR)); b0 = min(n, a0 + len(x)); mix[a0:b0] += g * x[:b0 - a0]
     for i, a in enumerate(A):
-        put(a.astype(np.float32), starts[i] + 0.15, 1.0)
+        put(a.astype(np.float32), starts[i] + LEAD, 1.0)
     for i in range(1, len(durs)):
-        put(R.whoosh(0.35, seed=i).astype(np.float32), starts[i] - 0.12, 0.45)
-    for i, s in enumerate(scenes):
-        put(R.pop().astype(np.float32), starts[i] + 0.1, 0.25)
-    put(R.ding().astype(np.float32), starts[-1] + 1.3, 0.35)
-    bed = music(n / SR)
-    env = np.ones(n, np.float32)                          # duck the music under the voice
+        put(D.swell(0.55), starts[i] - 0.3, 0.8)
+    for i in range(len(scenes)):
+        put(D.tick(), starts[i] + 0.12, 0.6)
+    put(D.chime(), starts[-1] + 1.4, 0.7)
+    bed = D.music(n / SR)
+    duck = np.ones(n, np.float32)
     for i, a in enumerate(A):
-        s0 = int((starts[i] + 0.1) * SR); env[s0:s0 + len(a) + int(0.1 * SR)] = 0.55
-    mix += bed[:n] * env
-    mix /= max(1.0, float(np.abs(mix).max()) / 0.95)
+        s0 = int((starts[i] + LEAD - 0.1) * SR); duck[max(0, s0):s0 + len(a) + int(0.2 * SR)] = 0.45
+    duck = np.convolve(duck, np.ones(int(0.12 * SR)) / int(0.12 * SR), "same").astype(np.float32)   # smooth ducking
+    mix += bed[:n] * duck
+    mix /= max(1.0, float(np.abs(mix).max()) / 0.92)
     wav = out.replace(".mp4", "_x.wav"); sf.write(wav, mix[:int(total * SR)], SR)
     # ---- video
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     proc = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                              "-r", str(FPS), "-i", "-", "-i", wav, "-shortest"] + HY.enc_args(out), stdin=subprocess.PIPE)
+    TR = 0.4
     prev_last = None
     nf = int(total * FPS)
     for fi in range(nf):
@@ -984,18 +379,22 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
         lt = tg - starts[i]
         fr = Image.new("RGBA", (W, H), (0, 0, 0, 255))
         if i < len(scenes):
-            DRAW[scenes[i]["block"]](fr, lt, durs[i], scenes[i])
+            sc_i = dict(scenes[i]); sc_i["_first"] = (i == 0)            # frame 0 already shows the full hook (cover)
+            DRAW[sc_i["block"]](fr, lt + (1.2 if i == 0 else 0.0), durs[i] + (1.2 if i == 0 else 0.0), sc_i)
+            dark = sc_i["block"] in D.DARK_BLOCKS
+            D.brand_bar(fr, tg, total, dark)
+            D.captions(fr, [(ts, w) for ts, w in words if starts[i] - 0.01 <= ts < starts[i] + durs[i]], tg)
         else:
-            b_cta(fr, lt, durs[i], kind)
-        if tg >= 0.15:
-            subtitle(fr, [(ts, w) for ts, w in words if starts[i] - 0.01 <= ts < starts[i] + durs[i]], tg)
-        if i > 0 and lt < 0.32 and prev_last is not None:      # push transition
-            k = ease_in_out(lt / 0.32)
-            base = Image.new("RGBA", (W, H))
-            base.paste(prev_last, (int(-W * k), 0)); base.paste(fr, (int(W * (1 - k)), 0))
-            fr = base
+            D.end_card(fr, lt, durs[i], kind)
+            D.brand_bar(fr, tg, total, True)
+        if i > 0 and lt < TR and prev_last is not None:             # crossfade + gentle scale
+            k = D.ease_in_out(lt / TR)
+            sc_in = 1.04 - 0.04 * k
+            inc = fr.resize((int(W * sc_in), int(H * sc_in)), Image.BILINEAR).crop(
+                (int((W * sc_in - W) / 2), int((H * sc_in - H) / 2), int((W * sc_in - W) / 2) + W, int((H * sc_in - H) / 2) + H))
+            fr = Image.blend(prev_last, inc, k)
         if int(np.searchsorted(starts, (fi + 1) / FPS, side="right") - 1) != i:
-            prev_last = fr.copy()                              # last frame of this scene -> next push transition
+            prev_last = fr.copy()
         proc.stdin.write(fr.convert("RGB").tobytes())
     proc.stdin.close(); proc.wait(); os.remove(wav)
     # ---- caption
@@ -1003,8 +402,12 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
            f"{brand.PARENT_LINE}\n\n" + " ".join(brand.hashtags(rng)))
     open(out.replace(".mp4", ".txt"), "w").write(cap)
     meta = dict(mode="explainer", pillar=pillar, story=sc.get("title"), hook=sc.get("caption_hook"),
-                headline=scenes[0]["headline"], blocks=[s["block"] for s in scenes], duration=round(total, 1),
+                headline=scenes[0]["headline"], blocks=[x["block"] for x in scenes], duration=round(total, 1),
                 cta=kind, arms=arms, review_score=None)
+    if director_report:
+        arts = director_report.get("art") or []
+        meta["director"] = {"hook_options": [h.get("headline") for h in (director_report.get("copy") or {}).get("hooks", [])],
+                            "art_scores": [r["score"] for r in arts], "art_summary": arts[-1]["summary"] if arts else None}
     if not mock and not evergreen and os.environ.get("REVIEWER", "on") != "off":
         try:
             import reviewer

@@ -104,7 +104,10 @@ if summary:  # visible on the run page in GitHub
                 + (f"- Blocks: {', '.join(meta.get('blocks') or [])}\n")
                 + (f"- Student case: `{meta.get('case')}`\n" if meta.get("case") else "")
                 + (f"- Remix of: `{meta.get('remix_of')}`\n" if meta.get("remix_of") else "")
-                + (f"- Reviewer score: {meta.get('review_score')}/10\n" if meta.get("review_score") is not None else "")
+                + (f"- Director: hooks considered: {' | '.join(meta['director'].get('hook_options') or [])}\n"
+                   f"- Director: art scores {meta['director'].get('art_scores')} - {meta['director'].get('art_summary')}\n"
+                   if meta.get("director") else "")
+                + (f"- Final video review: {meta.get('review_score')}/10\n" if meta.get("review_score") is not None else "")
                 + f"- {insights_msg}\n"
                 + (f"- Experiment: {', '.join(f'{k}={v.split(chr(58))[0]}' for k, v in arms.items())}\n" if arms else "")
                 + (f"- {strat_msg}\n" if strat_msg else "")
@@ -149,6 +152,6 @@ if brake:
     print("BRAKE:", brake)
 log({k: meta.get(k) for k in ("engine", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
-                              "case", "remix_of")})
+                              "case", "remix_of", "director")})
 if brake:
     raise SystemExit(f"Published, then the automatic brake engaged: {brake}")

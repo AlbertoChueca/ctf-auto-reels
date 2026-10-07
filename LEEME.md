@@ -25,8 +25,14 @@ Sin puzzles: todo son reels de motion graphics para padres.
 - **Remix**: cada domingo el sistema analiza con Gemini tus reels publicados (los del editor y los automáticos):
   tema, gancho, puntos clave, por qué funcionó. Los mejores se reexplican de otra forma (otro gancho, otro ángulo)
   sin repetir la misma idea en 45 días. Todo queda en `content_bank.json`.
-- **Motion graphics** (`make_explainer.py`): estilo del vídeo "Stuck in chess?" con 15 bloques de escena ya
-  diseñados; Gemini solo escribe el guion y elige bloques.
+- **Motion graphics** (`make_explainer.py` + `design.py`): 15 bloques de escena con diseño premium
+  (titulares Montserrat Black con marca naranja, tarjetas tipo papel, fondos de estudio, subtítulos con la palabra
+  activa en naranja, barra de progreso, fundidos suaves y sonido tonal). Gemini solo escribe y elige bloques.
+- **Director creativo** (`director.py`, segundo agente): antes de grabar la voz escribe 5 ganchos alternativos, los
+  puntúa y se queda con el mejor, y pule todo el guion para que convierta. Después revisa un storyboard con un
+  fotograma de cada escena (legibilidad, solapes, jerarquía, coherencia con la voz) y aplica correcciones hasta
+  llegar a 8/10 (máx. 2 rondas). Al final un tercer control ve el vídeo terminado. Todo queda en el resumen de
+  cada ejecución y en `review_log.jsonl`.
 - **Respaldo**: si el guion de IA falla dos veces, se usa un guion de reserva ya escrito (`evergreen.json`, solo
   hechos reales de tu web). Siempre sale un reel de la Academia.
 

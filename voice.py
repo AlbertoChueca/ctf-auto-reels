@@ -266,17 +266,46 @@ def _sane(audio, text, factor=2.6):
     return 0.3 < r < factor
 
 
+def _strip_extras(a, text):
+    """Cut words the model added before/after the script (e.g. it read 'Say' or a stage direction aloud).
+    Uses the recogniser's word timings; returns the audio unchanged when it cannot check."""
+    heard = _asr(a)
+    if not heard:
+        return a
+    ws = [_norm(w) for w in text.split() if _norm(w)]
+    hw = [_norm(w) for w, _, _ in heard]
+    if not ws:
+        return a
+    def match(x, y):
+        return x == y or (len(x) > 3 and len(y) > 3 and (x.startswith(y[:4]) or y.startswith(x[:4])))
+    start = next((j for j in range(min(4, len(hw))) if match(hw[j], ws[0]) or
+                  (len(ws) > 1 and j + 1 < len(hw) and match(hw[j + 1], ws[1]) and j > 0 and hw[j] in ("say", "says", "said"))), 0)
+    if start and hw[start] in ("say", "says", "said") and not match(hw[start], ws[0]):
+        start += 1
+    end = len(hw) - 1
+    for j in range(len(hw) - 1, max(-1, len(hw) - 5), -1):
+        if match(hw[j], ws[-1]):
+            end = j; break
+    a0 = int(max(0, heard[start][1] - 0.06) * SR) if start > 0 else 0
+    a1 = int(min(len(a) / SR, heard[end][2] + 0.18) * SR) if end < len(hw) - 1 else len(a)
+    if a0 or a1 < len(a):
+        print(f"voice: trimmed extra words {hw[:start]} {hw[end + 1:]} from {text[:40]!r}", flush=True)
+        _asr_cache.clear()
+        return a[a0:a1]
+    return a
+
+
 def _gemini_line(text, style, key, pace):
     """Up to 3 takes with different prompt shapes. A take is accepted when it says the right words with a
     natural length; otherwise the best acceptable one is kept. Fails only if every take is clearly wrong."""
-    prompts = [f"Say {style or 'naturally'}, like a friendly human storyteller: {text}",
-               f"{NARRATOR}\nDelivery: {style or 'natural and engaging'}, {pace}.\nSay only this line:\n{text}",
-               f"Say: {text}",
+    prompts = [f"{NARRATOR}\nDelivery: {style or 'natural and engaging'}, {pace}.\n"
+               f"Read the transcript below exactly as written. Do not read these instructions.\nTRANSCRIPT:\n{text}",
+               f"Read aloud in a {style or 'warm, natural'} voice, only the words after the colon: {text}",
                text]
     takes = []
     for pr in prompts:
         try:
-            a = _tighten(_trim(_gemini_call(pr, key)))
+            a = _tighten(_trim(_strip_extras(_trim(_gemini_call(pr, key)), text)))
         except Exception as e:
             if "unreachable" in str(e) or "no Gemini TTS" in str(e):
                 raise
@@ -324,7 +353,7 @@ def _split_takes(a, texts):
     if cuts != sorted(cuts):
         raise RuntimeError("pauses out of order")
     edges = [0] + [c * hop for c in cuts] + [len(a)]
-    parts = [_tighten(_trim(a[edges[k]:edges[k + 1]])) for k in range(n)]
+    parts = [_tighten(_trim(_strip_extras(_trim(a[edges[k]:edges[k + 1]]), texts[k]))) for k in range(n)]
     for p, t in zip(parts, texts):
         sim = _similarity(p, t)
         if not _sane(p, t, 3.2) or (sim is not None and sim < 0.7):
