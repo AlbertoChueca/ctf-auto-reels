@@ -1,6 +1,6 @@
 # ChessTalentsFactory autopilot - what is winning
 
-_Updated 2026-10-06 · 0 reels with results (3+ days old) · average score 0.00_
+_Updated 2026-10-07 · 0 reels with results (3+ days old) · average score 0.00_
 
 
 Still collecting data: options are being tested evenly for now.
@@ -13,7 +13,7 @@ Still collecting data: options are being tested evenly for now.
 | rating_mistake | 0 | - |
 | myth | 0 | - |
 | what_strong_kids_do | 0 | - |
-| quick_test | 0 | - |
+| student_story | 0 | - |
 | parent_question | 0 | - |
 | coach_secret | 0 | - |
 | tournament_moment | 0 | - |
@@ -30,29 +30,6 @@ Still collecting data: options are being tested evenly for now.
 | consistency | 0 | - |
 | confidence, focus and school skills that chess builds | 0 | - |
 | why group training with kids of the same level speeds up progress | 0 | - |
-
-## difficulty
-
-| option | reels | avg score |
-|---|---|---|
-| basic | 0 | - |
-| intermediate | 0 | - |
-| advanced | 0 | - |
-
-## think_time
-
-| option | reels | avg score |
-|---|---|---|
-| fast | 0 | - |
-| normal | 0 | - |
-| long | 0 | - |
-
-## story_length
-
-| option | reels | avg score |
-|---|---|---|
-| short | 0 | - |
-| normal | 0 | - |
 
 ## cta
 
