@@ -2,24 +2,19 @@ name: Daily reels
 
 on:
   schedule:
-    - cron: "0 16 * * *"   # conversion reel (weekly calendar: pain/faq/method/proof explainers) -> 12:00 New York (13:00 PY)
-    - cron: "0 1 * * *"    # challenge reel (insight + puzzle, "send to a chess parent")        -> 21:00 New York (22:00 PY)
+    - cron: "0 16 * * *"   # midday reel  -> 12:00 New York (13:00 PY)   (weekly calendar in run_daily.py)
+    - cron: "0 1 * * *"    # evening reel -> 21:00 New York (22:00 PY)
   workflow_dispatch:
     inputs:
       level:
-        description: "story = midday slot (calendar), storytag = evening puzzle challenge"
+        description: "Slot: story = midday, storytag = evening (only matters with pillar auto)"
         type: choice
         options: [story, storytag]
         default: story
-      difficulty:
-        description: "Puzzle level (auto = rotates every day)"
-        type: choice
-        options: [auto, basic, intermediate, advanced]
-        default: auto
       pillar:
         description: "Reel type (auto = weekly calendar)"
         type: choice
-        options: [auto, pain, faq, method, success, remix, proof, puzzle]
+        options: [auto, success, remix, pain, faq, method, proof]
         default: auto
       dry_run:
         description: "Only generate the video (do not publish)"
@@ -79,31 +74,18 @@ jobs:
           [ -f models/kokoro.onnx ] || curl -sSL -o models/kokoro.onnx https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/kokoro-v1.0.onnx
           [ -f models/voices.bin ]  || curl -sSL -o models/voices.bin  https://github.com/thewh1teagle/kokoro-onnx/releases/download/model-files-v1.0/voices-v1.0.bin
 
-      - name: Monthly cache key
-        id: month
-        run: echo "m=$(date +%Y-%m)" >> "$GITHUB_OUTPUT"
-
-      - name: Cache puzzle database
-        uses: actions/cache@v4
-        with:
-          path: data
-          key: puzzles-${{ steps.month.outputs.m }}
-          restore-keys: puzzles-
-
       - name: Generate and publish
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
           VOICE_ENGINE: gemini
-          LEVEL_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.difficulty || 'auto' }}
           GEMINI_VOICE: ${{ vars.GEMINI_VOICE || 'Charon' }}
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
           # Academy decisions (Settings > Secrets and variables > Actions > Variables). Empty = defaults in brand.py
           PILLAR_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.pillar || 'auto' }}
           FORCE_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.force || false }}
           FB_REELS: ${{ vars.FB_REELS || 'on' }}
-          IMAGE_GEN: ${{ vars.IMAGE_GEN || 'off' }}
           STUDENT_NAMES: ${{ vars.STUDENT_NAMES || 'none' }}
           DM_KEYWORD: ${{ vars.DM_KEYWORD || 'PLAN' }}
           REEL_FORMAT: ${{ vars.REEL_FORMAT }}
@@ -132,5 +114,5 @@ jobs:
         run: |
           git config user.name "reels-bot"
           git config user.email "reels-bot@users.noreply.github.com"
-          for f in used.json log.jsonl story_log.json explainer_log.json review_log.jsonl performance.json strategy_arms.json strategy_report.md playbook.md paused.json failures.json content_bank.json; do [ -f "$f" ] && git add "$f"; done
+          for f in log.jsonl explainer_log.json review_log.jsonl performance.json strategy_arms.json strategy_report.md playbook.md paused.json failures.json content_bank.json; do [ -f "$f" ] && git add "$f"; done
           git diff --cached --quiet || (git commit -m "Reel ${{ steps.lvl.outputs.level }} $(date +%F)" && (git push || (git pull --rebase && git push)))
