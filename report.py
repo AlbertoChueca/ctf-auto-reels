@@ -89,6 +89,11 @@ def build():
         best = sorted(last30, key=lambda r: (r.get("profile_visits") or 0, strategy.reward(r)), reverse=True)[:3]
         L += ["", "## Recomendados para fijar en el perfil, anuncios y emails", ""]
         L += [f"- {r.get('permalink')} ({(r.get('hook') or '')[:70]})" for r in best]
+    try:
+        import studio
+        L += ["", "## Ranking de creadores IA", "", studio.leaderboard_md()]
+    except Exception:
+        pass
     st, mu, sd, n = strategy.stats()
     if n:
         L += ["", "## Qué está ganando (piloto automático)", ""]

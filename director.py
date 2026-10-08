@@ -150,9 +150,14 @@ def apply_fixes(sc, fixes):
     return sc
 
 
-def direct(sc, pillar, context, slots_text, validate, kind):
-    """Full creative review. Always returns a valid script (the best version that passed validation)."""
-    report = {"pillar": pillar}
+def direct(sc, pillar, context, slots_text, validate, kind, agent=None):
+    """Full creative review. Always returns a valid script (the best version that passed validation).
+    The director polishes but keeps the creator's voice and angle, so creators stay distinct."""
+    report = {"pillar": pillar, "agent_id": agent}
+    if agent:
+        import studio
+        context = (context + f"\nThis script was written by {studio.CREATORS[agent]['name']} "
+                   f"({studio.CREATORS[agent]['persona'][:160]}...). Keep its voice and angle; improve, don't flatten.")
     try:
         new, info = copy_chief(sc, pillar, context, slots_text)
         sc = validate(new, pillar)

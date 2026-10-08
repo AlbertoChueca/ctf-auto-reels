@@ -45,6 +45,30 @@ Sin puzzles: todo son reels de motion graphics para padres.
   los trabajos semanales se queda por debajo. Si algún mes se acercara al límite, GitHub avisa por email.
 - YouTube/TikTok vía Zernio es opcional; sin `ZERNIO_API_KEY` simplemente no se publica ahí.
 
+## Estudio de 5 creadores IA (`studio.py`)
+
+Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo visual propios:
+
+| Creador | Especialidad | Estilo de gancho | Look |
+|---|---|---|---|
+| The Analyst | Método, FAQ, prueba | Marcos claros: "Las 3 habilidades entre 1200 y 1500" | Papel editorial, subrayado |
+| The Storyteller | Éxitos, remix, dolor | Momentos reales de alumnos | Cálido, marca naranja |
+| The Myth Buster | Dolor, método, remix | Rompe una creencia de los padres | Estudio, marca naranja |
+| The Parent Whisperer | FAQ, dolor, éxitos | Empatía con el padre, objeciones | Papel, marca naranja |
+| The Trend Scout | Remix, dolor, FAQ, método | Formatos que frenan el scroll (POV, "nadie te dice…") | Cálido, subrayado |
+
+- **Compiten**: cada reel se asigna con muestreo de Thompson según resultados reales (visitas al perfil, follows,
+  shares, guardados, views). El mejor recibe más reels; un 20 % sigue explorando y nunca repite el creador del
+  reel anterior.
+- **Aprenden cada día**: cada creador reescribe su cuaderno (`agents/<creador>.md`) con sus mejores y peores reels,
+  los comentarios de los padres y lo que el director creativo le corrigió: qué mantener, qué dejar y 3 experimentos
+  nuevos.
+- **Se enseñan entre ellos**: cada lunes el jefe de estudio extrae las lecciones del líder (`agents/_studio.md`)
+  y todos las aplican a su estilo.
+- **Control de calidad**: todo pasa por el director creativo (gancho, copy y arte) y la revisión final del vídeo,
+  que pulen sin borrar la voz del creador. Las reglas de honestidad no se pueden saltar.
+- El ranking sale en el informe de los lunes. Para probar uno en concreto: *Daily reels* → `creator`.
+
 ## Conversión
 - **CTA** que el piloto automático prueba y optimiza: comentar la palabra clave (por defecto `PLAN`), ver la VSL,
   reservar llamada o comentar+seguir.

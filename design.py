@@ -38,6 +38,15 @@ GREEN = (26, 150, 90)
 MX = 72                     # side margin
 TOP = 150                   # headline top (below brand bar)
 
+# ======================================================================= creator looks (set per reel by studio.py)
+LOOK = {"light": "studio", "marker": "fill"}
+
+
+def set_look(light="studio", marker="fill"):
+    LOOK["light"] = light if light in ("studio", "paper", "warm") else "studio"
+    LOOK["marker"] = marker if marker in ("fill", "underline") else "fill"
+
+
 # ======================================================================= utilities
 _c = {}
 
@@ -200,9 +209,27 @@ def bg_warm():
     return cached("bg_warm", mk)
 
 
+def bg_paper():
+    """Editorial look: clean cream paper, fine grid, one soft orange glow. Quiet and premium."""
+    def mk():
+        im = _grad((251, 248, 243), (244, 238, 230), curve=1.0)
+        d = ImageDraw.Draw(im, "RGBA")
+        for x in range(0, BGW, 72):
+            d.line([(x, 0), (x, BGH)], fill=(120, 90, 60, 26))
+        for y in range(0, BGH, 72):
+            d.line([(0, y), (BGW, y)], fill=(120, 90, 60, 26))
+        _glow(im, int(BGW * 0.85), int(BGH * 0.2), 380, (255, 214, 176), 0.5)
+        _glow(im, BGW // 2, int(BGH * 0.8), 520, (255, 255, 255), 0.75)
+        _ghost_pieces(im, [(BGW - 360, BGH - 820, 420, 6)], blur=12, alpha=0.06)
+        return im.convert("RGBA")
+    return cached("bg_paper", mk)
+
+
 def draw_bg(fr, kind, t):
     """Slow drift (Ken Burns) on the background only, so text and characters stay razor sharp."""
-    bg = {"studio": bg_studio, "dark": bg_dark, "warm": bg_warm}[kind]()
+    if kind == "studio":
+        kind = LOOK["light"]
+    bg = {"studio": bg_studio, "dark": bg_dark, "warm": bg_warm, "paper": bg_paper}[kind]()
     k = ease_in_out(t / 8.0)
     ox, oy = int((BGW - W) * (0.5 + 0.25 * (k - 0.5))), int((BGH - H) * (0.65 - 0.3 * k))
     fr.paste(bg.crop((ox, oy, ox + W, oy + H)), (0, 0))
@@ -250,9 +277,15 @@ def character(fr, name, cx, feet_y, height, t, enter=0.0, slide_from=None):
 
 # ======================================================================= headline (kinetic, marker highlight)
 def _word_img(w, size, hl, dark):
+    under = hl and LOOK["marker"] == "underline"
     def mk():
         f = font(F_BLACK, size)
         tw = int(f.getlength(w)); asc, desc = f.getmetrics()
+        if under:                                       # orange word with a thick orange underline
+            im = Image.new("RGBA", (tw + 8, asc + desc + 18), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+            d.rounded_rectangle([2, asc + 2, tw + 4, asc + 14], radius=6, fill=ORANGE + (110,))
+            d.text((2, 0), w, font=f, fill=ORANGE)
+            return im
         padx, pady = (18, 6) if hl else (0, 0)
         im = Image.new("RGBA", (tw + 2 * padx + 6, asc + desc + 2 * pady + 6), (0, 0, 0, 0))
         d = ImageDraw.Draw(im)
@@ -262,7 +295,7 @@ def _word_img(w, size, hl, dark):
         col = (255, 255, 255) if (hl or dark) else INK
         d.text((padx, pady), w, font=f, fill=col)
         return im
-    return cached(("w", w, size, hl, dark), mk)
+    return cached(("w", w, size, hl, dark, under), mk)
 
 
 def headline_layout(text, highlight, size=88, maxw=W - 2 * MX):
@@ -272,7 +305,8 @@ def headline_layout(text, highlight, size=88, maxw=W - 2 * MX):
         f = font(F_BLACK, size)
         lines, cur = [], []
         for w in words:
-            ww = f.getlength(" ".join(cur + [w])) + (36 * sum(1 for x in cur + [w] if x.lower().strip(".,!?'’") in hl))
+            pad = 36 if LOOK["marker"] == "fill" else 8
+            ww = f.getlength(" ".join(cur + [w])) + (pad * sum(1 for x in cur + [w] if x.lower().strip(".,!?'’") in hl))
             if cur and ww > maxw:
                 lines.append(cur); cur = [w]
             else:

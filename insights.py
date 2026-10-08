@@ -92,7 +92,8 @@ def update(days=45):
         except Exception as err:
             print("insights error", mid, str(err)[:150], flush=True); continue
         perf[mid] = {**{k: e.get(k) for k in ("date", "slot", "story", "hook", "level", "mode", "engine",
-                                              "review_score", "permalink", "arms", "pillar", "cta")}, **m}
+                                              "review_score", "permalink", "arms", "pillar", "cta", "agent",
+                                              "headline", "media_id")}, **m}
         n += 1
     json.dump(perf, open(PERF, "w"), indent=0)
     return (f"insights: updated {n} reels"

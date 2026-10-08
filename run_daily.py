@@ -66,6 +66,21 @@ try:
 except Exception as e:
     strat_msg = f"strategy skipped: {str(e)[:150]}"; print(strat_msg, flush=True)
 
+# ---- the studio: 5 creators compete; they learn once a day from their own real results
+agent, studio_msg = None, ""
+try:
+    import studio
+    studio_msg = studio.learn(); print(studio_msg, flush=True)
+    recent_agents = []
+    try:
+        recent_agents = [x.get("agent") for x in json.load(open("explainer_log.json"))[-3:] if x.get("agent")]
+    except Exception:
+        pass
+    agent = studio.pick(pillar, seed=f"{now:%Y-%m-%d-%H}-{slot}-agent", recent_agents=recent_agents)
+    print("creator:", studio.CREATORS[agent]["name"], flush=True)
+except Exception as e:
+    studio_msg = f"studio skipped: {str(e)[:150]}"; print(studio_msg, flush=True)
+
 out = f"out/{today}_{slot}_{now.hour:02d}.mp4"
 
 # ---- render: AI script (2 tries) -> evergreen script (no AI text needed)
@@ -75,7 +90,7 @@ for eng in ["explainer", "explainer", "evergreen"]:
     try:
         if eng == "explainer" and not os.environ.get("GEMINI_API_KEY") and os.environ.get("STORY_MOCK") != "1":
             raise RuntimeError("GEMINI_API_KEY not set")
-        meta = build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen"))
+        meta = build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen"), agent=agent)
         meta["qc"] = guard.qc(out)                  # hard checks: streams, duration, real audio
         engine = eng
         break
@@ -100,6 +115,7 @@ if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
         f.write(f"## {'✅ AI reel' if engine == 'explainer' else '⚠️ Evergreen reel (AI script failed)'} · pillar `{pillar}`\n\n"
                 f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used}` · narrator: `{brand.NARRATOR}`\n"
+                + (f"- Creator: **{studio.CREATORS[meta['agent']]['name']}** · {studio_msg}\n" if meta.get("agent") else f"- {studio_msg}\n")
                 + (f"- Title: {meta.get('story')}\n" if meta.get("story") else "")
                 + (f"- Blocks: {', '.join(meta.get('blocks') or [])}\n")
                 + (f"- Student case: `{meta.get('case')}`\n" if meta.get("case") else "")
@@ -152,6 +168,6 @@ if brake:
     print("BRAKE:", brake)
 log({k: meta.get(k) for k in ("engine", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
-                              "case", "remix_of", "director")})
+                              "case", "remix_of", "director", "agent")})
 if brake:
     raise SystemExit(f"Published, then the automatic brake engaged: {brake}")

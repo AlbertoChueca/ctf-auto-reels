@@ -107,7 +107,9 @@ def allowed_blocks():
     return out                      # a trophy is a symbol of goals: allowed without any number
 
 
-PROMPT = """You write a {secs}-second vertical motion-graphics reel for {name}.
+PROMPT = """{creator}
+
+You write a {secs}-second vertical motion-graphics reel for {name}.
 {audience}
 {academy}
 {narrator}
@@ -195,19 +197,20 @@ def context_for(pillar):
     return "", {}
 
 
-def write_script(pillar, arms=None, context=""):
+def write_script(pillar, arms=None, context="", agent=None):
     import make_story as MS, strategy
     arms = arms or {}
     allowed = allowed_blocks()
     n = len(PILLARS[pillar])
     recent = _recent()
+    import studio
     body = {"contents": [{"parts": [{"text": PROMPT.format(
-        secs="35-50", name=brand.NAME, audience=brand.AUDIENCE, academy=brand.ACADEMY, narrator=brand.narrator_text(),
+        creator=studio.brief(agent) if agent in studio.CREATORS else "", secs="35-50", name=brand.NAME, audience=brand.AUDIENCE, academy=brand.ACADEMY, narrator=brand.narrator_text(),
         honesty=brand.HONESTY, claims=guard.approved_text(), cases=brand.cases_text(), facts="; ".join(brand.FACTS),
         pillar=pillar, brief=PILLAR_BRIEF[pillar], hook_style=arms.get("hook_style", "your best idea"),
         theme=arms.get("theme", "your best idea"),
         playbook=("WHAT WORKS FOR OUR AUDIENCE (from real results):\n" + strategy.playbook_text()) if strategy.playbook_text() else "",
-        recent="; ".join(f"{r.get('pillar')}: {r.get('title')} ({r.get('headline')})" for r in recent) or "none",
+        recent="; ".join(f"{r.get('agent') or '-'}/{r.get('pillar')}: {r.get('title')} ({r.get('headline')})" for r in recent) or "none",
         n=n, slots=_slots_text(pillar, allowed), catalog=json.dumps({k: v for k, v in BLOCKS.items() if k in allowed}),
         words="75-110", context=context)}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 1.0}}
@@ -314,9 +317,11 @@ def evergreen_script(pillar):
     return validate(sc, sc["pillar"]), sc["pillar"], {"evergreen": sc["id"], **({"case": sc["case"]} if sc.get("case") else {})}
 
 
-def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
-    import voice
+def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent=None):
+    import voice, studio
     arms = arms or {}
+    if agent in studio.CREATORS:
+        studio.apply_look(agent)                           # each creator has its own on-brand visual look
     mock = os.environ.get("STORY_MOCK") == "1" if mock is None else mock
     rng = random.Random(seed)
     kind = arms.get("cta") if arms.get("cta") in brand.CTA else (brand.CTA_MODE if brand.CTA_MODE in brand.CTA else "keyword")
@@ -327,10 +332,11 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
         ctx, extra = ("", {}) if mock else context_for(pillar)
         if pillar in ("success", "remix") and not ctx:
             pillar = "pain"                                # nothing to feature yet -> a pain reel instead
-        sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx)
+        sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx, agent)
         if not mock and os.environ.get("REVIEWER", "on") != "off":
             import director                                # 2nd agent: copy chief + art director
-            sc, director_report = director.direct(sc, pillar, ctx, _slots_text(pillar, allowed_blocks()), validate, kind)
+            sc, director_report = director.direct(sc, pillar, ctx, _slots_text(pillar, allowed_blocks()), validate, kind,
+                                                  agent=agent)
     scenes = [dict(x) for x in sc["scenes"]]
     scenes[0]["_first"] = False
     CT = brand.cta(kind)
@@ -403,7 +409,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
     open(out.replace(".mp4", ".txt"), "w").write(cap)
     meta = dict(mode="explainer", pillar=pillar, story=sc.get("title"), hook=sc.get("caption_hook"),
                 headline=scenes[0]["headline"], blocks=[x["block"] for x in scenes], duration=round(total, 1),
-                cta=kind, arms=arms, review_score=None)
+                cta=kind, arms=arms, review_score=None, agent=agent if not evergreen else None)
     if director_report:
         arts = director_report.get("art") or []
         meta["director"] = {"hook_options": [h.get("headline") for h in (director_report.get("copy") or {}).get("hooks", [])],
@@ -420,7 +426,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False):
         except Exception as e:
             print("explainer review skipped:", e)
     log = _recent(200) + [{"pillar": pillar, "title": sc.get("title"), "headline": scenes[0]["headline"],
-                           "date": time.strftime("%Y-%m-%d"), **extra}]
+                           "date": time.strftime("%Y-%m-%d"), "agent": agent, **extra}]
     if extra.get("remix_of"):
         try:
             import content_bank; content_bank.mark_remixed(extra["remix_of"])
