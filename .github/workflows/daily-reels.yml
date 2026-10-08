@@ -16,6 +16,11 @@ on:
         type: choice
         options: [auto, success, remix, pain, faq, method, proof]
         default: auto
+      creator:
+        description: "AI creator (auto = the studio picks the one with the best results)"
+        type: choice
+        options: [auto, analyst, storyteller, mythbuster, parent_whisperer, trend_scout]
+        default: auto
       dry_run:
         description: "Only generate the video (do not publish)"
         type: boolean
@@ -86,6 +91,7 @@ jobs:
           PILLAR_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.pillar || 'auto' }}
           FORCE_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.force || false }}
           FB_REELS: ${{ vars.FB_REELS || 'on' }}
+          AGENT_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.creator || 'auto' }}
           STUDENT_NAMES: ${{ vars.STUDENT_NAMES || 'none' }}
           DM_KEYWORD: ${{ vars.DM_KEYWORD || 'PLAN' }}
           REEL_FORMAT: ${{ vars.REEL_FORMAT }}
@@ -115,4 +121,5 @@ jobs:
           git config user.name "reels-bot"
           git config user.email "reels-bot@users.noreply.github.com"
           for f in log.jsonl explainer_log.json review_log.jsonl performance.json strategy_arms.json strategy_report.md playbook.md paused.json failures.json content_bank.json; do [ -f "$f" ] && git add "$f"; done
+          [ -d agents ] && git add agents
           git diff --cached --quiet || (git commit -m "Reel ${{ steps.lvl.outputs.level }} $(date +%F)" && (git push || (git pull --rebase && git push)))
