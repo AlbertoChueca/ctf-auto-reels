@@ -63,6 +63,7 @@ BLOCKS = {
     "limited":      "calendar with spots filling (ONLY with the approved limited_spots claim). params: {}",
     "before_after": "REAL student rating progress counter. params: {\"from\": int, \"to\": int, \"label\": \"in 13 months\"} - numbers ONLY from TODAY'S STUDENT CASE",
     "success_timeline": "REAL student milestones appear one by one with medals. params: {\"milestones\": [2-4 items, max 7 words each, ONLY from TODAY'S STUDENT CASE]}",
+    "key_card": "signature card 'SQUARE 65 - KEY n/65' with the key's title, by IM Alberto Chueca. params: {\"key\": n} (n = TODAY'S KEY)",
 }
 
 PILLARS = {
@@ -75,6 +76,8 @@ PILLARS = {
                 ["trophy", "authority"]],
     "remix": [["pain", "rating_drop", "faq_question"], ["wrong_way", "faq_answer", "mentor"],
               ["roadmap", "method_steps"], ["authority", "progress", "trophy"]],
+    "key": [["pain", "faq_question", "rating_drop", "wrong_way"], ["key_card"], ["method_steps", "faq_answer", "roadmap"],
+            ["authority", "progress", "trophy"]],
 }
 
 PILLAR_BRIEF = {
@@ -91,6 +94,10 @@ PILLAR_BRIEF = {
     "success": "Tell the REAL story of TODAY'S STUDENT CASE below: where the child started, what changed with structured "
                "training, the milestones reached. Use ONLY its facts, exactly. Then connect it to the parent watching "
                "(it is a pattern, not a promise).",
+    "key": "Teach TODAY'S KEY from Square 65, the book by IM Alberto Chueca that condenses our method into 65 keys. "
+           "Scene 1: the problem this key solves, as a parent sees it. Scene 2: the key_card (name it: 'Key n of Square "
+           "65'). Scene 3: what to actually do, in concrete steps taken from the key. Scene 4: how we apply it with our "
+           "students. Faithful to the book; never invent what the key says.",
     "remix": "Re-explain the IDEA TO REMIX below in a completely new way: a new hook, a new angle, a new example or "
              "analogy. Do not copy its wording or structure. It must feel like a fresh reel to someone who saw the original.",
 }
@@ -104,12 +111,15 @@ def allowed_blocks():
         out.discard("limited")
     if not guard.cases():
         out -= {"before_after", "success_timeline"}
+    if not os.path.exists(os.path.join(HERE, "method_bank.json")):
+        out.discard("key_card")
     return out                      # a trophy is a symbol of goals: allowed without any number
 
 
 PROMPT = """{creator}
 
 You write a {secs}-second vertical motion-graphics reel for {name}.
+{bible}
 {audience}
 {academy}
 {narrator}
@@ -137,6 +147,9 @@ Rules:
 - delivery: 3-8 word acting direction for the voice (calm, confident, warm; vary it).
 - No prices. No guarantees. No competitors. Never state a number about results, students or titles unless it is
   in APPROVED CLAIMS. Rating numbers are allowed ONLY inside a rating_drop block as an illustrative example.
+- COMPETITOR TEST: if another academy or a freelance coach could post this reel word for word, it fails. Carry at
+  least one of OUR anchors (Square 65 key, Learning Path level, T-T-P or another signature concept, a real approved
+  case, a coach credential) and use our vocabulary from the brand bible.
 - caption_hook: Instagram first line for parents, max 12 words, one emoji allowed.
 - caption_body: 1-2 short sentences that add value for the parent (no hashtags).
 Return JSON: {{"title": str, "summary": str, "caption_hook": str, "caption_body": str,
@@ -179,7 +192,60 @@ def case_text(c):
             f"name, never invent anything): {c['text']} | Facts: " + "; ".join(c.get("facts", [])))
 
 
+def method_bank():
+    try:
+        return json.load(open(os.path.join(HERE, "method_bank.json")))
+    except Exception:
+        return []
+
+
+def _used_keys():
+    used = {}
+    for i, r in enumerate(_recent(400)):
+        for k in (r.get("key"), r.get("anchor_key")):
+            if k:
+                used[int(k)] = i
+    return used
+
+
+def pick_key(pillar=None, rng=None):
+    """Least recently used key. pillar=None -> any key (key pillar); otherwise keys relevant to that pillar."""
+    bank = method_bank()
+    if not bank:
+        return None
+    rng = rng or random.Random()
+    pool = [k for k in bank if pillar is None or pillar in k.get("pillars", [])] or bank
+    used = _used_keys()
+    never = [k for k in pool if k["n"] not in used]
+    if never:                                        # spread chapters: random among the never-used ones
+        return rng.choice(never)
+    return min(pool, key=lambda k: used.get(k["n"], -1))
+
+
+def key_text(k, full=True):
+    body = k["text"][:2200] if full else k["summary"]
+    return (f"TODAY'S KEY: Square 65, Key {k['n']} of 65 - \"{k['title']}\" (chapter: {k['chapter']}). "
+            f"What the book says (stay faithful, do not copy long sentences, do not invent):\n{body}")
+
+
 def context_for(pillar):
+    rng = random.Random()
+    if pillar == "key":
+        k = pick_key(None, rng)
+        if k:
+            return key_text(k), {"key": k["n"]}
+    ctx, extra = _context_main(pillar)
+    if pillar in ("success", "remix") and not ctx:
+        return ctx, extra
+    k = pick_key(pillar if pillar in ("pain", "faq", "method") else None, rng)
+    if k:                                            # every reel carries our method (competitor test)
+        ctx += ("\n\nMETHOD ANCHOR (weave it in naturally, at least one sentence; e.g. 'In Square 65, IM Alberto "
+                "Chueca calls this...' or 'It's Key " + str(k["n"]) + " of our method'):\n" + key_text(k, full=False))
+        extra["anchor_key"] = k["n"]
+    return ctx, extra
+
+
+def _context_main(pillar):
     if pillar == "success":
         c = pick_case()
         if c:
@@ -197,7 +263,7 @@ def context_for(pillar):
     return "", {}
 
 
-def write_script(pillar, arms=None, context="", agent=None):
+def write_script(pillar, arms=None, context="", agent=None, key=None):
     import make_story as MS, strategy
     arms = arms or {}
     allowed = allowed_blocks()
@@ -205,7 +271,7 @@ def write_script(pillar, arms=None, context="", agent=None):
     recent = _recent()
     import studio
     body = {"contents": [{"parts": [{"text": PROMPT.format(
-        creator=studio.brief(agent) if agent in studio.CREATORS else "", secs="35-50", name=brand.NAME, audience=brand.AUDIENCE, academy=brand.ACADEMY, narrator=brand.narrator_text(),
+        creator=studio.brief(agent) if agent in studio.CREATORS else "", secs="35-50", bible=brand.bible(), name=brand.NAME, audience=brand.AUDIENCE, academy=brand.ACADEMY, narrator=brand.narrator_text(),
         honesty=brand.HONESTY, claims=guard.approved_text(), cases=brand.cases_text(), facts="; ".join(brand.FACTS),
         pillar=pillar, brief=PILLAR_BRIEF[pillar], hook_style=arms.get("hook_style", "your best idea"),
         theme=arms.get("theme", "your best idea"),
@@ -221,7 +287,13 @@ def write_script(pillar, arms=None, context="", agent=None):
         try:
             j = MS._post(model, body)
             txt = j["candidates"][0]["content"]["parts"][0]["text"]
-            return validate(json.loads(re.sub(r"^```(json)?|```$", "", txt.strip())), pillar)
+            sc = json.loads(re.sub(r"^```(json)?|```$", "", txt.strip()))
+            if key:
+                sc["_key"] = key
+                for x in sc.get("scenes", []):
+                    if x.get("block") == "key_card":
+                        x.setdefault("params", {})["key"] = key
+            return validate(sc, pillar)
         except Exception as e:
             last = e; print("explainer script:", model, str(e)[:200], flush=True)
     raise RuntimeError(f"explainer script failed: {last}")
@@ -265,6 +337,18 @@ def validate(sc, pillar):
                 s["block"] = "success_timeline" if "success_timeline" in allowed else "progress"
         if s["block"] == "success_timeline":
             p["milestones"] = [" ".join(str(x).split()[:7]) for x in p.get("milestones", []) if str(x).strip()][:4] or ["Real progress"]
+        if s["block"] == "key_card":
+            bank = {k["n"]: k for k in method_bank()}
+            try:
+                n = int(p.get("key"))
+            except Exception:
+                n = sc.get("_key")
+            if n not in bank:
+                n = sc.get("_key") if sc.get("_key") in bank else None
+            if n is None:
+                s["block"] = next((b for b in slots[i] if b != "key_card" and b in allowed), "roadmap")
+            else:
+                p["key"] = n; p["title"] = bank[n]["title"]; p["chapter"] = bank[n]["chapter"]
         if s["block"] == "faq_question":
             p["question"] = " ".join(str(p.get("question") or s["headline"]).split()[:8])
         s["params"] = p
@@ -314,7 +398,11 @@ def evergreen_script(pillar):
     used = {r.get("evergreen"): i for i, r in enumerate(_recent(200)) if r.get("evergreen")}
     same = [x for x in lib if x["pillar"] == pillar] or lib
     sc = json.loads(json.dumps(min(same, key=lambda x: used.get(x["id"], -1))))
-    return validate(sc, sc["pillar"]), sc["pillar"], {"evergreen": sc["id"], **({"case": sc["case"]} if sc.get("case") else {})}
+    extra = {"evergreen": sc["id"], **({"case": sc["case"]} if sc.get("case") else {})}
+    for k in ("key", "anchor_key"):
+        if sc.get(k):
+            extra[k] = sc[k]
+    return validate(sc, sc["pillar"]), sc["pillar"], extra
 
 
 def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent=None):
@@ -332,7 +420,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent
         ctx, extra = ("", {}) if mock else context_for(pillar)
         if pillar in ("success", "remix") and not ctx:
             pillar = "pain"                                # nothing to feature yet -> a pain reel instead
-        sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx, agent)
+        sc = mock_script(pillar) if mock else write_script(pillar, arms, ctx, agent, extra.get("key"))
         if not mock and os.environ.get("REVIEWER", "on") != "off":
             import director                                # 2nd agent: copy chief + art director
             sc, director_report = director.direct(sc, pillar, ctx, _slots_text(pillar, allowed_blocks()), validate, kind,
@@ -412,6 +500,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent
                 cta=kind, arms=arms, review_score=None, agent=agent if not evergreen else None)
     if director_report:
         arts = director_report.get("art") or []
+        meta["brand_check"] = director_report.get("brand")
         meta["director"] = {"hook_options": [h.get("headline") for h in (director_report.get("copy") or {}).get("hooks", [])],
                             "art_scores": [r["score"] for r in arts], "art_summary": arts[-1]["summary"] if arts else None}
     if not mock and not evergreen and os.environ.get("REVIEWER", "on") != "off":

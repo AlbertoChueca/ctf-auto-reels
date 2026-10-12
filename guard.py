@@ -57,6 +57,9 @@ def claims_ok(text):
         allowed |= {str(n).lower() for n in c.get("numbers", [])}
     bad = []
     text = re.sub(r"\b(one|two|three) of (our|the|my|his|her|their|these|those)\b", " ", text or "", flags=re.I)
+    # references to the book are not result claims: "Key 44", "Key forty-four", "Square 65", "65 keys"
+    text = re.sub(rf"\bkeys?\s+(\d+|(?:{WORDNUM})(?:[\s-](?:{WORDNUM}))*)\b", " ", text, flags=re.I)
+    text = re.sub(r"\bsquare\s+65\b|\b65\s+keys\b|\bof\s+65\b", " ", text, flags=re.I)
     for m in CLAIM_RE.finditer(text):
         num = m.group(1).lower().strip().rstrip(".,")
         if num not in allowed and num.replace(",", "") not in allowed:
@@ -123,3 +126,15 @@ def health(drop=0.4, min_reels=20):
     if med > 0 and now < drop * med:
         return f"views of the last 6 reels ({now:.0f}) are under {int(drop * 100)}% of the 14-day median ({med:.0f})"
     return None
+
+
+def anchored(sc):
+    """Competitor test, deterministic part: does the script carry at least one of OUR anchors?"""
+    import brand
+    text = " ".join(f"{s.get('headline', '')} {s.get('narration', '')} {json.dumps(s.get('params', {}))}"
+                    for s in sc.get("scenes", [])).lower()
+    text += " " + (sc.get("caption_hook", "") + " " + sc.get("caption_body", "")).lower()
+    hits = [t.strip() for t in brand.ANCHOR_TERMS if t in text]
+    if any(s.get("block") in ("key_card", "before_after", "success_timeline") for s in sc.get("scenes", [])):
+        hits.append("signature block")
+    return hits

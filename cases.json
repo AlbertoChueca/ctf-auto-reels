@@ -1,13 +1,162 @@
 [
-  {"id": "pranav", "approved": true, "source": "website", "name": "Pranav",
-   "url": "https://chesstalentsfactory.com/our-students/pranav-sathish/",
-   "text": "From 1100 to 1800+ rating in only 13 months. Later crossed 2300 FIDE rating and earned the National Master title (2023).",
-   "facts": ["From 1100 to 1800+ rating in 13 months", "Crossed 2300 FIDE rating", "National Master title in 2023"],
-   "numbers": ["1100", "1800", "13", "2300", "2023"]},
-  {"id": "vyom", "approved": true, "source": "website", "name": "Vyom",
-   "url": "https://chesstalentsfactory.com/our-students/vyom-vidyarthi/",
-   "text": "California State Champion at 10, National Grade K-6 Champion at 12, FIDE Master and International Master at 14, Pan American Junior Champion at 15.",
-   "facts": ["California State Champion at age 10", "National Master at age 12", "International Master title at age 14",
-             "Pan American Junior Champion at age 15", "North American Junior U20 Champion"],
-   "numbers": ["10", "12", "14", "15", "20", "2017", "2019", "2021", "2022"]}
+ {
+  "id": "pranav-sathish",
+  "approved": true,
+  "source": "website",
+  "name": "Pranav",
+  "url": "https://chesstalentsfactory.com/our-students/pranav-sathish/",
+  "text": "From 1100 to 1800+ rating in only 13 months. Later crossed 2300 FIDE rating and earned the National Master title (2023).",
+  "facts": [
+   "From 1100 to 1800+ rating in 13 months",
+   "Crossed 2300 FIDE rating",
+   "National Master title in 2023"
+  ],
+  "numbers": [
+   "1100",
+   "1800",
+   "13",
+   "2300",
+   "2023"
+  ]
+ },
+ {
+  "id": "vyom-vidyarthi",
+  "approved": true,
+  "source": "website",
+  "name": "Vyom",
+  "url": "https://chesstalentsfactory.com/our-students/vyom-vidyarthi/",
+  "text": "California State Champion at 10, National Grade K-6 Champion at 12, FIDE Master and International Master at 14, Pan American Junior Champion at 15.",
+  "facts": [
+   "California State Champion at age 10",
+   "National Master at age 12",
+   "International Master title at age 14",
+   "Pan American Junior Champion at age 15",
+   "North American Junior U20 Champion"
+  ],
+  "numbers": [
+   "10",
+   "12",
+   "14",
+   "15",
+   "20",
+   "2017",
+   "2019",
+   "2021",
+   "2022"
+  ]
+ },
+ {
+  "approved": true,
+  "source": "book",
+  "source_detail": "Square 65 (book by IM Alberto Chueca), success stories page",
+  "id": "omya-vidyarthi",
+  "name": "Omya",
+  "url": "https://chesstalentsfactory.com/our-students/omya-vidyarthi/",
+  "text": "World Chess Champion U10 (FIDE Girls' Rapid). 4 times Pan-American Champion. From 1100 to 1900+ rating in only 2 years.",
+  "facts": [
+   "World Chess Champion U10 (Girls' Rapid)",
+   "4 times Pan-American Champion",
+   "From 1100 to 1900+ rating in 2 years"
+  ],
+  "numbers": [
+   "10",
+   "4",
+   "four",
+   "1100",
+   "1900",
+   "2",
+   "two"
+  ]
+ },
+ {
+  "approved": true,
+  "source": "book",
+  "source_detail": "Square 65 (book by IM Alberto Chueca), success stories page",
+  "id": "vishva-nanugonda",
+  "name": "Vishva",
+  "url": "",
+  "text": "From 1500 to 2100+ rating in 4 years.",
+  "facts": [
+   "From 1500 to 2100+ rating in 4 years"
+  ],
+  "numbers": [
+   "1500",
+   "2100",
+   "4",
+   "four"
+  ]
+ },
+ {
+  "approved": true,
+  "source": "book",
+  "source_detail": "Square 65 (book by IM Alberto Chueca), success stories page",
+  "id": "jwalanthi-ram",
+  "name": "Jwalanthi",
+  "url": "",
+  "text": "3rd place at a Pan-American tournament. From 1100 to 1900+ rating in only 2 years.",
+  "facts": [
+   "3rd place at a Pan-American tournament",
+   "From 1100 to 1900+ rating in 2 years"
+  ],
+  "numbers": [
+   "3",
+   "1100",
+   "1900",
+   "2",
+   "two"
+  ]
+ },
+ {
+  "approved": true,
+  "source": "book",
+  "source_detail": "Square 65 (book by IM Alberto Chueca), success stories page",
+  "id": "imran-champsi",
+  "name": "Imran",
+  "url": "",
+  "text": "From 1700 to 2050+ rating in only 2 years.",
+  "facts": [
+   "From 1700 to 2050+ rating in 2 years"
+  ],
+  "numbers": [
+   "1700",
+   "2050",
+   "2",
+   "two"
+  ]
+ },
+ {
+  "approved": true,
+  "source": "book",
+  "source_detail": "Square 65 (book by IM Alberto Chueca), success stories page",
+  "id": "shiv-shome",
+  "name": "Shiv",
+  "url": "https://chesstalentsfactory.com/our-students/shiv-shome/",
+  "text": "Initial FIDE rating of 2148. Top 3 of the U-12 World Ranking (2018).",
+  "facts": [
+   "Initial FIDE rating of 2148",
+   "Top 3 in the U-12 World Ranking in 2018"
+  ],
+  "numbers": [
+   "2148",
+   "3",
+   "12",
+   "2018"
+  ]
+ },
+ {
+  "approved": true,
+  "source": "book",
+  "source_detail": "Square 65 (book by IM Alberto Chueca), success stories page",
+  "id": "alejandra-sandoval-rivera",
+  "name": "Alejandra",
+  "url": "https://chesstalentsfactory.com/our-students/alejandra-sandoval-rivera/",
+  "text": "The only Mexican player in the top 50 of the USA U14 ranking.",
+  "facts": [
+   "The only Mexican player in the top 50 of the USA U14 ranking"
+  ],
+  "numbers": [
+   "50",
+   "14"
+  ]
+ }
 ]

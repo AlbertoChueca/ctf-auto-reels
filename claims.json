@@ -1,17 +1,91 @@
 [
-  {"id": "students_trained", "approved": true, "source": "website",
-   "text": "More than 250 students trained.", "numbers": ["250", "two hundred fifty"]},
-  {"id": "national_champions", "approved": true, "source": "website",
-   "text": "More than 30 national champions among our students.", "numbers": ["30", "thirty"]},
-  {"id": "countries", "approved": true, "source": "website",
-   "text": "Students from more than 15 countries.", "numbers": ["15", "fifteen"]},
-  {"id": "fide_titles", "approved": true, "source": "website",
-   "text": "Our students have earned official titles such as FIDE Master, National Master and International Master.", "numbers": []},
-  {"id": "avg_gain", "approved": false,
-   "text": "Our students gain on average 300 rating points in their first 3 months.",
-   "numbers": ["300", "three hundred"],
-   "note": "Pon approved: true SOLO si es un dato medido. Activa el bloque del contador de rating medio."},
-  {"id": "limited_spots", "approved": false,
-   "text": "Group spots are limited because groups have 2 to 6 students of the same level.",
-   "numbers": ["2", "6", "two", "six"], "note": "Activa el bloque de plazas limitadas."}
+ {
+  "id": "students_trained",
+  "approved": true,
+  "source": "website",
+  "text": "More than 250 students trained.",
+  "numbers": [
+   "250",
+   "two hundred fifty"
+  ]
+ },
+ {
+  "id": "national_champions",
+  "approved": true,
+  "source": "website",
+  "text": "More than 30 national champions among our students.",
+  "numbers": [
+   "30",
+   "thirty"
+  ]
+ },
+ {
+  "id": "countries",
+  "approved": true,
+  "source": "website",
+  "text": "Students from more than 15 countries.",
+  "numbers": [
+   "15",
+   "fifteen"
+  ]
+ },
+ {
+  "id": "fide_titles",
+  "approved": true,
+  "source": "website",
+  "text": "Our students have earned official titles such as FIDE Master, National Master and International Master.",
+  "numbers": []
+ },
+ {
+  "id": "avg_gain",
+  "approved": false,
+  "text": "Our students gain on average 300 rating points in their first 3 months.",
+  "numbers": [
+   "300",
+   "three hundred"
+  ],
+  "note": "Pon approved: true SOLO si es un dato medido. Activa el bloque del contador de rating medio."
+ },
+ {
+  "id": "limited_spots",
+  "approved": false,
+  "text": "Group spots are limited because groups have 2 to 6 students of the same level.",
+  "numbers": [
+   "2",
+   "6",
+   "two",
+   "six"
+  ],
+  "note": "Activa el bloque de plazas limitadas."
+ },
+ {
+  "id": "coach_credentials",
+  "approved": true,
+  "source": "book",
+  "text": "IM Alberto Chueca is an International Master, a FIDE Trainer and has been Official US Chess Coach for the Cadet U8, U10 and U12 World Chess Championships.",
+  "numbers": [
+   "8",
+   "10",
+   "12"
+  ]
+ },
+ {
+  "id": "author",
+  "approved": true,
+  "source": "book",
+  "text": "IM Alberto Chueca is the author of the chess books 'Square 65' and 'The Chueca-Vidyarthi Opening 1.Nc3'.",
+  "numbers": [
+   "65",
+   "1"
+  ]
+ },
+ {
+  "id": "world_champion_student",
+  "approved": true,
+  "source": "book",
+  "text": "One of our students became U10 World Chess Champion (Girls' Rapid).",
+  "numbers": [
+   "10"
+  ]
+ }
 ]

@@ -72,6 +72,24 @@ HONESTY = (
     f"except {COACH} when the narrator speaks as him.")
 
 
+def bible():
+    """The brand bible (brand_bible.md), read fresh every run so edits apply to the next reel."""
+    try:
+        txt = open(os.path.join(HERE, "brand_bible.md")).read()
+        return re.sub(r"<!--.*?-->", "", txt, flags=re.S).strip()
+    except Exception:
+        return ""
+
+
+# Words that prove a reel is OURS (the competitor test). At least one must appear in every script.
+ANCHOR_TERMS = ["square 65", "65 keys", "key ", "meta-chess", "t-t-p", "tripartite", "tactics, theory", "learning path",
+                "the basics", "the strategist", "the competitor", "the expert", "candidate master", "master & beyond",
+                "study thesis", "technical diagnosis", "deliberate practice", "macrocycle", "microcycle",
+                "ninety-minute", "90-minute", "international master", "fide trainer", "im alberto", "alberto chueca",
+                "our students", "one of our students", "world champion", "pan-american", "national master",
+                "progress report", "chesstalentsfactory"]
+
+
 def cases_text():
     """Real, permission-approved cases written by the owner in cases.json (empty by default)."""
     try:
@@ -128,7 +146,9 @@ def cta(kind):
 
 
 # Facts the AI may use freely (true by definition of the offer). Anything else about results needs claims.json.
-FACTS = ["International Masters", "Small groups of 2-6", "Private 1-on-1 lessons", "Level-based roadmap",
+FACTS = ["International Masters", "FIDE Trainer", "T-T-P training system", "90-minute classes", "Author of Square 65",
+         "6-level Learning Path", "Quarterly progress reports", "Technical diagnosis first",
+         "Small groups of 2-6", "Private 1-on-1 lessons", "Level-based roadmap",
          "Weekly assignments", "Recorded lessons", "Masterclasses", "Progress reports", "Kids of the same level",
          "15 years of coaching"]
 

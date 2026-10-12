@@ -28,7 +28,7 @@ CREATORS = {
         persona=("A calm International-Master-level coach who explains chess improvement like an engineer: precise, "
                  "structured, one clear framework per reel (3 steps, 1 rule, before/after). Hooks are specific and "
                  "intriguing ('The 3 skills between 1200 and 1500'). Speaks to analytical, high-achieving parents."),
-        pillars=["method", "faq", "proof"],
+        pillars=["method", "faq", "proof", "key"],
         look={"light": "paper", "marker": "underline"}),
     "storyteller": dict(
         name="The Storyteller",
@@ -42,21 +42,21 @@ CREATORS = {
         persona=("A bold, contrarian expert who opens by breaking a belief parents hold ('More games won't fix it', "
                  "'Openings aren't the problem'). Pattern-interrupt hooks, short punchy lines, then a clear, credible "
                  "alternative. Never rude, never hype."),
-        pillars=["pain", "method", "remix"],
+        pillars=["pain", "method", "remix", "key"],
         look={"light": "studio", "marker": "fill"}),
     "parent_whisperer": dict(
         name="The Parent Whisperer",
         persona=("Speaks from the parent's side of the table: the drive to the tournament, the tears after a loss, "
                  "the doubt about which coach to trust. Empathetic first sentence, then honest, practical answers to "
                  "the questions parents ask before hiring an academy. Builds trust and handles objections."),
-        pillars=["faq", "pain", "success"],
+        pillars=["faq", "pain", "success", "key"],
         look={"light": "paper", "marker": "fill"}),
     "trend_scout": dict(
         name="The Trend Scout",
         persona=("A creative short-form strategist obsessed with what makes people stop scrolling: curiosity gaps, "
                  "unexpected comparisons, 'POV' and 'nobody tells parents this' formats, numbered reveals. Re-invents "
                  "the account's best past ideas in fresh formats. Always original, never gimmicky."),
-        pillars=["remix", "pain", "faq", "method"],
+        pillars=["remix", "pain", "faq", "method", "key"],
         look={"light": "warm", "marker": "underline"}),
 }
 

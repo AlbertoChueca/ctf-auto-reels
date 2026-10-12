@@ -7,6 +7,9 @@
    system in about a second) and checks legibility, overlaps, hierarchy, empty space, consistency and whether each
    image matches what the voice says. It returns concrete fixes (shorter headline, other highlight words, another
    block from the same slot, shorter list items) which are applied and checked again, up to 2 rounds.
+3. brand_guardian(): the competitor test. Scores how unmistakably ChessTalentsFactory the script is (could another
+   academy post it word for word?) and how well it follows the brand bible (voice, vocabulary, banned words). Below
+   8/10, or with no anchor of ours at all (deterministic check), it rewrites the script around our method anchor.
 Every fix goes through make_explainer.validate(), so the agent can never break the honesty rules or the layout.
 """
 import json, os
@@ -35,12 +38,36 @@ def _log(entry):
 
 
 ROLE = f"""You are the creative director of {brand.NAME}'s short-form video (Instagram Reels, Facebook, Shorts).
+{brand.bible()}
 {brand.AUDIENCE}
 {brand.ACADEMY}
 {brand.HONESTY}
 Standards: premium, calm confidence, zero hype, zero cliches. Every reel must (1) stop a busy parent's scroll in the
 first 1.5 seconds, (2) teach or show something specific and credible, (3) make them think "these people really know
 how kids improve", (4) end with a natural bridge into the call to action, so they comment, follow or visit the profile."""
+
+
+def brand_guardian(sc, pillar, context, slots_text):
+    hits = guard.anchored(sc)
+    res = _ask([{"text": f"""You are the BRAND GUARDIAN of {brand.NAME}. Your only job: protect a premium, distinctive brand.
+BRAND BIBLE:
+{brand.bible()}
+{brand.HONESTY}
+{guard.approved_text()}
+{context}
+
+SCRIPT TO JUDGE (pillar: {pillar}):
+{json.dumps(sc, ensure_ascii=False)}
+Our anchors found automatically: {hits or 'NONE'}
+
+1) Score 1-10 "distinctiveness": 10 = only ChessTalentsFactory could have made this (our method, our concepts by name,
+   our cases, our coaches); 1 = any academy or freelance coach could post it word for word.
+2) Score 1-10 "voice": matches the brand bible voice and vocabulary, no banned words, premium and calm.
+3) If either score is below 8, rewrite the script so it passes: weave in the METHOD ANCHOR / today's key / case
+   above by name, use our vocabulary, remove anything generic or off-voice. Keep the hook if it is strong, keep the
+   same scenes and blocks (allowed per slot: {slots_text}), keep the JSON schema, keep it honest.
+Return JSON: {{"distinctiveness": number, "voice": number, "issues": [str], "script": <full script JSON or null>}}"""}], 0.5)
+    return res, hits
 
 
 def copy_chief(sc, pillar, context, slots_text):
@@ -160,11 +187,31 @@ def direct(sc, pillar, context, slots_text, validate, kind, agent=None):
                    f"({studio.CREATORS[agent]['persona'][:160]}...). Keep its voice and angle; improve, don't flatten.")
     try:
         new, info = copy_chief(sc, pillar, context, slots_text)
+        if sc.get("_key"):
+            new["_key"] = sc["_key"]
         sc = validate(new, pillar)
         report["copy"] = info
         print("director/copy: hook =", sc["scenes"][0]["headline"], "|", info.get("notes", "")[:120], flush=True)
     except Exception as e:
         report["copy_error"] = str(e)[:200]; print("director/copy skipped:", str(e)[:200], flush=True)
+    try:                                              # brand guardian: the competitor test
+        res, hits = brand_guardian(sc, pillar, context, slots_text)
+        dist, voice = float(res.get("distinctiveness") or 0), float(res.get("voice") or 0)
+        rewrote = False
+        if (dist < 8 or voice < 8 or not hits) and isinstance(res.get("script"), dict):
+            new = res["script"]
+            for k in ("caption_hook", "caption_body", "title", "summary", "_key"):
+                if sc.get(k) is not None:
+                    new.setdefault(k, sc.get(k))
+            new = validate(new, pillar)
+            if guard.anchored(new):
+                sc, rewrote = new, True
+        report["brand"] = {"distinctiveness": dist, "voice": voice, "anchors": guard.anchored(sc),
+                           "issues": (res.get("issues") or [])[:4], "rewrote": rewrote}
+        print(f"director/brand: distinctiveness {dist}/10, voice {voice}/10, anchors {guard.anchored(sc)}"
+              + (" -> rewritten" if rewrote else ""), flush=True)
+    except Exception as e:
+        report["brand_error"] = str(e)[:200]; print("director/brand skipped:", str(e)[:200], flush=True)
     report["art"] = []
     for rnd in range(2):
         try:

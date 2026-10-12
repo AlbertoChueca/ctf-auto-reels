@@ -730,12 +730,75 @@ def b_success_timeline(fr, t, dur, s):
     headline(fr, s["headline"], s["highlight"], t, instant=s.get("_first"))
 
 
+def book_cover(w=300):
+    """Stylised Square 65 cover (our own drawing, no copyrighted art): black cover, 8x8 board + the orange 65th square."""
+    def mk():
+        h = int(w * 1.45)
+        sh = soft_shadow(w, h, 10, blur=24, alpha=110, dy=18)
+        pad = (sh.width - w) // 2
+        im = sh.copy(); d = ImageDraw.Draw(im)
+        d.rounded_rectangle([pad, pad, pad + w, pad + h], radius=10, fill=(22, 21, 26))
+        d.rectangle([pad, pad, pad + 14, pad + h], fill=(10, 10, 12))                        # spine
+        cs = (w - 92) / 8; x0, y0 = pad + 34, pad + int(h * 0.1)
+        for r in range(8):
+            for c in range(8):
+                col = (66, 64, 74) if (r + c) % 2 else (38, 37, 44)
+                d.rectangle([x0 + c * cs, y0 + r * cs, x0 + (c + 1) * cs - 2, y0 + (r + 1) * cs - 2], fill=col)
+        d.rounded_rectangle([x0 + 8 * cs + 8, y0 + 7 * cs, x0 + 9 * cs + 6, y0 + 8 * cs - 2], radius=4, fill=ORANGE)
+        yb = y0 + 8 * cs
+        d.text((pad + w / 2, yb + h * 0.11), "SQUARE 65", font=font(F_BLACK, int(w * 0.15)), fill=(255, 255, 255), anchor="mm")
+        d.text((pad + w / 2, yb + h * 0.19), "65 keys to win in chess", font=font(F_UI2, int(w * 0.058)),
+               fill=(200, 196, 206), anchor="mm")
+        d.text((pad + w / 2, pad + h - h * 0.07), "IM ALBERTO CHUECA", font=font(F_UI, int(w * 0.056)), fill=ORANGE, anchor="mm")
+        return im
+    return cached(("book", w), mk)
+
+
+def b_key_card(fr, t, dur, s):
+    draw_bg(fr, "dark", t)
+    p = s["params"]; n = p.get("key", 1)
+    k = ease_out(t / 0.6)
+    paste(fr, book_cover(320), MX + 180, 690 + (1 - k) * 60, 0.92 + 0.08 * k, min(1, t / 0.35))
+    lt = t - 0.35
+    if lt > 0:
+        lab = cached("keylab", lambda: _txt("SQUARE 65 · KEY", font(F_UI, 36), ORANGE))
+        paste(fr, lab, MX + 420 + lab.width / 2, 520, 1, min(1, lt / 0.25))
+        num = cached(("keynum", n), lambda: _keynum(n, font(F_BLACK, 190), font(F_BLACK, 70)))
+        paste(fr, num, MX + 418 + num.width / 2, 660, 0.85 + 0.15 * back(lt / 0.45), min(1, lt / 0.2))
+        by = cached("keyby", lambda: _txt("by IM Alberto Chueca", font(F_UI2, 34), (190, 186, 198)))
+        paste(fr, by, MX + 420 + by.width / 2, 800, 1, clamp((lt - 0.3) / 0.3))
+    d = ImageDraw.Draw(fr)
+    d.line([(MX, 1000), (MX + 120 * ease_out((t - 0.6) / 0.5), 1000)], fill=ORANGE, width=8)
+    title = p.get("title", "")
+    ft = font(F_BLACK, 64 if len(title) < 48 else 54)
+    lines = text_lines(title, ft, W - 2 * MX)[:4]
+    lh = int(ft.size * 1.18)
+    for li, ln in enumerate(lines):
+        lt2 = t - 0.7 - li * 0.12
+        if lt2 > 0:
+            a = int(255 * min(1, lt2 / 0.3))
+            d.text((MX, 1040 + li * lh + (1 - ease_out(lt2 / 0.4)) * 20), ln, font=ft, fill=(255, 255, 255, a))
+    lt3 = t - 1.2
+    if lt3 > 0 and p.get("chapter"):
+        ch = chip(p["chapter"].upper(), 32, dark=True)
+        paste(fr, ch, MX - 14 + ch.width / 2, 1080 + len(lines) * lh + 30, 1, min(1, lt3 / 0.3))
+
+
+def _keynum(n, f, fs):
+    a, b = str(n), "/65"
+    wa, wb = f.getlength(a), fs.getlength(b)
+    im = Image.new("RGBA", (int(wa + wb + 20), int(f.size * 1.2)), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.text((0, 0), a, font=f, fill=ORANGE)
+    d.text((wa + 12, f.size * 0.62), b, font=fs, fill=(150, 146, 160))
+    return im
+
+
 DRAW = {"pain": b_pain, "rating_drop": b_rating_drop, "wrong_way": b_wrong_way, "mentor": b_mentor,
         "roadmap": b_roadmap, "method_steps": b_method_steps, "authority": b_authority,
         "faq_question": b_faq_question, "faq_answer": b_faq_answer, "progress": b_progress,
         "rating_up": b_rating_up, "trophy": b_trophy, "limited": b_limited,
-        "before_after": b_before_after, "success_timeline": b_success_timeline}
-DARK_BLOCKS = {"wrong_way", "limited"}
+        "before_after": b_before_after, "success_timeline": b_success_timeline, "key_card": b_key_card}
+DARK_BLOCKS = {"wrong_way", "limited", "key_card"}
 
 
 # ======================================================================= end card

@@ -10,13 +10,13 @@ Sin puzzles: todo son reels de motion graphics para padres.
 
 | Día | 12:00 | 21:00 |
 |---|---|---|
-| Lunes | Dolor → solución | Pregunta de padres (FAQ) |
+| Lunes | Dolor → solución | **Clave de Square 65** |
 | Martes | **Éxito de alumno** | **Remix** de un reel anterior |
-| Miércoles | Pregunta de padres (FAQ) | Dolor → solución |
+| Miércoles | Pregunta de padres (FAQ) | **Clave de Square 65** |
 | Jueves | **Remix** de un reel anterior | **Éxito de alumno** |
-| Viernes | Método / hoja de ruta | **Remix** de un reel anterior |
+| Viernes | Método / hoja de ruta | **Clave de Square 65** |
 | Sábado | **Éxito de alumno** | Pregunta de padres (FAQ) |
-| Domingo | **Remix** de un reel anterior | Método / hoja de ruta |
+| Domingo | **Remix** de un reel anterior | **Clave de Square 65** |
 
 - **Éxito de alumno**: historias reales sacadas SOLO de lo que la Academia ya publica: las páginas de alumnos de la
   web (`success_sync.py`, cada domingo) y los casos que aparecen en tus propios reels (`content_bank.py`). Rota los
@@ -44,6 +44,19 @@ Sin puzzles: todo son reels de motion graphics para padres.
 - GitHub Actions: un repo privado tiene 2.000 minutos gratis al mes. Con 2 reels/día, el bot cada 2 horas y
   los trabajos semanales se queda por debajo. Si algún mes se acercara al límite, GitHub avisa por email.
 - YouTube/TikTok vía Zernio es opcional; sin `ZERNIO_API_KEY` simplemente no se publica ahí.
+
+## Marca propia: nada de contenido genérico
+- **`brand_bible.md`** (editable): posicionamiento, tu método con sus nombres propios (Square 65 / Meta-Chess,
+  sistema T-T-P, diagnóstico técnico, Study Thesis, los 6 niveles del Learning Path…), tu voz, las palabras que
+  usamos y las prohibidas, y la **prueba del competidor**. Todos los agentes la leen antes de escribir.
+- **`method_bank.json`**: las 65 claves de *Square 65* extraídas del libro. Pilar nuevo **"key"** (4 reels a la
+  semana): cada uno enseña una clave con la tarjeta "SQUARE 65 · KEY n/65". Rotan sin repetirse hasta usar las 65.
+  Además, **todos los demás reels** llevan una clave relacionada como ancla del método.
+- **Guardián de marca** (en `director.py`): puntúa de 1 a 10 si solo ChessTalentsFactory podría haber hecho el reel
+  y si respeta la voz. Por debajo de 8, o sin ninguna ancla propia, lo reescribe con tu método. Lo verás en el
+  resumen de cada ejecución.
+- Casos del libro añadidos a `cases.json` (Omya, Vishva, Jwalanthi, Imran, Shiv, Alejandra) y credenciales en
+  `claims.json` (IM, FIDE Trainer, entrenador oficial de US Chess en Mundiales U8/U10/U12, autor).
 
 ## Estudio de 5 creadores IA (`studio.py`)
 

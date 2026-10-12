@@ -29,8 +29,8 @@ def log(entry):
 
 # ---- weekly calendar (US date), Mon..Sun: 14 reels a week, success stories and remixes get the most slots
 MIDDAY = {0: "pain", 1: "success", 2: "faq", 3: "remix", 4: "method", 5: "success", 6: "remix"}
-EVENING = {0: "faq", 1: "remix", 2: "pain", 3: "success", 4: "remix", 5: "faq", 6: "method"}
-PILLARS = ("pain", "faq", "method", "proof", "success", "remix")
+EVENING = {0: "key", 1: "remix", 2: "key", 3: "success", 4: "key", 5: "faq", 6: "key"}   # key = Square 65 key
+PILLARS = ("pain", "faq", "method", "proof", "success", "remix", "key")
 us_today = (now - datetime.timedelta(hours=5)).date()
 wd = us_today.weekday()
 pillar = os.environ.get("PILLAR_OVERRIDE", "auto")
@@ -123,6 +123,10 @@ if summary:  # visible on the run page in GitHub
                 + (f"- Director: hooks considered: {' | '.join(meta['director'].get('hook_options') or [])}\n"
                    f"- Director: art scores {meta['director'].get('art_scores')} - {meta['director'].get('art_summary')}\n"
                    if meta.get("director") else "")
+                + (f"- Brand guardian: distinctiveness {meta['brand_check'].get('distinctiveness')}/10, voice "
+                   f"{meta['brand_check'].get('voice')}/10, anchors {meta['brand_check'].get('anchors')}"
+                   f"{' (rewritten)' if meta['brand_check'].get('rewrote') else ''}\n" if meta.get("brand_check") else "")
+                + (f"- Square 65: key {meta.get('key') or meta.get('anchor_key')}\n" if (meta.get("key") or meta.get("anchor_key")) else "")
                 + (f"- Final video review: {meta.get('review_score')}/10\n" if meta.get("review_score") is not None else "")
                 + f"- {insights_msg}\n"
                 + (f"- Experiment: {', '.join(f'{k}={v.split(chr(58))[0]}' for k, v in arms.items())}\n" if arms else "")
@@ -168,6 +172,7 @@ if brake:
     print("BRAKE:", brake)
 log({k: meta.get(k) for k in ("engine", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
-                              "case", "remix_of", "director", "agent")})
+                              "case", "remix_of", "director", "agent", "key",
+                              "anchor_key", "brand_check")})
 if brake:
     raise SystemExit(f"Published, then the automatic brake engaged: {brake}")
