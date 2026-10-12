@@ -95,5 +95,12 @@
 "date": "2026-10-12",
 "agent": "mythbuster",
 "evergreen": "pain-plateau"
+},
+{
+"pillar": "pain",
+"title": "The Myth of Learning from Losses",
+"headline": "Why Lost Games Repeat Mistakes",
+"date": "2026-10-12",
+"agent": "trend_scout"
 }
 ]
