@@ -59,6 +59,8 @@ try:
     import strategy
     fixed = {"cta": brand.CTA_MODE} if brand.CTA_MODE in brand.CTA else {}
     arms = strategy.choose(seed=f"{now:%Y-%m-%d-%H}-{slot}", fixed=fixed)
+    if arms.get("cta") not in ("keyword", "vsl", "call"):
+        arms["cta"] = "keyword"
     if slot == "story":
         strat_msg = strategy.weekly_strategist()
     strategy.write_report()

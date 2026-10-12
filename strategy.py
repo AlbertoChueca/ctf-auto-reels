@@ -38,7 +38,7 @@ DEFAULT_ARMS = {
         "confidence, focus and school skills that chess builds",
         "why group training with kids of the same level speeds up progress",
     ],
-    "cta": ["keyword", "vsl", "call", "comment"],
+    "cta": ["keyword", "vsl", "call"],
 }
 THINK_FACTOR = {"fast": 0.75, "normal": 1.0, "long": 1.3}
 WORDS = {"short": "22-30", "normal": "30-40"}
@@ -49,6 +49,7 @@ def arms():
         a = json.load(open(ARMS_FILE))
         for k, v in DEFAULT_ARMS.items():
             a.setdefault(k, v)
+        a["cta"] = [c for c in a.get("cta", []) if c in DEFAULT_ARMS["cta"]] or list(DEFAULT_ARMS["cta"])
         return a
     except Exception:
         return {k: list(v) for k, v in DEFAULT_ARMS.items()}

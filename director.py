@@ -70,7 +70,7 @@ Return JSON: {{"distinctiveness": number, "voice": number, "issues": [str], "scr
     return res, hits
 
 
-def copy_chief(sc, pillar, context, slots_text):
+def copy_chief(sc, pillar, context, slots_text, kind="keyword"):
     res = _ask([{"text": f"""{ROLE}
 {guard.approved_text()}
 {context}
@@ -87,7 +87,10 @@ angles: a sharp question, a counter-intuitive claim, a specific moment parents r
 insight. Score each 1-10 for scroll-stop, clarity, curiosity, relevance to this pillar and credibility. Pick the best.
 Step 2. Rewrite the whole script around the chosen hook: one idea per scene, concrete words parents use, narration
 8-20 words per scene, total 75-110 words, headlines max 6 words with 1-2 highlight words, narration matching what
-each block shows, last scene ends with a line that leads into the call to action ("{brand.cta('keyword')['say'][:40]}...").
+each block shows, last scene ends with a line that leads naturally into THIS reel's only call to action
+("{brand.cta(kind)['say'][:60]}..."), never a different one. Narration is spoken to a parent: no internal
+labels (scene, hook, slot, block, CTA, anchor), no stage directions, no brackets, no acronyms read as letters;
+explain any signature concept in plain words the first time it appears.
 Keep the JSON schema, the same number of scenes, and params valid for each block.
 Return JSON: {{"hooks": [{{"headline": str, "line": str, "score": number}}], "chosen": int,
 "script": <the full improved script JSON>, "notes": str}}"""}], 0.7)
@@ -186,7 +189,7 @@ def direct(sc, pillar, context, slots_text, validate, kind, agent=None):
         context = (context + f"\nThis script was written by {studio.CREATORS[agent]['name']} "
                    f"({studio.CREATORS[agent]['persona'][:160]}...). Keep its voice and angle; improve, don't flatten.")
     try:
-        new, info = copy_chief(sc, pillar, context, slots_text)
+        new, info = copy_chief(sc, pillar, context, slots_text, kind)
         if sc.get("_key"):
             new["_key"] = sc["_key"]
         sc = validate(new, pillar)

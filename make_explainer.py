@@ -144,6 +144,12 @@ Rules:
 - narration per scene: 8-20 spoken words, short sentences, contractions, numbers as words, expert-to-parent tone,
   no hype, no cliches, no chess notation. Total narration {words} words. The narration of each scene must match
   what its block shows.
+- narration is read aloud WORD FOR WORD to a parent: never put stage directions, brackets, labels ("Scene 2:",
+  "Hook:", "CTA"), pauses or notes in it. Acting directions go ONLY in "delivery".
+- Signature concepts must make sense to a parent hearing them for the first time: say what they are in plain words
+  (e.g. "Square 65, IM Alberto Chueca's book of 65 training keys"; "our three-phase class: tactics, theory, practice").
+  Never say "T-T-P" or a bare key number on its own.
+- The LAST scene leads naturally into this call to action, and only this one: "{cta_say}"
 - delivery: 3-8 word acting direction for the voice (calm, confident, warm; vary it).
 - No prices. No guarantees. No competitors. Never state a number about results, students or titles unless it is
   in APPROVED CLAIMS. Rating numbers are allowed ONLY inside a rating_drop block as an illustrative example.
@@ -278,7 +284,8 @@ def write_script(pillar, arms=None, context="", agent=None, key=None):
         playbook=("WHAT WORKS FOR OUR AUDIENCE (from real results):\n" + strategy.playbook_text()) if strategy.playbook_text() else "",
         recent="; ".join(f"{r.get('agent') or '-'}/{r.get('pillar')}: {r.get('title')} ({r.get('headline')})" for r in recent) or "none",
         n=n, slots=_slots_text(pillar, allowed), catalog=json.dumps({k: v for k, v in BLOCKS.items() if k in allowed}),
-        words="75-110", context=context)}]}],
+        words="75-110", context=context,
+        cta_say=brand.cta(arms.get("cta") if arms.get("cta") in brand.CTA else "keyword")["say"])}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 1.0}}
     body0 = body
     last = None
@@ -310,6 +317,23 @@ def write_script(pillar, arms=None, context="", agent=None, key=None):
     raise RuntimeError(f"explainer script failed: {last}")
 
 
+# Narration is read aloud word for word: nothing that looks like a note to ourselves may reach the voice.
+_LABEL = re.compile(r"^\s*(?:scene|slot|hook|cta|narrator|narration|voice ?over|vo|line|step)\s*\d*\s*[:\-–]\s*", re.I)
+_INTERNAL = re.compile(r"\b(?:scene|slot)\s*\d|\b(?:cta|voice-?over|narration|stage direction|on-screen text|b-roll)\b"
+                       r"|\bhook\s*:|\bdelivery\s*:", re.I)
+
+
+def clean_spoken(text):
+    """Strip stage directions, brackets, markdown and labels; spell out acronyms parents shouldn't hear as letters."""
+    t = str(text or "")
+    t = re.sub(r"\[[^\]]*\]|\([^)]*\)|\{[^}]*\}|<[^>]*>", " ", t)        # [pause] (warmly) {beat} <break>
+    t = _LABEL.sub("", t)
+    t = re.sub(r"[*_#`~|]+", " ", t)
+    t = re.sub(r"\bT-?T-?P(?:\s+[Ss]ystem)?\b", "three-phase training system", t)
+    t = re.sub(r"\s+([,.!?])", r"\1", re.sub(r"\s+", " ", t)).strip()
+    return t
+
+
 def validate(sc, pillar):
     """Hard rules the AI cannot break: block per slot, lengths, params, approved claims only."""
     allowed = allowed_blocks()
@@ -322,8 +346,11 @@ def validate(sc, pillar):
         opts = [b for b in slots[i] if b in allowed] or ["mentor"]
         if s.get("block") not in opts:
             s["block"] = opts[0]
-        s["headline"] = " ".join(str(s.get("headline", "")).split()[:6]) or "Chess parents"
-        s["narration"] = " ".join(str(s.get("narration", "")).split()[:26])
+        s["headline"] = " ".join(clean_spoken(s.get("headline", "")).split()[:6]) or "Chess parents"
+        s["narration"] = " ".join(clean_spoken(s.get("narration", "")).split()[:26])
+        if _INTERNAL.search(s["narration"]):
+            raise ValueError(f"scene {i + 1} narration contains a production note, not words for parents: "
+                             f"{s['narration'][:80]!r}")
         s["highlight"] = [h for h in (s.get("highlight") or []) if isinstance(h, str)][:2]
         p = s.get("params") or {}
         if s["block"] == "authority":
@@ -456,8 +483,11 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent
     mix = np.zeros(n, np.float32)
     def put(x, at, g=1.0):
         a0 = max(0, int(at * SR)); b0 = min(n, a0 + len(x)); mix[a0:b0] += g * x[:b0 - a0]
+    A = [D.vo_compress(a) for a in A]                     # even, clear voice over the music
+    speech = np.zeros(n, bool)
     for i, a in enumerate(A):
         put(a.astype(np.float32), starts[i] + LEAD, 1.0)
+        s0 = int((starts[i] + LEAD) * SR); speech[s0:s0 + len(a)] = True
     for i in range(1, len(durs)):
         put(D.swell(0.55), starts[i] - 0.3, 0.8)
     for i in range(len(scenes)):
@@ -469,7 +499,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent
         s0 = int((starts[i] + LEAD - 0.1) * SR); duck[max(0, s0):s0 + len(a) + int(0.2 * SR)] = 0.45
     duck = np.convolve(duck, np.ones(int(0.12 * SR)) / int(0.12 * SR), "same").astype(np.float32)   # smooth ducking
     mix += bed[:n] * duck
-    mix /= max(1.0, float(np.abs(mix).max()) / 0.92)
+    mix = D.master(mix, speech)
     wav = out.replace(".mp4", "_x.wav"); sf.write(wav, mix[:int(total * SR)], SR)
     # ---- video
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
