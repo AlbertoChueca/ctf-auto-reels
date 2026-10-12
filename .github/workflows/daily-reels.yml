@@ -14,7 +14,7 @@ on:
       pillar:
         description: "Reel type (auto = weekly calendar)"
         type: choice
-        options: [auto, success, remix, pain, faq, method, proof]
+        options: [auto, key, success, remix, pain, faq, method, proof]
         default: auto
       creator:
         description: "AI creator (auto = the studio picks the one with the best results)"
