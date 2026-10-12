@@ -110,5 +110,14 @@
 "date": "2026-10-12",
 "agent": "mythbuster",
 "key": 14
+},
+{
+"pillar": "pain",
+"title": "The blitz trap",
+"headline": "Hours of blitz, no progress?",
+"date": "2026-10-12",
+"agent": "parent_whisperer",
+"evergreen": "pain-blitz",
+"anchor_key": 44
 }
 ]
