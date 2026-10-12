@@ -38,4 +38,3 @@ Still collecting data: options are being tested evenly for now.
 | keyword | 0 | - |
 | vsl | 0 | - |
 | call | 0 | - |
-| comment | 0 | - |
