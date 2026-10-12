@@ -87,5 +87,13 @@
 "headline": "The Habit Costing Won Games",
 "date": "2026-10-12",
 "agent": "storyteller"
+},
+{
+"pillar": "pain",
+"title": "Why the rating stops",
+"headline": "Stuck in chess?",
+"date": "2026-10-12",
+"agent": "mythbuster",
+"evergreen": "pain-plateau"
 }
 ]
