@@ -1,84 +1,65 @@
-"""Answer new comments on recent reels with a short public reply (optional private DM with the academy link).
+"""Keyword bot: answers ONLY comments that contain the keyword (default PLAN). Everything else is left for the owner.
 
-Runs every hour from GitHub Actions. Uses only the official Instagram API on our own posts.
-- (Puzzle answers are only checked if a reel ever carries a puzzle; the academy reels have none.)
-- One DM per person per week at most (no spam), public replies are varied.
+Runs every 2 hours from GitHub Actions. Uses only the official Instagram API on our own posts.
+- A keyword comment gets a private reply (DM) with the link to the home page (free video + form), then a short
+  public reply. If the DM cannot be sent, the public reply points to the link in bio instead of saying "sent".
+- One DM per person per week at most (no spam).
 - Remembers handled comments in handled_comments.json.
-Env: IG_TOKEN. Optional: BOT_DRY_RUN=true (print only).
+Env: IG_TOKEN. Optional: BOT_DRY_RUN=true (print only), HOME_URL (default chesstalentsfactory.com).
 """
 import datetime, json, os, random, re, requests
 import brand
 from publish_ig import GRAPH, _check, whoami
 
-TOKEN = os.environ["IG_TOKEN"]
+TOKEN = os.environ.get("IG_TOKEN", "")
 DRY = os.environ.get("BOT_DRY_RUN") == "true"
-SEND_DMS = os.environ.get("BOT_SEND_DMS") == "true"   # DMs to every commenter: off (public replies only)
-KEYWORD_DMS = os.environ.get("KEYWORD_DMS", "true") == "true"   # DM only to people who comment the keyword (opt-in)
 KW = re.compile(rf"(^|\W){re.escape(brand.KEYWORD)}(\W|$)", re.I)
 HANDLED = "handled_comments.json"
-LINK = brand.url_full(brand.CTA_URL, "dm")
+HOME = brand.url_full((os.environ.get("HOME_URL") or "chesstalentsfactory.com").rstrip("/") + "/", "dm")
 
-PUBLIC_CORRECT = [
-    "Correct! {move} is the move 🎯 Great calculation!",
-    "Spot on! {move} 💥 That's how strong juniors think",
-    "Yes! {move} wins 👏 Well calculated",
-    "Exactly, {move}! 🔥 Checks and captures first, always",
-    "That's it! {move} ♟️ Tell your coach you found it",
-    "Sharp eyes! {move} is the one 👀",
-    "Nailed it! {move} 🎯 New challenge tomorrow",
-    "Excellent! {move} is correct 💪 Parents: free training video in our bio",
-]
-PUBLIC_OTHER = [
-    "Thanks for sharing! ♟️ Comment \"{kw}\" and we'll send you our free training video",
-    "Great point! 🙌 Parents: our free training video is in the bio",
-    "Thank you! ♟️ Follow for more tips for chess parents",
-    "Love this! 💪 Comment \"{kw}\" if you'd like our free video for parents",
-    "Thanks for being here! ♟️ New video for chess parents every day",
-    "Appreciate it! 🔥 Questions about your child's training? Ask below",
-]
-PUBLIC_KEYWORD = [
-    "Sent! 📩 Check your DMs",
-    "Done! The free video is in your DMs 📩",
-    "Just sent it to your inbox 📩",
-    "Check your messages, it's there 📩",
-]
-DM_KEYWORD = ("Hi! Here's our free training video for parents: how kids gain rating points faster with the right "
-              "structure 👉 " + LINK + "\nIf you'd like a plan for your child, you can book a call with our coaches "
-              "from that page.")
-DM_CORRECT = ("Great job finding {move}! 🎯 If you're a parent and want to see how kids gain rating points fast with "
-              "the right training, here's our free video: " + LINK)
-DM_OTHER = ("Thanks for playing! ♟️ If you're a parent, here's our free video on how kids improve their rating "
-            "faster with structured training: " + LINK)
-
-
-def norm(s):
-    return re.sub(r"[x+#!?\s=.]", "", s).lower()
-
-
-def got_it(text, first_move):
-    """True when the comment contains the first solution move (SAN, ignoring x/+/#)."""
-    if not first_move:
-        return False
-    target = norm(first_move)
-    tokens = re.findall(r"[KQRBNkqrbn]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?", text)
-    return any(norm(t) == target for t in tokens) and len(target) >= 2
+DM_KEYWORD = "Fill out the form of the video here 👉 " + HOME
+PUBLIC_SENT = ["Sent! 📩 Check your DMs", "Done! Check your DMs 📩", "Just sent it to your inbox 📩"]
+PUBLIC_ALREADY = ["It's already in your DMs 📩", "Check your DMs, we sent it to you 📩"]
+PUBLIC_NO_DM = ["Thanks! 🙌 You'll find the free video and the form at the link in our bio"]
 
 
 def load(path, default):
     return json.load(open(path)) if os.path.exists(path) else default
 
 
+def handle(c, uid, handled, now):
+    """Processes one comment. Returns (public_sent, dm_sent). Non-keyword comments are ignored."""
+    if not KW.search(c.get("text", "")):
+        return 0, 0                                   # not the keyword: no reply, the owner answers if needed
+    user = c.get("username", "")
+    last_dm = handled["dm"].get(user)
+    can_dm = not last_dm or (now - datetime.datetime.fromisoformat(last_dm)).days >= 7
+    print(f"keyword comment {c['id']} -> dm={can_dm}")
+    if DRY:
+        return 0, 0
+    dm_ok = False
+    if can_dm:
+        try:
+            _check(requests.post(f"{GRAPH}/{uid}/messages", json={
+                "recipient": {"comment_id": c["id"]}, "message": {"text": DM_KEYWORD}},
+                headers={"Authorization": f"Bearer {TOKEN}"}))
+            handled["dm"][user] = now.isoformat(); dm_ok = True
+            handled["kw_dms"] = handled.get("kw_dms", 0) + 1
+        except Exception as e:
+            print("  private reply failed (check the instagram_manage_messages permission):", str(e)[:200])
+    pub = random.choice(PUBLIC_SENT if dm_ok else PUBLIC_ALREADY if not can_dm else PUBLIC_NO_DM)
+    try:
+        _check(requests.post(f"{GRAPH}/{c['id']}/replies", data={"message": pub, "access_token": TOKEN}))
+        return 1, int(dm_ok)
+    except Exception as e:
+        print("  public reply failed:", str(e)[:200])
+        return 0, int(dm_ok)
+
+
 def main():
     me = whoami(TOKEN); uid = me["user_id"]; myname = me["username"]
     handled = load(HANDLED, {"comments": [], "dm": {}})
     done = set(handled["comments"])
-    solutions = {}
-    if os.path.exists("log.jsonl"):
-        for line in open("log.jsonl"):
-            e = json.loads(line)
-            if e.get("media_id") and e.get("sans"):
-                solutions[e["media_id"]] = e["sans"][0]
-
     now = datetime.datetime.now(datetime.timezone.utc)
     week_ago = now - datetime.timedelta(days=7)
     media = _check(requests.get(f"{GRAPH}/{uid}/media", params={
@@ -93,31 +74,8 @@ def main():
         for c in comments:
             if c["id"] in done or c.get("username") == myname:
                 continue
-            user = c.get("username", "")
-            move = solutions.get(m["id"])
-            ok = got_it(c.get("text", ""), move)
-            kw = bool(KW.search(c.get("text", "")))
-            pub = random.choice(PUBLIC_KEYWORD if kw else PUBLIC_CORRECT if ok else PUBLIC_OTHER).format(move=move, kw=brand.KEYWORD)
-            last_dm = handled["dm"].get(user)
-            can_dm = not last_dm or (now - datetime.datetime.fromisoformat(last_dm)).days >= 7
-            dm = DM_KEYWORD if kw else (DM_CORRECT if ok else DM_OTHER).format(move=move)
-            want_dm = (kw and KEYWORD_DMS) or SEND_DMS
-            print(f"@{user}: {c.get('text','')[:80]!r} -> keyword={kw} correct={ok} dm={can_dm and want_dm}")
-            if not DRY:
-                try:
-                    _check(requests.post(f"{GRAPH}/{c['id']}/replies", data={"message": pub, "access_token": TOKEN}))
-                    sent_pub += 1
-                except Exception as e:
-                    print("  public reply failed:", e)
-                if can_dm and want_dm:
-                    try:
-                        _check(requests.post(f"{GRAPH}/{uid}/messages", json={
-                            "recipient": {"comment_id": c["id"]}, "message": {"text": dm}},
-                            headers={"Authorization": f"Bearer {TOKEN}"}))
-                        handled["dm"][user] = now.isoformat(); sent_dm += 1
-                        handled["kw_dms"] = handled.get("kw_dms", 0) + (1 if kw else 0)
-                    except Exception as e:
-                        print("  private reply failed:", e)
+            p, d = handle(c, uid, handled, now)
+            sent_pub += p; sent_dm += d
             done.add(c["id"])
     handled["comments"] = sorted(done)[-5000:]
     if not DRY:

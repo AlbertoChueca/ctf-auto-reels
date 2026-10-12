@@ -85,7 +85,7 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
 ## Conversión
 - **CTA** que el piloto automático prueba y optimiza: comentar la palabra clave (por defecto `PLAN`), ver la VSL,
   reservar llamada o comentar+seguir.
-- **Palabra clave + DM**: quien comenta `PLAN` recibe por DM el enlace a la VSL (con UTM). Solo a quien lo pide,
+- **Palabra clave + DM**: el bot responde SOLO a quien comenta `PLAN`. Le envía por DM "Fill out the form of the video here" con el enlace a la home (con UTM) y contesta en público "Check your DMs". Máximo 1 DM por persona y semana. El resto de comentarios no se contestan: quedan para ti.
   máximo 1 DM por persona y semana.
 - **Piloto automático**: cada reel es un experimento (gancho, tema, nivel, CTA). La recompensa pesa mucho las
   visitas al perfil y los follows. Los lunes un estratega IA reescribe `playbook.md`.
