@@ -41,23 +41,20 @@ def _log(kind, data):
 
 
 def _ask(parts, temperature=0.6):
-    """Gemini call returning parsed JSON."""
+    """Gemini call returning parsed JSON. Tries at most 3 live models (shared dead-model list for the run)."""
     import make_story as MS
     body = {"contents": [{"parts": parts}],
             "generationConfig": {"responseMimeType": "application/json", "temperature": temperature}}
-    names = MS.TEXT_MODELS + [m for m in MS._available() if "flash" in m and not any(
-        x in m for x in ("image", "tts", "live", "audio", "lite"))]
     last = None
-    for model in dict.fromkeys(names):
+    for model in MS.text_models(3):
         try:
             j = MS._post(model, body)
             txt = j["candidates"][0]["content"]["parts"][0]["text"]
             return json.loads(re.sub(r"^```(json)?|```$", "", txt.strip()))
         except Exception as e:
             last = e
-            if " 404" not in str(e) and " 400" not in str(e):
-                break
-    raise last
+            print("ai call:", str(e)[:160], flush=True)
+    raise last or RuntimeError("no Gemini text model available")
 
 
 def _jpeg_b64(im, size=512):

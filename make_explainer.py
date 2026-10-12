@@ -270,7 +270,7 @@ def write_script(pillar, arms=None, context="", agent=None, key=None):
     n = len(PILLARS[pillar])
     recent = _recent()
     import studio
-    body = {"contents": [{"parts": [{"text": PROMPT.format(
+    body = {"contents": [{"role": "user", "parts": [{"text": PROMPT.format(
         creator=studio.brief(agent) if agent in studio.CREATORS else "", secs="35-50", bible=brand.bible(), name=brand.NAME, audience=brand.AUDIENCE, academy=brand.ACADEMY, narrator=brand.narrator_text(),
         honesty=brand.HONESTY, claims=guard.approved_text(), cases=brand.cases_text(), facts="; ".join(brand.FACTS),
         pillar=pillar, brief=PILLAR_BRIEF[pillar], hook_style=arms.get("hook_style", "your best idea"),
@@ -280,22 +280,33 @@ def write_script(pillar, arms=None, context="", agent=None, key=None):
         n=n, slots=_slots_text(pillar, allowed), catalog=json.dumps({k: v for k, v in BLOCKS.items() if k in allowed}),
         words="75-110", context=context)}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 1.0}}
-    names = MS.TEXT_MODELS + [m for m in MS._available() if "flash" in m and not any(
-        x in m for x in ("image", "tts", "live", "audio", "lite"))]
+    body0 = body
     last = None
-    for model in dict.fromkeys(names):
-        try:
-            j = MS._post(model, body)
-            txt = j["candidates"][0]["content"]["parts"][0]["text"]
-            sc = json.loads(re.sub(r"^```(json)?|```$", "", txt.strip()))
-            if key:
-                sc["_key"] = key
-                for x in sc.get("scenes", []):
-                    if x.get("block") == "key_card":
-                        x.setdefault("params", {})["key"] = key
-            return validate(sc, pillar)
-        except Exception as e:
-            last = e; print("explainer script:", model, str(e)[:200], flush=True)
+    for model in MS.text_models(3):
+        body = body0
+        for attempt in range(2):                  # 2nd attempt = repair: same model, told exactly what to fix
+            try:
+                j = MS._post(model, body)
+                txt = j["candidates"][0]["content"]["parts"][0]["text"]
+                sc = json.loads(re.sub(r"^```(json)?|```$", "", txt.strip()))
+                if key:
+                    sc["_key"] = key
+                    for x in sc.get("scenes", []):
+                        if x.get("block") == "key_card":
+                            x.setdefault("params", {})["key"] = key
+                out = validate(sc, pillar)
+                print(f"explainer script: {model}" + (" (repaired)" if attempt else ""), flush=True)
+                return out
+            except ValueError as e:               # script broke a rule -> ask the same model to fix it
+                last = e; print(f"explainer script: {model} rejected: {str(e)[:160]}", flush=True)
+                body = {**body, "contents": body["contents"][:1] + [
+                    {"role": "model", "parts": [{"text": txt}]},
+                    {"role": "user", "parts": [{"text": f"Your script was rejected by our checks: {e}. Rewrite the whole "
+                     "script fixing ONLY that. Any number about students, ratings or results must be one of the "
+                     "APPROVED CLAIMS or the REAL CASE facts exactly (you may write it in words). Same JSON schema."}]}]}
+            except Exception as e:
+                last = e; print(f"explainer script: {str(e)[:160]}", flush=True)
+                break                              # API problem -> next model
     raise RuntimeError(f"explainer script failed: {last}")
 
 

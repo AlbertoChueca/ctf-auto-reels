@@ -4,7 +4,7 @@ their child; script + scenes generated with Google Gemini), followed by the puzz
 python make_story.py puzzle.json seed out.mp4          (needs GEMINI_API_KEY)
 STORY_MOCK=1 python make_story.py ...                   (offline test with placeholder scenes)
 """
-import base64, io, json, math, os, random, subprocess, sys, time
+import base64, io, json, math, os, random, re, subprocess, sys, time
 import numpy as np
 import requests
 import soundfile as sf
@@ -16,7 +16,7 @@ import brand
 HERE = os.path.dirname(os.path.abspath(__file__))
 W, H, FPS, SR = 1080, 1920, 25, 24000
 API = "https://generativelanguage.googleapis.com/v1beta/models"
-TEXT_MODELS = [m for m in os.environ.get("GEMINI_TEXT_MODEL", "gemini-3.8-flash,gemini-3.5-flash,gemini-3-flash").split(",") if m]
+TEXT_MODELS = [m for m in os.environ.get("GEMINI_TEXT_MODEL", "gemini-3.8-flash,gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash").split(",") if m]
 IMAGE_MODELS = [m for m in os.environ.get("GEMINI_IMAGE_MODEL", "gemini-3.1-flash-image,gemini-2.5-flash-image").split(",") if m]
 
 
@@ -92,16 +92,67 @@ def _key():
     return os.environ["GEMINI_API_KEY"]
 
 
-def _post(model, body, tries=4):
+DEAD = set()          # models that do not exist / are retired / have no daily quota left: skipped for the whole run
+_AVAIL = None
+
+
+class QuotaError(RuntimeError):
+    pass
+
+
+def _retry_delay(r):
+    """Seconds Google asks us to wait (RetryInfo), and whether the exhausted quota is a DAILY one."""
+    try:
+        err = r.json().get("error", {})
+        delay, daily = None, False
+        for d in err.get("details", []):
+            if d.get("retryDelay"):
+                delay = float(str(d["retryDelay"]).rstrip("s") or 0)
+            for v in d.get("violations", []) or []:
+                if "PerDay" in (v.get("quotaId") or "") or "per_day" in (v.get("quotaMetric") or "").lower():
+                    daily = True
+        return delay, daily
+    except Exception:
+        return None, False
+
+
+def _post(model, body, tries=3):
+    """One model. Honours Google's retry delay; gives up fast on daily quota, retired models and long outages."""
+    if model in DEAD:
+        raise QuotaError(f"Gemini {model}: skipped (unavailable earlier in this run)")
+    last = ""
     for k in range(tries):
-        r = requests.post(f"{API}/{model}:generateContent", headers={"x-goog-api-key": _key(), "Content-Type": "application/json"},
-                          json=body, timeout=180)
-        if r.status_code == 429 or r.status_code >= 500:
-            time.sleep(15 * (k + 1)); continue
-        if r.status_code >= 400:
-            raise RuntimeError(f"Gemini {model} {r.status_code}: {r.text[:400]}")
-        return r.json()
-    raise RuntimeError(f"Gemini {model}: too many retries")
+        try:
+            r = requests.post(f"{API}/{model}:generateContent", json=body, timeout=150,
+                              headers={"x-goog-api-key": _key(), "Content-Type": "application/json"})
+        except requests.RequestException as e:
+            last = f"network: {str(e)[:120]}"; time.sleep(5 * (k + 1)); continue
+        if r.status_code == 200:
+            return r.json()
+        last = f"{r.status_code}: {r.text[:300]}"
+        if r.status_code == 429:
+            delay, daily = _retry_delay(r)
+            if daily or (delay and delay > 70):
+                DEAD.add(model)
+                raise QuotaError(f"Gemini {model} 429 quota exhausted ({'daily' if daily else f'retry in {delay:.0f}s'})")
+            time.sleep(min(delay or 20, 60) + 1); continue
+        if r.status_code >= 500:
+            time.sleep(8 * (k + 1)); continue
+        if r.status_code in (400, 403, 404):
+            DEAD.add(model)
+        raise RuntimeError(f"Gemini {model} {last}")
+    raise RuntimeError(f"Gemini {model}: still failing after {tries} tries ({last[:160]})")
+
+
+def text_models(limit=None):
+    """Preferred text models first, then any other available flash model; dead ones removed. Cached per run."""
+    global _AVAIL
+    if _AVAIL is None:
+        _AVAIL = _available()
+    extra = [m for m in _AVAIL if "flash" in m and not any(x in m for x in ("image", "tts", "live", "audio", "lite", "omni"))]
+    extra.sort(key=lambda m: [-int(x) if x.isdigit() else 0 for x in re.findall(r"\d+", m)])  # newest first
+    names = [m for m in dict.fromkeys(TEXT_MODELS + extra) if m not in DEAD and (not _AVAIL or m in _AVAIL or m in TEXT_MODELS)]
+    return names[:limit] if limit else names
 
 
 def write_story(level, side, goal, avoid, episode=1, recent=(), arms=None):

@@ -11,8 +11,54 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PAUSE = os.path.join(HERE, "paused.json")
 FAILS = os.path.join(HERE, "failures.json")
 
-WORDNUM = ("one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|"
-           "sixty|seventy|eighty|ninety|hundred|thousand")
+WORDNUM = ("one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|"
+           "seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand")
+_UNITS = {w: i for i, w in enumerate("zero one two three four five six seven eight nine ten eleven twelve thirteen "
+                                       "fourteen fifteen sixteen seventeen eighteen nineteen".split())}
+_TENS = {w: 10 * (i + 2) for i, w in enumerate("twenty thirty forty fifty sixty seventy eighty ninety".split())}
+
+
+def to_int(s):
+    """'1,800+' -> 1800, 'eleven hundred' -> 1100, 'twenty three hundred' -> 2300, 'forty-four' -> 44."""
+    s = str(s).lower().strip().rstrip(".,+")
+    d = re.sub(r"[,+]", "", s)
+    if re.fullmatch(r"\d+(\.\d+)?", d):
+        return int(float(d))
+    total = cur = 0; seen = False
+    for w in re.split(r"[\s-]+", s):
+        if w in _UNITS:
+            cur += _UNITS[w]; seen = True
+        elif w in _TENS:
+            cur += _TENS[w]; seen = True
+        elif w == "hundred":
+            cur = (cur or 1) * 100; seen = True
+        elif w == "thousand":
+            total += (cur or 1) * 1000; cur = 0; seen = True
+        elif w in ("and", "a"):
+            continue
+        else:
+            return None
+    return total + cur if seen else None
+
+
+def allowed_numbers():
+    """Every number we may state about results: approved claims, approved cases, and the gains between a case's
+    'from X to Y' figures (1100 -> 1900 makes '800 points' a true statement)."""
+    nums = {1}
+    blobs = []
+    for c in approved():
+        nums |= {n for n in (to_int(x) for x in c.get("numbers", [])) if n is not None}
+        blobs.append(c.get("text", ""))
+    for c in cases():
+        nums |= {n for n in (to_int(x) for x in c.get("numbers", [])) if n is not None}
+        blobs.append(c.get("text", "") + " " + " ".join(c.get("facts", [])))
+    for b in blobs:
+        nums |= {to_int(x) for x in re.findall(r"\d[\d,]*", b)} - {None}
+        for a, z in re.findall(r"from (\d[\d,]*)\+? to \+?(\d[\d,]*)", b, flags=re.I):
+            a, z = to_int(a), to_int(z)
+            if a and z and z > a:
+                nums.add(z - a)
+    return nums
 CLAIM_RE = re.compile(rf"\b((?:\d[\d,.]*|(?:{WORDNUM})(?:[\s-](?:{WORDNUM}))*))\s*(?:%|percent|\+)?\s*"
                       r"(?:\w+\s){0,2}?(points?|elo|rating|percent|%|students?|kids|children|families|titles?|"
                       r"grandmasters?|masters?|champions?|wins|medals?)\b", re.I)
@@ -48,21 +94,16 @@ def has(claim_id):
 
 
 def claims_ok(text):
-    """Returns (ok, offending). Any number tied to results/students must be an approved number."""
-    allowed = set()
-    for c in approved():
-        allowed |= {str(n).lower() for n in c.get("numbers", [])}
-    for c in cases():
-        allowed |= set(re.findall(r"\d[\d,.]*", c.get("text", "") + " " + " ".join(c.get("facts", []))))
-        allowed |= {str(n).lower() for n in c.get("numbers", [])}
+    """Returns (ok, offending). Any number tied to results/students must be an approved number (digits or words)."""
+    allowed = allowed_numbers()
     bad = []
     text = re.sub(r"\b(one|two|three) of (our|the|my|his|her|their|these|those)\b", " ", text or "", flags=re.I)
     # references to the book are not result claims: "Key 44", "Key forty-four", "Square 65", "65 keys"
     text = re.sub(rf"\bkeys?\s+(\d+|(?:{WORDNUM})(?:[\s-](?:{WORDNUM}))*)\b", " ", text, flags=re.I)
     text = re.sub(r"\bsquare\s+65\b|\b65\s+keys\b|\bof\s+65\b", " ", text, flags=re.I)
     for m in CLAIM_RE.finditer(text):
-        num = m.group(1).lower().strip().rstrip(".,")
-        if num not in allowed and num.replace(",", "") not in allowed:
+        n = to_int(m.group(1))
+        if n is None or n not in allowed:
             bad.append(m.group(0))
     return (not bad), bad
 

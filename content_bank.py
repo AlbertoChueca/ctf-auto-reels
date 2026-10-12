@@ -63,7 +63,7 @@ def _analyse(video_url, caption):
                                     {"inline_data": {"mime_type": "video/mp4", "data": data}}]}],
             "generationConfig": {"responseMimeType": "application/json", "temperature": 0.3}}
     last = None
-    for model in MS.TEXT_MODELS:
+    for model in MS.text_models(3):
         try:
             j = MS._post(model, body)
             return json.loads(re.sub(r"^```(json)?|```$", "", j["candidates"][0]["content"]["parts"][0]["text"].strip()))

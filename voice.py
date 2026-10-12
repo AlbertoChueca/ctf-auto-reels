@@ -227,20 +227,35 @@ def _tts_models(key):
     return _models
 
 
+_TTS_DEAD = set()
+
+
 def _gemini_call(prompt, key):
+    """Gemini TTS. Daily quota / retired model -> skip that model for the rest of the run (fast fallback to the
+    next model or to the free local voice instead of waiting minutes)."""
+    from make_story import _retry_delay
     last = None
-    for model in _tts_models(key):
-        for attempt in range(4):
+    for model in [m for m in _tts_models(key) if m not in _TTS_DEAD][:3]:
+        for attempt in range(3):
             try:
                 r = requests.post(f"{API}/models/{model}:generateContent", headers={"x-goog-api-key": key},
-                                  timeout=180, json={
+                                  timeout=150, json={
                                       "contents": [{"parts": [{"text": prompt}]}],
                                       "generationConfig": {"responseModalities": ["AUDIO"], "speechConfig": {
                                           "voiceConfig": {"prebuiltVoiceConfig": {"voiceName": GEMINI_VOICE}}}}})
-                if r.status_code in (429, 500, 502, 503, 504):
-                    last = RuntimeError(f"{model} {r.status_code}"); time.sleep(8 * (attempt + 1)); continue
+                if r.status_code == 429:
+                    delay, daily = _retry_delay(r)
+                    last = RuntimeError(f"{model} 429{' daily quota' if daily else ''}")
+                    if daily or (delay and delay > 70):
+                        _TTS_DEAD.add(model); break
+                    time.sleep(min(delay or 15, 45) + 1); continue
+                if r.status_code in (500, 502, 503, 504):
+                    last = RuntimeError(f"{model} {r.status_code}"); time.sleep(6 * (attempt + 1)); continue
                 if r.status_code != 200:
-                    last = RuntimeError(f"{model} {r.status_code}: {r.text[:200]}"); break
+                    last = RuntimeError(f"{model} {r.status_code}: {r.text[:200]}")
+                    if r.status_code in (400, 403, 404):
+                        _TTS_DEAD.add(model)
+                    break
                 for p in r.json()["candidates"][0]["content"]["parts"]:
                     d = p.get("inlineData") or p.get("inline_data")
                     if d:
@@ -253,6 +268,8 @@ def _gemini_call(prompt, key):
                 raise RuntimeError(f"Gemini unreachable: {e}")
             except Exception as e:
                 last = e; time.sleep(4)
+    if not [m for m in _tts_models(key) if m not in _TTS_DEAD]:
+        raise RuntimeError("no Gemini TTS model available (daily quota exhausted)")
     raise last or RuntimeError("no Gemini TTS model available")
 
 
