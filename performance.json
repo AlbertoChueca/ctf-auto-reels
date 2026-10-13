@@ -1,1 +1,69 @@
-{}
+{
+"18197508442388239": {
+"date": "2026-10-12",
+"slot": "story",
+"story": "The blitz trap",
+"hook": "Hours of blitz, same rating? Here's why \u26a1",
+"level": null,
+"mode": null,
+"engine": "evergreen",
+"review_score": null,
+"permalink": "https://www.instagram.com/reel/DeZYcVFDX0i/",
+"arms": {
+"hook_style": "rating_mistake: open on the one habit that keeps a child's rating stuck, stated bluntly",
+"theme": "learning from lost games (game review with a coach)",
+"cta": "comment"
+},
+"pillar": "pain",
+"cta": "comment",
+"agent": null,
+"headline": "Hours of blitz, no progress?",
+"media_id": "18197508442388239"
+},
+"18130723951752948": {
+"date": "2026-10-12",
+"slot": "story",
+"story": "The Tournament Blunder Habit",
+"hook": "Watching your child rush moves in tournament play? \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 8.4,
+"permalink": "https://www.instagram.com/reel/DeZfa5siEHy/",
+"arms": {
+"hook_style": "tournament_moment: open at a tense tournament moment that every chess parent recognises",
+"theme": "calculation: seeing two or three moves ahead before touching a piece",
+"cta": "vsl"
+},
+"pillar": "pain",
+"cta": "vsl",
+"agent": "storyteller",
+"headline": "Touching The Piece Too Fast",
+"media_id": "18130723951752948",
+"comments_count": 0,
+"like_count": 0
+},
+"18435934354183480": {
+"date": "2026-10-12",
+"slot": "story",
+"story": "Rebuilding Resilience After Tournament Losses",
+"hook": "The quiet drive home after a painful tournament loss is heartbreaking. \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 8.9,
+"permalink": "https://www.instagram.com/reel/DeaW3B2jxUD/",
+"arms": {
+"hook_style": "student_story: open with a short real moment from a student's journey (only real, approved facts)",
+"theme": "tournament nerves and time management",
+"cta": "vsl"
+},
+"pillar": "pain",
+"cta": "vsl",
+"agent": "parent_whisperer",
+"headline": "The Silent Drive Home",
+"media_id": "18435934354183480",
+"comments_count": 0,
+"like_count": 0
+}
+}
