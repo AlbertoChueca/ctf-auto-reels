@@ -151,5 +151,13 @@
 "agent": "storyteller",
 "case": "pranav-sathish",
 "anchor_key": 30
+},
+{
+"pillar": "key",
+"title": "The Game Analysis Myth",
+"headline": "Stop Analyzing Every Engine Mistake",
+"date": "2026-10-14",
+"agent": "analyst",
+"key": 43
 }
 ]

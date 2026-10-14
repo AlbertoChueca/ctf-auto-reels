@@ -1,16 +1,18 @@
-# The Parent Whisperer - notebook (2026-10-13)
+# The Parent Whisperer - notebook (2026-10-14)
+
+# The Parent Whisperer Notebook
 
 **KEEP:**
-- Visceral tournament-reality hooks like "The Silent Drive Home" that mirror post-round car rides.
-- Strict script pacing: 75–110 total words (14–18 words per scene).
-- Clear academy trust anchors: Square 65 Keys, T-T-P method, 90-minute classes, and IM Alberto Chueca.
+- Visceral tournament reality hooks ("The silent drive home") validating parental anxiety.
+- Pacing discipline: 75–110 total words (14–18 words per scene).
+- Concrete trust anchors: T-T-P framework, Square 65 keys, 90-minute formats, and IM Alberto Chueca.
 
 **STOP:**
-- Visual crowding: 3-line headlines and stacked badges pushing art into subtitle zones.
-- Highlighting more than 1–2 words per badge.
-- Long step labels that collide with character and coach illustrations.
+- Headlines over 2 lines that push illustrations into the subtitle zone.
+- Highlighting more than 1–2 words per badge or stacking badge shapes.
+- Long step labels that crowd or collide with character illustrations.
 
 **TRY NEXT:**
-- Experiment 1 (The Sunk-Cost Hook): "You’ve spent $2,000 on weekend tournaments—why is their rating still frozen?" (Exposing unstructured private tutoring vs. systematic training).
-- Experiment 2 (The Hallway Tears Hook): "What do you say when they walk out crying after Round 3?" (Empathizing with parental helplessness, pivoting to post-game tilt management via T-T-P).
-- Experiment 3 (The Coach Vetting Hook): "3 questions ambitious parents should ask a chess coach before writing the check" (Direct objection handling on evaluating academy rigor).
+- Experiment 1 (Post-Loss Silence): "What do you say when they won't look at you after round 4?" (De-escalating post-game tilt with systematic review).
+- Experiment 2 (Coaching Audit): "You're paying $150 an hour for private lessons—why are they still hanging pieces?" (Contrasting casual play with deliberate practice).
+- Experiment 3 (Vetting Framework): "3 red flags smart parents miss before hiring a chess academy." (Direct objection handling with an objective coaching checklist).

@@ -1,16 +1,19 @@
-# The Storyteller - notebook (2026-10-13)
+# The Storyteller - notebook (2026-10-14)
+
+# The Storyteller Notebook
 
 KEEP:
-- Tight 65–85 word documentary arcs (~15–18 words/scene) tracking verified tournament milestones.
-- Emotional hooks capturing unforced blunders that resonate with ambitious parents.
-- Clean negative space and alternating contrast layouts that protect character art.
+- 75–85 word documentary arcs (8–20 words/scene) tracking doubt, turning points, and verified tournament growth.
+- Emotionally vivid hooks focused on unforced blunders and draw traps ('Touching The Piece Too Fast').
+- High-contrast visual cards with ample negative space preserving illustration hierarchy.
 
 STOP:
-- Highlighting more than 2 words, causing clunky badge wrapping and awkward line splits.
-- Horizontal badge overflow that collides with character illustrations.
-- Headline-highlight mismatches that isolate proprietary method terms.
+- Highlighting more than 2 words, preventing awkward badge wrapping and layout crowding.
+- 3-line headlines that push character and coach assets into caption areas.
+- Repeating identical visual assets (like the trophy graphic) across multiple consecutive frames.
+- Headline-to-highlight mismatches that break proprietary framework branding.
 
 TRY NEXT:
-- The Silent Plateau: "He was stuck at 1100 for an entire year until this single habit shifted."
-- The Post-Game Tension: "The hardest part of tournament chess isn't the loss—it's the silent car ride home."
-- The Impulse Turning Point: "He spotted the winning tactic in five seconds, then played a blunder in one."
+- The Post-Loss Ride: "The hardest part of tournament chess isn't losing—it's the silent car ride home."
+- The Impulse Trap: "He spent eight minutes finding the best attack, then moved a pawn in two seconds."
+- The Notation Habit: "Stuck at 1100 for months, his breakthrough didn't come from puzzles—it came from his scoresheet."

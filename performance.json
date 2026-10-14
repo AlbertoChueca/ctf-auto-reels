@@ -65,5 +65,51 @@
 "media_id": "18435934354183480",
 "comments_count": 0,
 "like_count": 0
+},
+"18170322232462613": {
+"date": "2026-10-13",
+"slot": "storytag",
+"story": "Hands Shaking at Round Four",
+"hook": "Is tournament anxiety really just nerves? Not quite. \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 8.4,
+"permalink": "https://www.instagram.com/reel/DebSXDQCfb-/",
+"arms": {
+"hook_style": "tournament_moment: open at a tense tournament moment that every chess parent recognises",
+"theme": "confidence, focus and school skills that chess builds",
+"cta": "call"
+},
+"pillar": "pain",
+"cta": "call",
+"agent": "mythbuster",
+"headline": "Tournament Anxiety Isn't Weakness",
+"media_id": "18170322232462613",
+"comments_count": 0,
+"like_count": 0
+},
+"17968908432172586": {
+"date": "2026-10-13",
+"slot": "story",
+"story": "Escaping The Tournament Draw Trap",
+"hook": "Why ambitious tournament kids get trapped in draw streaks. \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 7.4,
+"permalink": "https://www.instagram.com/reel/DecvzDIE7gZ/",
+"arms": {
+"hook_style": "what_strong_kids_do: open with what kids who reach 1800-2000 do differently in training",
+"theme": "consistency: short daily training beats random long sessions",
+"cta": "keyword"
+},
+"pillar": "success",
+"cta": "keyword",
+"agent": "storyteller",
+"headline": "The Draw Trap Stalling Ratings",
+"media_id": "17968908432172586",
+"comments_count": 1,
+"like_count": 1
 }
 }
