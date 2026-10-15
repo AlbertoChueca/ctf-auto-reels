@@ -458,7 +458,8 @@ def say_many(texts, speed=1.08, styles=None, one_take=False):
     All calls inside one reel use the same engine (see reset/LOCK); if that engine fails later in the
     reel, VoiceError is raised so the caller can redo the reel with a single consistent voice."""
     global ENGINE_USED, LOCK
-    texts = [t.replace("3%", "three percent") for t in texts]
+    texts = [re.sub(r"(?i)chess\s*talents\s*factory", "Chess Talents Factory", t.replace("3%", "three percent"))
+             for t in texts]                    # clear pronunciation of the academy name
     styles = list(styles or [None] * len(texts))
     pace = "a lively, brisk pace" if speed >= 1.1 else "a relaxed but energetic pace"
     key = os.environ.get("GEMINI_API_KEY")

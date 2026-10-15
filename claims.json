@@ -60,24 +60,26 @@
  },
  {
   "id": "coach_credentials",
-  "approved": true,
+  "approved": false,
   "source": "book",
   "text": "IM Alberto Chueca is an International Master, a FIDE Trainer and has been Official US Chess Coach for the Cadet U8, U10 and U12 World Chess Championships.",
   "numbers": [
    "8",
    "10",
    "12"
-  ]
+  ],
+  "note": "Desactivado: no citar al entrenador ni el libro en los reels."
  },
  {
   "id": "author",
-  "approved": true,
+  "approved": false,
   "source": "book",
   "text": "IM Alberto Chueca is the author of the chess books 'Square 65' and 'The Chueca-Vidyarthi Opening 1.Nc3'.",
   "numbers": [
    "65",
    "1"
-  ]
+  ],
+  "note": "Desactivado: no citar al entrenador ni el libro en los reels."
  },
  {
   "id": "world_champion_student",

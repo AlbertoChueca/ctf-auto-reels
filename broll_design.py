@@ -194,19 +194,18 @@ def ladder(fr, a, b, t, dur):
 
 
 def key_badge(fr, p, t):
-    w, h = W - 2 * MX, 360
+    w = W - 2 * MX
+    f = D.font(D.F_BLACK, 54)
+    lines = D.text_lines(p.get("title", ""), f, w - 120)[:3]
+    h = 150 + 64 * len(lines)
     im, pad = glass(w, h, dark=True)
     im = im.copy()
-    bk = D.book_cover(170)
-    bk = bk.resize((int(bk.width * 0.9), int(bk.height * 0.9)))
-    im.alpha_composite(bk, (pad + 10, pad + (h - bk.height) // 2))
     d = ImageDraw.Draw(im)
-    tx = pad + 250
-    d.text((tx, pad + 46), f"SQUARE 65 · KEY {p['key']}/65", font=D.font(D.F_UI, 32), fill=ORANGE)
-    f = D.font(D.F_BLACK, 50)
-    for i, ln in enumerate(D.text_lines(p.get("title", ""), f, w - 290)[:3]):
-        d.text((tx, pad + 100 + i * 60), ln, font=f, fill=WHITE)
-    d.text((tx, pad + h - 58), "by IM Alberto Chueca", font=D.font(D.F_UI2, 30), fill=(200, 196, 206))
+    tx = pad + 60
+    d.rounded_rectangle([pad + 28, pad + 40, pad + 36, pad + h - 40], 4, fill=ORANGE)     # accent bar
+    d.text((tx, pad + 46), "THE CHESSTALENTSFACTORY METHOD", font=D.font(D.F_UI, 30), fill=ORANGE)
+    for i, ln in enumerate(lines):
+        d.text((tx, pad + 100 + i * 64), ln, font=f, fill=WHITE)
     e = D.ease_out(t / 0.5)
     D.paste(fr, im, W / 2, 1150 + (1 - e) * 60, 1, min(1, t / 0.25))
 

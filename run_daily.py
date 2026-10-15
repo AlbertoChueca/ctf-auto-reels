@@ -3,7 +3,7 @@
 python run_daily.py <story|storytag> [--dry-run]
 
 story = midday slot, storytag = evening slot. The weekly calendar decides the pillar of each slot:
-pain, faq, method, success (real student stories), remix, proof, key (Square 65), benefits, rating.
+pain, faq, method, success (real student stories), remix, proof, key (a principle of our method), benefits, rating.
 Every reel is a real-footage reel (make_broll). If the AI script fails twice, a pre-written evergreen
 script (evergreen_broll.json, real facts only) is used, so a post always goes out.
 Every post: Instagram reel + Story, Facebook Reel, random US location, YouTube/TikTok when configured.
@@ -29,7 +29,7 @@ def log(entry):
 
 # ---- weekly calendar (US date), Mon..Sun: 14 reels a week, success stories and remixes get the most slots
 MIDDAY = {0: "pain", 1: "success", 2: "benefits", 3: "remix", 4: "faq", 5: "success", 6: "rating"}
-EVENING = {0: "key", 1: "faq", 2: "key", 3: "success", 4: "key", 5: "remix", 6: "benefits"}   # key = Square 65 key
+EVENING = {0: "key", 1: "faq", 2: "key", 3: "success", 4: "key", 5: "remix", 6: "benefits"}   # key = a principle of our method
 PILLARS = ("pain", "faq", "method", "proof", "success", "remix", "key", "benefits", "rating")
 us_today = (now - datetime.timedelta(hours=5)).date()
 wd = us_today.weekday()
@@ -101,8 +101,6 @@ for eng in chain:
         engine = eng
         break
     except Exception as e:
-        if type(e).__name__ == "RejectReel" and eng == chain[-1]:
-            raise
         errors.append(f"{eng}: {str(e)[:300]}")
         print(f"[{eng}] failed:\n{traceback.format_exc()[-1500:]}", flush=True)
 if meta is None:
@@ -136,7 +134,7 @@ if summary:  # visible on the run page in GitHub
                 + (f"- Brand guardian: distinctiveness {meta['brand_check'].get('distinctiveness')}/10, voice "
                    f"{meta['brand_check'].get('voice')}/10, anchors {meta['brand_check'].get('anchors')}"
                    f"{' (rewritten)' if meta['brand_check'].get('rewrote') else ''}\n" if meta.get("brand_check") else "")
-                + (f"- Square 65: key {meta.get('key') or meta.get('anchor_key')}\n" if (meta.get("key") or meta.get("anchor_key")) else "")
+                + (f"- Method principle: #{meta.get('key') or meta.get('anchor_key')}\n" if (meta.get("key") or meta.get("anchor_key")) else "")
                 + (f"- Final video review: {meta.get('review_score')}/10\n" if meta.get("review_score") is not None else "")
                 + f"- {insights_msg}\n"
                 + (f"- Experiment: {', '.join(f'{k}={v.split(chr(58))[0]}' for k, v in arms.items())}\n" if arms else "")

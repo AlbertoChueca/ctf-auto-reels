@@ -1,7 +1,7 @@
 """Premium real-footage reels for chess PARENTS (who often don't play chess themselves).
 
 Every reel = real stock footage (Pexels/Pixabay, graded per creator) + voice + kinetic text in varied layouts +
-optional glass overlays (real progress chart, the 6-level ladder, a Square 65 key, an approved stat, a checklist).
+optional glass overlays (real progress chart, the 6-level ladder, a principle of our method, an approved stat, a checklist).
 Structure ("shape") varies per reel: story, listicle, myth vs fact, POV, letter to parents, Q&A, before/after.
 The AI writes; hard rules (validate_broll) + the creative director (copy chief, brand guardian with the parent test,
 art director on a real storyboard) keep it honest, on-brand and readable.
@@ -97,7 +97,7 @@ Write 5 or 6 scenes. Each scene:
 - "delivery": 3-8 word acting direction (calm, warm, confident; vary).
 - "layout": one of top | center | lower | question | number | quote.
   center = one big statement; question = a parent's question card; number = item n of a numbered list (listicles);
-  quote = ONLY for a sentence from TODAY'S KEY, exactly as the book says it.
+  quote = ONLY for a short sentence of TODAY'S KEY (our method), faithful to it.
 - "broll": 2-4 SIMPLE English words a stock-video site really has (subject + action), matching what the voice says:
   e.g. "boy playing chess", "girl doing homework", "mother hugging son", "family car trip", "chess pieces closeup",
   "child using tablet", "chess clock", "trophy", "classroom children", "father son talking". Children aged 7-14,
@@ -105,7 +105,9 @@ Write 5 or 6 scenes. Each scene:
 - "overlay": none | chart | ladder | key_card | stat | list. {overlay_rule}
 - "params": for number {{"n": i, "total": 3}}; ladder {{"from_level": 0-5, "to_level": 0-5}}; stat {{"value": "250+",
   "label": "students trained"}} (approved numbers only); list {{"items": [max 3, max 5 words]}}; key_card {{}};
-  quote {{"source": "Square 65, Key n"}}.
+  quote {{}}.
+NEVER mention a book, "Square 65", key numbers or any person's name (no coach names); the academy is simply
+"ChessTalentsFactory" (never "high-performance").
 Rules: max 2 overlays per reel; NO call to action inside the scenes (no "comment", "link in bio", "book a call",
 "follow"): the end card adds the only one, so the last scene just leads naturally into it; no prices, no guarantees,
 no competitors; never a number about results unless it is in APPROVED CLAIMS or the REAL CASE.
@@ -252,7 +254,7 @@ def validate(sc, pillar, info=None):
                 hw = re.findall(r"[a-z']+", s["headline"].lower())
                 src_ok = bool(hw) and sum(w in kt for w in hw) / len(hw) >= 0.8
             if src_ok:
-                p["source"] = f"Square 65, Key {key['n']}"
+                p["source"] = "The ChessTalentsFactory method"
                 s["headline"] = _words(s["headline"], 9)
             else:
                 lay = "center"; p.pop("source", None)
@@ -266,6 +268,12 @@ def validate(sc, pillar, info=None):
     if not 55 <= words <= 140:
         raise ValueError(f"narration length {words} words (needs 75-115)")
     cta_txt = " ".join(f"{s['headline']} {s['narration']}" for s in scenes).lower()
+    whole = cta_txt + " " + f"{sc.get('caption_hook', '')} {sc.get('caption_body', '')} {sc.get('title', '')}".lower()
+    m = re.search(r"square\s*65|\balberto\b|\bchueca\b|high[\s-]performance|\b(?:the|our|my|his|a) book\b|"
+                  r"\bkey (?:\d+|number)\b|\b65 keys\b|\bin the book\b", whole)
+    if m:
+        raise ValueError(f"mentions {m.group(0)!r}: never cite the book, never name a person, never say "
+                         "'high-performance'; present it as the ChessTalentsFactory method")
     m = re.search(r"\b(comment|link in (?:the )?bio|book (?:a|your) (?:free )?call|dm us|send us a|click|sign up|"
                   r"follow (?:us|for)|subscribe|tap the|watch (?:the|our) (?:free )?(?:video|training))\b", cta_txt)
     if m:

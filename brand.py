@@ -59,8 +59,8 @@ AUDIENCE = (
     "slow, improvised lessons. They watch on Instagram/Facebook, often with their child next to them.")
 
 ACADEMY = (
-    f"{NAME} is a premium online high-performance chess academy led by {COACH} (International Master, 15 years "
-    "coaching). Small groups (2-6 kids of similar age and level) or private lessons with International Masters, a "
+    f"{NAME} is a premium online chess academy for kids with a team of International Masters and 15 years of "
+    "coaching experience. Small groups (2-6 kids of similar age and level) or private lessons with International Masters, a "
     "tested methodology and level-based roadmap, weekly assignments, masterclasses, recorded lessons and progress "
     "reports. Its free video explains how a child can gain 300 rating points in 3 months with the right training.")
 
@@ -68,8 +68,9 @@ HONESTY = (
     "HONESTY RULES (non-negotiable): never invent students, testimonials, names, ages, ratings or results; never "
     "promise or guarantee a specific result to the viewer. Talk about patterns coaches see, typical mistakes and how "
     "training works. Only mention a concrete student result if it is listed under REAL CASES below, exactly as written. "
-    "Never show or describe real, identifiable children. No brands other than ChessTalentsFactory, no real people "
-    f"except {COACH} when the narrator speaks as him.")
+    "Never show or describe real, identifiable children. No brands other than ChessTalentsFactory. Never name any "
+    "coach or person and never mention or quote any book: the academy and its method are the protagonists. Never call "
+    "the academy 'high-performance' or 'high performance training': it is simply ChessTalentsFactory.")
 
 
 def bible():
@@ -82,10 +83,10 @@ def bible():
 
 
 # Words that prove a reel is OURS (the competitor test). At least one must appear in every script.
-ANCHOR_TERMS = ["square 65", "65 keys", "key ", "meta-chess", "t-t-p", "tripartite", "tactics, theory", "learning path",
+ANCHOR_TERMS = ["our method", "our coaches", "at chesstalentsfactory", "6 levels", "six levels", "meta-chess", "t-t-p", "tripartite", "tactics, theory", "learning path",
                 "the basics", "the strategist", "the competitor", "the expert", "candidate master", "master & beyond",
                 "study thesis", "technical diagnosis", "deliberate practice", "macrocycle", "microcycle",
-                "ninety-minute", "90-minute", "international master", "fide trainer", "im alberto", "alberto chueca",
+                "ninety-minute", "90-minute", "international master", "fide trainer",
                 "our students", "one of our students", "world champion", "pan-american", "national master",
                 "progress report", "chesstalentsfactory"]
 
@@ -103,11 +104,11 @@ def cases_text():
 
 
 def narrator_text():
-    if NARRATOR == "coach":
+    if False and NARRATOR == "coach":
         return (f"NARRATOR: {COACH} himself, first person ('I', 'my students'), calm, confident, warm, direct, like a top "
                 "coach giving a parent a straight answer in a hallway at a tournament.")
     return (f"NARRATOR: the voice of {NAME} ('we', 'our coaches', 'our students'), calm, confident, warm and direct, like "
-            "a top coach giving a parent a straight answer. Mention the head coach by name at most once.")
+            "a top coach giving a parent a straight answer. Never mention any coach by name and never cite a book.")
 
 
 # Voice actor direction (Gemini TTS)
@@ -147,14 +148,14 @@ def cta(kind):
 
 
 # Facts the AI may use freely (true by definition of the offer). Anything else about results needs claims.json.
-FACTS = ["International Masters", "FIDE Trainer", "T-T-P training system", "90-minute classes", "Author of Square 65",
+FACTS = ["International Masters", "FIDE Trainer", "T-T-P training system", "90-minute classes",
          "6-level Learning Path", "Quarterly progress reports", "Technical diagnosis first",
          "Small groups of 2-6", "Private 1-on-1 lessons", "Level-based roadmap",
          "Weekly assignments", "Recorded lessons", "Masterclasses", "Progress reports", "Kids of the same level",
          "15 years of coaching"]
 
-PARENT_LINE = (f"{NAME}: online high-performance chess academy led by {COACH}. Small groups and private lessons "
-               "with International Masters.")
+PARENT_LINE = (f"{NAME}: online chess academy for kids. Small groups and private lessons with International "
+               "Masters.")
 
 TAGS = ["chess", "chessparenting", "chesstraining", "chesscoach", "chesslessons", "chesskids", "kidschess",
         "scholasticchess", "chessparents", "chessforkids", "chesstactics", "chessacademy", "uschess", "learnchess",

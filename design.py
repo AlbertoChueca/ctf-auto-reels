@@ -763,14 +763,13 @@ def b_key_card(fr, t, dur, s):
     draw_bg(fr, "dark", t)
     p = s["params"]; n = p.get("key", 1)
     k = ease_out(t / 0.6)
-    paste(fr, book_cover(320), MX + 180, 690 + (1 - k) * 60, 0.92 + 0.08 * k, min(1, t / 0.35))
     lt = t - 0.35
     if lt > 0:
-        lab = cached("keylab", lambda: _txt("SQUARE 65 · KEY", font(F_UI, 36), ORANGE))
+        lab = cached("keylab", lambda: _txt("OUR METHOD", font(F_UI, 36), ORANGE))
         paste(fr, lab, MX + 420 + lab.width / 2, 520, 1, min(1, lt / 0.25))
         num = cached(("keynum", n), lambda: _keynum(n, font(F_BLACK, 190), font(F_BLACK, 70)))
         paste(fr, num, MX + 418 + num.width / 2, 660, 0.85 + 0.15 * back(lt / 0.45), min(1, lt / 0.2))
-        by = cached("keyby", lambda: _txt("by IM Alberto Chueca", font(F_UI2, 34), (190, 186, 198)))
+        by = cached("keyby", lambda: _txt("ChessTalentsFactory", font(F_UI2, 34), (190, 186, 198)))
         paste(fr, by, MX + 420 + by.width / 2, 800, 1, clamp((lt - 0.3) / 0.3))
     d = ImageDraw.Draw(fr)
     d.line([(MX, 1000), (MX + 120 * ease_out((t - 0.6) / 0.5), 1000)], fill=ORANGE, width=8)

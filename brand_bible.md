@@ -3,46 +3,45 @@
      Edita libremente: lo que cambies aquí cambia el tono de todos los reels a partir del siguiente. -->
 
 ## Positioning
-- ChessTalentsFactory is a **High Performance Chess Academy**, "a high-performance laboratory where we refined the
-  training protocols" of Square 65. Not chess lessons: high-performance training.
-- Promise (spirit, never a guarantee): helping children improve in months what typically takes years, through
-  optimized systems instead of passive study. "Methodology + Innovation = Success."
-- Led by IM Alberto Chueca (International Master, FIDE Trainer, Official US Chess Coach for the Cadet U8, U10 and
-  U12 World Chess Championships, author of "Square 65" and "The Chueca-Vidyarthi Opening 1.Nc3"). Team of
-  International Masters.
+- The academy's name is **ChessTalentsFactory** (spoken: "Chess Talents Factory"). Always just that name: never
+  "high-performance academy", "high performance training" or any other label.
+- An online chess academy for kids with a team of International Masters and a tested, structured method.
+- Promise (spirit, never a guarantee): helping children improve faster and with more confidence through structured,
+  well-guided training instead of random games and passive videos.
+- The ACADEMY and its METHOD are the protagonists. Never name any coach or person. Never mention or quote any book
+  (no "Square 65", no key numbers): the principles are presented simply as "our method" / "at ChessTalentsFactory".
 
-## Proprietary method (our signature concepts - use them by name)
-- **Square 65 / Meta-Chess**: a board has 64 squares; the 65th is everything outside the board that decides the
-  game: study method, psychology, time management, preparation, rest. Our book has 65 keys.
-- **The T-T-P System (Tripartite Training System)**: every 90-minute class has 3 phases: Tactics (neuronal warm-up)
-  -> Theory (one strategic "recipe" per class) -> Practice (games that force the new concept to appear).
-- **Technical Diagnosis + SMART objectives**: we never study blindly; first we find the bottlenecks.
-- **The Study Thesis**: master one key concept "to the point of overdose" before moving on.
-- **Density over quantity**: the effectiveness of the session matters more than the hours.
-- **Deliberate practice**: "Watching videos is entertainment, not training." Real learning happens under tension.
-- **Periodization**: macrocycles (e.g. 3 months of endgames) and microcycles (1 week of one endgame type).
-  "Improvisation is the enemy of progress."
+## Our method (signature concepts - use them in everyday words)
+- **What happens outside the board matters**: study habits, emotions, focus, time management and rest decide games.
+- **The T-T-P class structure**: every 90-minute class has 3 parts: a warm-up of exercises, one clear idea per class,
+  and practice games where the new idea has to appear.
+- **Diagnosis first + clear goals**: we never train blindly; first we find what is really holding the child back.
+- **One concept at a time**: master one key idea before moving on.
+- **Quality over hours**: a focused session beats a whole afternoon of games.
+- **Real practice**: "Watching videos is entertainment, not training." Real learning needs effort.
+- **A plan, not improvisation**: training is planned in stages.
 - **The Learning Path (6 levels)**: 1 The Basics (400-800), 2 The Strategist (800-1200), 3 The Competitor
   (1200-1500), 4 The Expert (1500-1800), 5 The Candidate Master (1800-2200), 6 The Master & Beyond (2200-2500+).
-- **Transversal knowledge**: below 1600, middlegames and endgames before opening theory.
-- **Quarterly progress reports** with strengths, weaknesses and personalized tips.
+- **Progress reports** every quarter with strengths, weaknesses and personalized tips.
 
 ## Voice
-- A high-performance coach speaking to an ambitious parent: calm authority, precise, demanding but warm.
-- Nonconformist about mediocre training; respectful of parents and kids. Confident, never arrogant.
-- Concrete over generic: name the concept, the level, the phase, the key number.
+- An experienced coach speaking to a parent who does not play chess: calm authority, precise, warm.
+- Empathetic with the child and the parent; nonconformist about improvised training. Confident, never arrogant.
+- Concrete over generic: a real moment, a clear concept, a level, a step.
 - Sentences short and spoken. One idea per scene.
 
 ## Words we use
-high-performance, methodology, roadmap, diagnosis, bottleneck, deliberate practice, structured training,
-measurable progress, the right concept at the right time, International Masters, Square 65, T-T-P.
+method, plan, roadmap, diagnosis, structured training, real practice, focus, confidence, measurable progress,
+the right concept at the right time, International Masters, Learning Path, our coaches.
 
 ## Words we never use
-"fun chess lessons", "unlock your child's potential", "game changer", "hack", "secret trick", "amazing",
-"guaranteed", "cheap", "discount", "best academy in the world", exaggerated emojis, competitor names.
+"high-performance", "high performance training", any person's name, "Square 65", "the book", "fun chess lessons",
+"unlock your child's potential", "game changer", "hack", "secret trick", "amazing", "guaranteed", "cheap",
+"discount", "best academy in the world", exaggerated emojis, competitor names.
 
 ## The competitor test (non-negotiable)
 If PremierChessAcademy, Killer Chess Training or any freelance coach could post the reel word for word, it is NOT a
 ChessTalentsFactory reel. Every reel must carry at least one of OUR anchors:
-1. a Square 65 key (by number or name), 2. a Learning Path level, 3. the T-T-P system or another signature concept
-above, 4. a real, approved student case, 5. a credential of our coaches.
+1. a principle of our method (said as "our method" / "at ChessTalentsFactory"), 2. a Learning Path level,
+3. the T-T-P class structure or another concept above, 4. a real, approved student case, 5. our team of
+International Masters.

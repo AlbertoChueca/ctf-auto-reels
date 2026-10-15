@@ -63,7 +63,7 @@ BLOCKS = {
     "limited":      "calendar with spots filling (ONLY with the approved limited_spots claim). params: {}",
     "before_after": "REAL student rating progress counter. params: {\"from\": int, \"to\": int, \"label\": \"in 13 months\"} - numbers ONLY from TODAY'S STUDENT CASE",
     "success_timeline": "REAL student milestones appear one by one with medals. params: {\"milestones\": [2-4 items, max 7 words each, ONLY from TODAY'S STUDENT CASE]}",
-    "key_card": "signature card 'SQUARE 65 - KEY n/65' with the key's title, by IM Alberto Chueca. params: {\"key\": n} (n = TODAY'S KEY)",
+    "key_card": "signature card 'OUR METHOD' with the principle's title. params: {\"key\": n} (n = TODAY'S KEY)",
 }
 
 PILLARS = {
@@ -103,10 +103,11 @@ PILLAR_BRIEF = {
     "rating": "Explain to a parent who has never played chess what a chess rating is (like a school grade or a race "
               "time that goes up as skills grow), what our 6 Learning Path levels mean, and what really moves a child "
               "from one level to the next.",
-    "key": "Teach TODAY'S KEY from Square 65, the book by IM Alberto Chueca that condenses our method into 65 keys. "
-           "Scene 1: the problem this key solves, as a parent sees it. Scene 2: the key_card (name it: 'Key n of Square "
-           "65'). Scene 3: what to actually do, in concrete steps taken from the key. Scene 4: how we apply it with our "
-           "students. Faithful to the book; never invent what the key says.",
+    "key": "Teach TODAY'S PRINCIPLE of the ChessTalentsFactory method. Scene 1: the problem it solves, as a parent "
+           "sees it. Scene 2: the principle itself (you may show the key_card). Scene 3: what to actually do, in "
+           "concrete steps. Scene 4: how we apply it with our students. Stay faithful to the principle; never invent "
+           "what it says. Present it as OUR method ('At ChessTalentsFactory we...'): never mention a book, never name "
+           "any person.",
     "remix": "Re-explain the IDEA TO REMIX below in a completely new way: a new hook, a new angle, a new example or "
              "analogy. Do not copy its wording or structure. It must feel like a fresh reel to someone who saw the original.",
 }
@@ -159,7 +160,7 @@ Rules:
 - PARENT TEST: the viewer is a parent who has NEVER played chess; their child loves it. No chess jargon or
   notation. If a chess idea is needed, translate it into everyday words (school, sports, music practice).
 - COMPETITOR TEST: if another academy or a freelance coach could post this reel word for word, it fails. Carry at
-  least one of OUR anchors (Square 65 key, Learning Path level, T-T-P or another signature concept, a real approved
+  least one of OUR anchors (a principle of our method, Learning Path level, T-T-P or another signature concept, a real approved
   case, a coach credential) and use our vocabulary from the brand bible.
 - caption_hook: Instagram first line for parents, max 12 words, one emoji allowed.
 - caption_body: 1-2 short sentences that add value for the parent (no hashtags).
@@ -237,8 +238,9 @@ def pick_key(pillar=None, rng=None):
 
 def key_text(k, full=True):
     body = k["text"][:2200] if full else k["summary"]
-    return (f"TODAY'S KEY: Square 65, Key {k['n']} of 65 - \"{k['title']}\" (chapter: {k['chapter']}). "
-            f"What the book says (stay faithful, do not copy long sentences, do not invent):\n{body}")
+    return (f"TODAY'S KEY (a principle of the ChessTalentsFactory method): \"{k['title']}\". Present it as our "
+            f"academy's method; NEVER mention a book, 'Square 65', key numbers or any person's name.\n"
+            f"What the principle says (stay faithful, do not copy long sentences, do not invent):\n{body}")
 
 
 def context_for(pillar):
@@ -252,8 +254,8 @@ def context_for(pillar):
         return ctx, extra
     k = pick_key(pillar if pillar in ("pain", "faq", "method", "benefits") else None, rng)
     if k:                                            # every reel carries our method (competitor test)
-        ctx += ("\n\nMETHOD ANCHOR (weave it in naturally, at least one sentence; e.g. 'In Square 65, IM Alberto "
-                "Chueca calls this...' or 'It's Key " + str(k["n"]) + " of our method'):\n" + key_text(k, full=False))
+        ctx += ("\n\nMETHOD ANCHOR (weave it in naturally, at least one sentence; e.g. 'At ChessTalentsFactory we "
+                "call this...' or 'In our method...'; never mention a book or a person):\n" + key_text(k, full=False))
         extra["anchor_key"] = k["n"]
     return ctx, extra
 

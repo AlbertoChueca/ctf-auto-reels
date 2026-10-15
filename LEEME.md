@@ -35,6 +35,10 @@ datos reales:
   se reescribe con otro ángulo.
 - Cada creador IA tiene su propio etalonaje (cálido, frío, contrastado, suave); música, movimientos de cámara y
   transiciones cambian en cada reel; un clip no se repite en 60 días (`stock_used.json`).
+- **Editor de vídeo IA**: antes de usar un clip, Gemini mira las miniaturas reales de 6 candidatos por escena y
+  elige el que encaja con lo que dice la voz (descarta animaciones, 3D, cielos estrellados, bebés, adultos solos…).
+  Si ninguno vale, propone otra búsqueda y repite (hasta 3 rondas). El director de arte puede pedir otro clip y
+  vuelve a ver el storyboard ya con el clip nuevo.
 - En los éxitos de alumnos solo se usan planos **no identificables** (manos, tablero, trofeo, sala de torneo) con la
   etiqueta "Illustrative footage": el vídeo ilustra, nunca se hace pasar por el alumno.
 
