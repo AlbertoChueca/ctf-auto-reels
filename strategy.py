@@ -41,7 +41,6 @@ DEFAULT_ARMS = {      # written for parents who do NOT play chess (no chess jarg
         "the parent's role: support without pressure",
     ],
     "cta": ["keyword", "vsl", "call", "comment"],
-    "format": ["broll", "broll", "motion"],
     "shape": ["story", "listicle", "myth_fact", "pov", "letter", "qa", "before_after"],
 }
 ARMS_VERSION = 2

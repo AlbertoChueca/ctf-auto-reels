@@ -6,7 +6,7 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
 
 ## Qué se publica (calendario automático, hora de Nueva York)
 
-Sin puzzles. Todo está pensado para **un padre que no juega al ajedrez y cuyo hijo lo adora**.
+Sin puzzles ni dibujos. Todo está pensado para **un padre que no juega al ajedrez y cuyo hijo lo adora**.
 
 | Día | 12:00 | 21:00 |
 |---|---|---|
@@ -18,23 +18,28 @@ Sin puzzles. Todo está pensado para **un padre que no juega al ajedrez y cuyo h
 | Sábado | **Éxito de alumno** | **Remix** de un reel anterior |
 | Domingo | **¿Qué significa el rating?** (los 6 niveles) | **Beneficios** |
 
-## Dos formatos (el autopiloto aprende cuál funciona mejor)
+## Formato: vídeo real (`make_broll.py`)
 
-1. **Vídeo real** (`make_broll.py`, formato principal): escenas reales de familias, niños estudiando, coche camino
-   del torneo, manos moviendo piezas, trofeos… sacadas de **Pixabay (y Pexels si tienes clave)** (gratis, licencia comercial, sin
-   atribución). Encima: voz, titulares animados en 6 composiciones distintas (arriba, centro, abajo, pregunta,
-   lista numerada, cita del libro) y tarjetas de cristal con datos reales:
-   - **Gráfica de progreso real** del caso del día (p. ej. 1100 → 1800 en 13 meses), dibujándose en pantalla.
-   - **Escalera de los 6 niveles** del Learning Path (para que el padre entienda dónde está su hijo).
-   - **Tarjeta de clave de Square 65**, cifra aprobada (250+ alumnos…) o lista de 3 puntos.
-   Cada reel tiene una **estructura** distinta: historia, "3 señales…", mito vs. realidad, POV, carta al padre,
-   pregunta-respuesta, antes/después. Cada creador IA tiene su propio **etalonaje** (cálido, frío, contrastado,
-   suave) y cada reel su música y movimientos de cámara. Un clip no se repite en 60 días (`stock_used.json`).
-   En los éxitos de alumnos solo se usan planos **no identificables** (manos, tablero, trofeo, sala de torneo) con
-   la etiqueta "Illustrative footage": el vídeo ilustra, nunca se hace pasar por el alumno.
-2. **Motion graphics** (`make_explainer.py`): el formato anterior, ahora como alternativa para dar variedad.
+Escenas reales de familias, niños estudiando, coche camino del torneo, manos moviendo piezas, trofeos… sacadas de
+**Pixabay** (y Pexels si tienes clave; gratis, licencia comercial, sin atribución). Encima: voz, titulares animados en
+6 composiciones distintas (arriba, centro, abajo, pregunta, lista numerada, cita del libro) y tarjetas de cristal con
+datos reales:
+- **Gráfica de progreso real** del caso del día (p. ej. 1100 → 1800 en 13 meses), dibujándose en pantalla.
+- **Escalera de los 6 niveles** del Learning Path (para que el padre entienda dónde está su hijo).
+- **Tarjeta de clave de Square 65**, cifra aprobada (250+ alumnos…) o lista de 3 puntos.
 
-Al principio ~70 % de los reels son de vídeo real; después decide el autopiloto según visitas al perfil y follows.
+**Cada reel es nuevo y distinto del anterior:**
+- 7 estructuras (historia, "3 señales…", mito vs. realidad, POV, carta al padre, pregunta-respuesta, antes/después);
+  nunca se repite la estructura de los 3 últimos reels.
+- Control de novedad: si el gancho o la idea se parecen a cualquiera de los últimos 40 reels, el guion se rechaza y
+  se reescribe con otro ángulo.
+- Cada creador IA tiene su propio etalonaje (cálido, frío, contrastado, suave); música, movimientos de cámara y
+  transiciones cambian en cada reel; un clip no se repite en 60 días (`stock_used.json`).
+- En los éxitos de alumnos solo se usan planos **no identificables** (manos, tablero, trofeo, sala de torneo) con la
+  etiqueta "Illustrative footage": el vídeo ilustra, nunca se hace pasar por el alumno.
+
+Los antiguos dibujos (la niña, el niño y el entrenador ilustrados) y el formato de motion graphics están retirados.
+Si un día Pixabay no responde, el reel sale igual con el mismo diseño sobre un fondo oscuro de marca.
 
 **Prueba del padre** (`guard.jargon` + guardián de marca): si el guion usa jerga que un padre no entiende
 ("fianchetto", "pawn structure", notación…) se rechaza y se reescribe; términos como "opening" o "endgame" solo se
@@ -47,20 +52,16 @@ permiten de forma puntual y explicados con comparaciones del día a día (notas 
 - **Remix**: cada domingo el sistema analiza con Gemini tus reels publicados (los del editor y los automáticos):
   tema, gancho, puntos clave, por qué funcionó. Los mejores se reexplican de otra forma (otro gancho, otro ángulo)
   sin repetir la misma idea en 45 días. Todo queda en `content_bank.json`.
-- **Motion graphics** (`make_explainer.py` + `design.py`): 15 bloques de escena con diseño premium
-  (titulares Montserrat Black con marca naranja, tarjetas tipo papel, fondos de estudio, subtítulos con la palabra
-  activa en naranja, barra de progreso, fundidos suaves y sonido tonal). Gemini solo escribe y elige bloques.
 - **Director creativo** (`director.py`, segundo agente): antes de grabar la voz escribe 5 ganchos alternativos, los
   puntúa y se queda con el mejor, y pule todo el guion para que convierta. Después revisa un storyboard con un
-  fotograma de cada escena (legibilidad, solapes, jerarquía, coherencia con la voz) y aplica correcciones hasta
+  fotograma real de cada escena (con el vídeo de fondo) (legibilidad, solapes, jerarquía, coherencia con la voz) y aplica correcciones hasta
   llegar a 8/10 (máx. 2 rondas). Al final un tercer control ve el vídeo terminado. Todo queda en el resumen de
   cada ejecución y en `review_log.jsonl`.
-- **Respaldo**: si el guion de IA falla dos veces, se usa un guion de reserva ya escrito (`evergreen.json`, solo
+- **Respaldo**: si el guion de IA falla dos veces, se usa un guion de reserva ya escrito (`evergreen_broll.json`, solo
   hechos reales de tu web). Siempre sale un reel de la Academia.
 
 ## 100 % gratis
-- Vídeo real: Pexels y Pixabay son gratuitos (solo hay que crear una clave, ver abajo). Sin clave, el sistema
-  sigue funcionando con motion graphics.
+- Vídeo real: Pixabay es gratuito (solo hay que crear una clave, ver abajo).
 - No se usa generación de imágenes con IA: todo el diseño está hecho en código.
 - Gemini se usa en su capa gratuita (guiones, voz y análisis de vídeos). Si la voz de Gemini supera el límite
   gratuito, el sistema cambia solo a una voz local gratuita (Kokoro) para que el reel salga igualmente.
@@ -141,7 +142,7 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
    nacionales, 15+ países, títulos). `cases.json` trae los casos de Pranav y Vyom de tu web y se amplía solo cada
    domingo. Pon `"approved": false` en cualquiera que no quieras usar.
 4. **Prueba**: Actions → *Daily reels* → Run workflow → elige `pillar` (success, remix, faq…) con `dry_run`
-   marcado. Puedes forzar `format` = broll (vídeo real) o motion. El vídeo queda en *Artifacts*.
+   marcado. El vídeo queda en *Artifacts*.
 5. Listo. Los horarios corren solos.
 
 ## Variables opcionales (Settings → Variables)
@@ -159,11 +160,9 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
 | `STUDENT_NAMES` | `none` | `first` = usar el nombre de pila de los alumnos que ya aparecen en tu web. |
 | `BANK_MAX_NEW` | `8` | Vídeos nuevos analizados por semana. |
 
-## Personajes y logo
-`assets/kit/` contiene los personajes recortados de tu vídeo y `assets/logo_h.png` tu logo, de forma
-**provisional**. Cuando el diseñador te pase los archivos fuente, exporta cada pose como PNG transparente con el
-mismo nombre (`girl_sad.png`, `girl_thinking.png`, `girl_standing.png`, `girl_trophy.png`, `coach_standing.png`,
-`pair_hands.png`) y súbelos: todos los reels mejoran sin tocar código. Se pueden añadir poses nuevas.
+## Logo
+`assets/logo_h.png` es tu logo (barra superior y tarjeta final). Sustitúyelo por la versión del diseñador con el
+mismo nombre cuando quieras. Ya no se usan personajes ilustrados.
 
 ## Workflows
 - *Daily reels*: 2 al día (13:00 y 22:00 hora de Paraguay).

@@ -254,7 +254,12 @@ def _fs(w):
     return im.filter(ImageFilter.GaussianBlur(22))
 
 
+CHARACTERS = False      # the illustrated girl/boy/coach cut-outs are retired (owner's decision)
+
+
 def character(fr, name, cx, feet_y, height, t, enter=0.0, slide_from=None):
+    if not CHARACTERS or not os.path.exists(os.path.join(KIT, name + ".png")):
+        return
     lt = t - enter
     if lt < 0:
         return

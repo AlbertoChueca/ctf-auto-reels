@@ -146,16 +146,19 @@ You are now the ART DIRECTOR. Below is the storyboard of a reel: the first frame
 scene (in order) and the end card. Script: {json.dumps(sc['scenes'], ensure_ascii=False)}
 
 Check every frame like a top motion designer: text fully readable on a phone, nothing cut off or overlapping (text vs
-characters vs cards vs captions), clear hierarchy (one focal point), balanced composition (no awkward empty areas or
+real footage vs text vs cards vs captions; text must stay readable over the video), clear hierarchy (one focal point), balanced composition (no awkward empty areas or
 crowding), consistent premium look, highlight words that really matter, the image supports what the voice says,
 the first frame works as a cover that makes parents stop.
 You may only fix things with these actions (per scene index starting at 0):
 - "headline": a shorter/clearer headline (max 6 words), "highlight": 1-2 words of it
-- "block": another block from the same slot (see below)
+- "block": another block from the same slot (motion reels only)
+- "layout": another text layout (real-footage reels: top|center|lower|question|number|quote)
+- "broll": a new 3-7 word stock-footage search when the clip does not match the voice, looks cheap/generic, repeats
+  another scene, or (student stories) shows an identifiable child
 - "params": shorter list items / different numbers ONLY if allowed
 Slots: {slots_text}
 Return JSON: {{"score": 1-10, "critical": bool, "summary": str, "fixes": [{{"scene": int, "headline": str?,
-"highlight": [str]?, "block": str?, "params": {{}}?, "why": str}}]}}. If it is already excellent, return no fixes."""},
+"highlight": [str]?, "block": str?, "layout": str?, "broll": str?, "params": {{}}?, "why": str}}]}}. If it is already excellent, return no fixes."""},
                 {"inline_data": {"mime_type": "image/jpeg", "data": _jpeg_b64(sheet, 1500)}}], 0.3)
     return res
 

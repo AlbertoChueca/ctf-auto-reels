@@ -129,8 +129,11 @@ def overlay_rule(pillar, info):
 
 def write_script(pillar, arms, ctx, info, agent):
     import make_story as MS, strategy, studio
-    shape = arms.get("shape") if arms.get("shape") in SHAPES else random.choice(list(SHAPES))
-    recent = E._recent()
+    recent = E._recent(40)
+    last_shapes = [r.get("shape") for r in recent[-3:]]
+    shape = arms.get("shape") if arms.get("shape") in SHAPES else None
+    if shape is None or shape in last_shapes:          # never the same structure as the last 3 reels
+        shape = random.choice([x for x in SHAPES if x not in last_shapes] or list(SHAPES))
     body0 = {"contents": [{"role": "user", "parts": [{"text": PROMPT.format(
         creator=studio.brief(agent) if agent in studio.CREATORS else "", name=brand.NAME, bible=brand.bible(),
         audience=brand.AUDIENCE, narrator=brand.narrator_text(), honesty=brand.HONESTY, claims=guard.approved_text(),
@@ -138,7 +141,7 @@ def write_script(pillar, arms, ctx, info, agent):
         context=ctx, shape=shape, shape_desc=SHAPES[shape], hook_style=arms.get("hook_style", "your best idea"),
         theme=arms.get("theme", "your best idea"),
         playbook=("WHAT WORKS FOR OUR AUDIENCE:\n" + strategy.playbook_text()) if strategy.playbook_text() else "",
-        recent="; ".join(f"{r.get('format', 'motion')}/{r.get('shape', '-')}/{r.get('pillar')}: {r.get('headline')}" for r in recent) or "none",
+        recent="; ".join(f"{r.get('format', 'motion')}/{r.get('shape', '-')}/{r.get('pillar')}: {r.get('headline')}" for r in recent[-15:]) or "none",
         words="75-115",
         success_rule=(" For this real student story use NON-IDENTIFYING footage only (hands, board, clock, trophy, "
                       "tournament hall, silhouettes from behind): the footage illustrates, it is not the student.")
@@ -154,8 +157,9 @@ def write_script(pillar, arms, ctx, info, agent):
                 j = MS._post(model, body)
                 txt = j["candidates"][0]["content"]["parts"][0]["text"]
                 sc = json.loads(re.sub(r"^```(json)?|```$", "", txt.strip()))
-                sc.setdefault("shape", shape)
+                sc["shape"] = shape
                 out = validate(sc, pillar, info)
+                novelty(out, recent)
                 print(f"broll script: {model}" + (" (repaired)" if attempt else ""), flush=True)
                 return out
             except ValueError as e:
@@ -167,6 +171,24 @@ def write_script(pillar, arms, ctx, info, agent):
             except Exception as e:
                 last = e; print(f"broll script: {str(e)[:160]}", flush=True); break
     raise RuntimeError(f"broll script failed: {last}")
+
+
+def _tok(t):
+    return set(re.findall(r"[a-z']{3,}", str(t or "").lower())) - {"your", "the", "and", "you", "for", "this", "that",
+                                                                 "with", "child", "chess", "kid", "kids"}
+
+
+def novelty(sc, recent):
+    """Every reel must be new: hook and idea may not repeat any of the last 40 reels."""
+    h = _tok(sc["scenes"][0]["headline"]) | _tok(sc.get("caption_hook"))
+    t = _tok(sc.get("title"))
+    for r in recent[-40:]:
+        rh = _tok(r.get("headline")) | _tok(r.get("hook"))
+        if h and rh and len(h & rh) / len(h | rh) > 0.45:
+            raise ValueError(f"hook too similar to a recent reel ({r.get('headline')!r}); write a completely new hook and angle")
+        rt = _tok(r.get("title"))
+        if t and rt and len(t & rt) / len(t | rt) > 0.6:
+            raise ValueError(f"idea too similar to a recent reel ({r.get('title')!r}); choose a different idea")
 
 
 def _words(x, n):
@@ -269,9 +291,14 @@ def slots_text():
 
 # ----------------------------------------------------------------------- footage
 class Clip:
-    """Streams frames of a prepared clip (BWxBH); loops if the scene is longer than the clip."""
+    """Streams frames of a prepared clip (BWxBH); loops if the scene is longer than the clip.
+    path=None -> no footage available: a premium dark brand background (the camera move still animates it)."""
     def __init__(self, path):
-        self.path = path; self.p = None; self._open()
+        self.path = path; self.p = None; self.still = None
+        if path is None:
+            self.still = D.cached("broll_still", lambda: D.bg_dark().convert("RGB").resize((BW, BH), Image.LANCZOS))
+        else:
+            self._open()
 
     def _open(self):
         if self.p:
@@ -280,6 +307,8 @@ class Clip:
                                    "-s", f"{BW}x{BH}", "-"], stdout=subprocess.PIPE)
 
     def frame(self):
+        if self.still is not None:
+            return self.still
         n = BW * BH * 3
         buf = self.p.stdout.read(n)
         if len(buf) < n:
@@ -312,8 +341,14 @@ def camera(img, t, dur, move):
 def fetch_clips(scenes, durs, grade, seed):
     paths, used = [], set()
     for i, s in enumerate(scenes):
-        p, inf = stock.get_clip(s["broll"], durs[i] + 0.6, grade, seed=f"{seed}-{i}", exclude=used)
-        used.add(inf["uid"]); s["_clip"] = inf
+        try:
+            p, inf = stock.get_clip(s["broll"], durs[i] + 0.6, grade, seed=f"{seed}-{i}", exclude=used)
+        except Exception as e:                       # never lose the post: designed background instead
+            print("stock:", str(e)[:150], "-> designed background", flush=True)
+            p, inf = None, {"uid": None, "query": None, "asked": s["broll"]}
+        if inf["uid"]:
+            used.add(inf["uid"])
+        s["_clip"] = inf
         paths.append(p)
     return paths
 
@@ -495,7 +530,7 @@ def build(seed, out, pillar="pain", arms=None, agent=None, evergreen=False, mock
         except Exception as e:
             print("broll review skipped:", e)
     log = E._recent(200) + [{"pillar": pillar, "format": "broll", "shape": sc.get("shape"), "title": sc.get("title"),
-                             "headline": scenes[0]["headline"], "date": time.strftime("%Y-%m-%d"), "agent": agent, **extra}]
+                             "headline": scenes[0]["headline"], "hook": sc.get("caption_hook"), "date": time.strftime("%Y-%m-%d"), "agent": agent, **extra}]
     if extra.get("remix_of"):
         try:
             import content_bank; content_bank.mark_remixed(extra["remix_of"])

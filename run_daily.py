@@ -3,9 +3,9 @@
 python run_daily.py <story|storytag> [--dry-run]
 
 story = midday slot, storytag = evening slot. The weekly calendar decides the pillar of each slot:
-pain, faq, method, success (real student stories), remix (re-explaining the account's best past reels), proof.
-Every reel is a motion-graphics explainer (make_explainer). If the AI script fails twice, a pre-written
-evergreen script (evergreen.json, real facts only) is used, so a post always goes out.
+pain, faq, method, success (real student stories), remix, proof, key (Square 65), benefits, rating.
+Every reel is a real-footage reel (make_broll). If the AI script fails twice, a pre-written evergreen
+script (evergreen_broll.json, real facts only) is used, so a post always goes out.
 Every post: Instagram reel + Story, Facebook Reel, random US location, YouTube/TikTok when configured.
 """
 import datetime, json, os, random, sys, traceback
@@ -83,41 +83,19 @@ except Exception as e:
 
 out = f"out/{today}_{slot}_{now.hour:02d}.mp4"
 
-# ---- render. Two formats:
-#   broll  = real stock footage + voice + kinetic text + real charts (make_broll)  <- default, most engaging
-#   motion = motion-graphics explainer (make_explainer)
-# Fallbacks keep a post going out: AI script -> other format -> evergreen real-footage -> evergreen motion.
-import stock
-fmt = os.environ.get("FORMAT_OVERRIDE", "auto")
-if fmt not in ("broll", "motion"):
-    fmt = arms.get("format") or "broll"
-    try:
-        n_measured = strategy.stats()[3]
-    except Exception:
-        n_measured = 0
-    if n_measured < 12 and random.Random(f"{seed}-fmt-{slot}").random() < 0.7:
-        fmt = "broll"                                # early on: mostly real footage, still testing motion
-if not stock.available():
-    fmt = "motion"
-arms["format"] = fmt
-ai = bool(os.environ.get("GEMINI_API_KEY")) or os.environ.get("STORY_MOCK") == "1"
-chain = (["broll", "explainer"] if fmt == "broll" else ["explainer", "explainer"]) if ai else []
-chain += (["evergreen_broll"] if stock.available() else []) + ["evergreen"]
+# ---- render: every reel is a real-footage reel (make_broll): stock footage + voice + kinetic text + real charts.
+# AI script (2 tries, each with its own repair round) -> pre-written evergreen real-footage script (real facts only).
+# Without footage (no key / API down) the same design runs on a premium brand background, so a post always goes out.
+arms.pop("format", None)
+ai = bool(os.environ.get("GEMINI_API_KEY"))
+chain = (["broll", "broll"] if ai else []) + ["evergreen_broll"]
 meta, engine, errors = None, None, []
 for eng in chain:
     try:
-        if eng in ("broll", "evergreen_broll"):
-            import make_broll
-            meta = make_broll.build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen_broll"), agent=agent)
-        else:
-            from make_explainer import build
-            meta = build(seed, out, pillar=pillar, arms={**arms, "format": "motion"}, evergreen=(eng == "evergreen"),
-                         agent=agent)
-            meta["format"] = "motion"
-            meta["arms"] = {k: v for k, v in arms.items() if k != "shape"}
+        import make_broll
+        meta = make_broll.build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen_broll"), agent=agent)
         meta["qc"] = guard.qc(out)                  # hard checks: streams, duration, real audio
-        meta.setdefault("arms", arms)
-        meta["arms"] = {**(meta.get("arms") or {}), "format": meta.get("format", "motion")}
+        meta["arms"] = dict(meta.get("arms") or arms)
         if meta.get("shape"):
             meta["arms"]["shape"] = meta["shape"]
         engine = eng
@@ -143,12 +121,12 @@ except Exception:
 summary = os.environ.get("GITHUB_STEP_SUMMARY")
 if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
-        f.write(f"## {'✅ AI reel' if engine in ('explainer', 'broll') else '⚠️ Evergreen reel (AI script failed)'} · pillar `{pillar}`\n\n"
+        f.write(f"## {'✅ AI reel' if engine == 'broll' else '⚠️ Evergreen reel (AI script failed)'} · pillar `{pillar}`\n\n"
                 f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used}` · narrator: `{brand.NARRATOR}`\n"
                 + (f"- Creator: **{studio.CREATORS[meta['agent']]['name']}** · {studio_msg}\n" if meta.get("agent") else f"- {studio_msg}\n")
                 + (f"- Title: {meta.get('story')}\n" if meta.get("story") else "")
-                + f"- Format: **{'real footage' if meta.get('format') == 'broll' else 'motion graphics'}**"
-                + (f" · shape `{meta.get('shape')}` · grade `{meta.get('grade')}`" if meta.get('shape') else "") + "\n"
+                + f"- Format: **real footage** · shape `{meta.get('shape')}` · grade `{meta.get('grade')}` · clips: "
+                + f"{sum(1 for x in (meta.get('footage') or []) if x)}/{len(meta.get('footage') or [])}\n"
                 + (f"- Blocks: {', '.join(meta.get('blocks') or [])}\n")
                 + (f"- Student case: `{meta.get('case')}`\n" if meta.get("case") else "")
                 + (f"- Remix of: `{meta.get('remix_of')}`\n" if meta.get("remix_of") else "")
