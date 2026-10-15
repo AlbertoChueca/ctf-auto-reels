@@ -75,7 +75,9 @@ def _pexels(query, min_s):
                 continue
             f = min(pool, key=lambda f: abs(f["height"] - 1920))
             out.append({"uid": f"pexels-{v['id']}", "url": f["link"], "w": f["width"], "h": f["height"],
-                        "dur": v.get("duration"), "portrait": f["height"] >= f["width"]})
+                        "dur": v.get("duration"), "portrait": f["height"] >= f["width"], "thumb": v.get("image"),
+                        "tags": " ".join(re.findall(r"[a-z]+", (v.get("url") or "").lower().split("/video/")[-1])),
+                        "pop": 0})
         if len([o for o in out if o["portrait"]]) >= 6:
             break
     return out
@@ -86,8 +88,9 @@ def _pixabay(query, min_s):
     if not key:
         return []
     try:
-        r = requests.get("https://pixabay.com/api/videos/", params={"key": key, "q": query, "per_page": 30,
-                                                                   "safesearch": "true"}, timeout=30)
+        r = requests.get("https://pixabay.com/api/videos/", params={"key": key, "q": query, "per_page": 50,
+                                                                   "safesearch": "true", "video_type": "film"},
+                         timeout=30)
         hits = r.json().get("hits", []) if r.status_code == 200 else []
     except Exception:
         hits = []
@@ -97,10 +100,13 @@ def _pixabay(query, min_s):
             continue
         v = (h.get("videos") or {})
         f = v.get("large") if (v.get("large") or {}).get("url") else v.get("medium")
-        if not f or not f.get("url"):
-            continue
+        if not f or not f.get("url") or h.get("type", "film") != "film":
+            continue                                   # no animation / CGI
+        thumb = next((x.get("thumbnail") for x in (v.get("small"), v.get("medium"), v.get("tiny"), f)
+                      if x and x.get("thumbnail")), None)
         out.append({"uid": f"pixabay-{h['id']}", "url": f["url"], "w": f.get("width", 1920), "h": f.get("height", 1080),
-                    "dur": h.get("duration"), "portrait": f.get("height", 0) >= f.get("width", 1)})
+                    "dur": h.get("duration"), "portrait": f.get("height", 0) >= f.get("width", 1), "thumb": thumb,
+                    "tags": (h.get("tags") or "").lower(), "pop": (h.get("downloads") or 0) + 20 * (h.get("likes") or 0)})
     return out
 
 
@@ -128,6 +134,29 @@ def _library(query, min_s):
     return [c for _, c in sorted(out, key=lambda x: -x[0])]
 
 
+STOP = {"a", "an", "the", "of", "with", "and", "at", "in", "on", "to", "for", "close", "up", "shot", "video"}
+
+
+OFF_TOPIC = {"dog", "dogs", "puppy", "cat", "cats", "kitten", "pet", "pets", "animal", "animals", "bird", "horse",
+             "food", "eating", "bowl", "cooking", "snow", "winter", "christmas", "xmas", "santa", "baby", "babies",
+             "toddler", "infant", "newborn", "wedding", "bride", "sky", "stars", "starry", "space", "galaxy", "night",
+             "animation", "cartoon", "3d", "cgi", "render", "green", "screen", "chroma", "abstract", "background",
+             "particles", "fractal", "loop", "beach", "bikini", "party", "beer", "wine", "alcohol", "smoking",
+             "gun", "war", "halloween", "zombie", "fire", "explosion", "drone", "aerial", "city", "traffic"}
+
+
+def on_topic(c):
+    """False for clips whose tags show they are about something unrelated (pets, food, sky, babies, CGI...)."""
+    tags = set(re.findall(r"[a-z0-9]+", (c.get("tags") or "").lower()))
+    return not (tags & OFF_TOPIC)
+
+
+def _keywords(q):
+    w = set(re.findall(r"[a-z]+", q.lower())) - STOP
+    syn = {"kid": "child", "kids": "children", "son": "boy", "daughter": "girl", "mom": "mother", "dad": "father"}
+    return w | {syn[x] for x in w if x in syn}
+
+
 def _simplify(q):
     words = [w for w in re.findall(r"[a-zA-Z]+", q.lower()) if w not in ("a", "an", "the", "of", "with", "and", "at", "in")]
     out = []
@@ -142,11 +171,14 @@ def candidates(query, min_s=5, seed=None, fresh_only=True):
     rng = random.Random(seed or query)
     for q in [query] + _simplify(query):
         found = _local(q, min_s) or (_pexels(q, min_s) + _pixabay(q, min_s) + _library(q, min_s))
-        fresh = [c for c in found if not fresh_only or c["uid"].startswith("local-") or _fresh(c["uid"])]
+        fresh = [c for c in found if (not fresh_only or c["uid"].startswith("local-") or _fresh(c["uid"])) and on_topic(c)]
         if fresh:
-            portrait = [c for c in fresh if c["portrait"]]
-            pool = portrait[:12] if len(portrait) >= 3 else fresh[:12]
-            rng.shuffle(pool)
+            want = _keywords(query)
+            def score(c):
+                tags = set(re.findall(r"[a-z]+", c.get("tags") or ""))
+                return (len(want & tags) * 3 + (1 if c.get("portrait") else 0)
+                        + min(2.0, (c.get("pop") or 0) / 20000.0) + rng.random() * 0.8)
+            pool = sorted(fresh, key=score, reverse=True)[:12]
             return pool, q
     return [], None
 
@@ -186,6 +218,49 @@ def _probe(p):
         return float(r.stdout.strip())
     except Exception:
         return 0.0
+
+
+def relevance(c, query):
+    """How many of the query's key words appear in the clip's tags (local/library clips count as relevant)."""
+    if c["uid"].startswith(("local-", "lib-")):
+        return 1
+    return len(_keywords(query) & set(re.findall(r"[a-z]+", c.get("tags") or "")))
+
+
+def search(query, seconds, seed=None, exclude=(), n=6):
+    """Up to n candidate clips for a query (fresh first; generic fallbacks only if the query finds nothing)."""
+    min_s = max(3, int(seconds * 0.6))
+    for q, fresh_only in [(query, True), (query, False)]:
+        cands, used_q = candidates(q, min_s, seed, fresh_only)
+        cands = [dict(c, query=used_q) for c in cands if c["uid"] not in exclude]
+        if cands:
+            return cands[:n]
+    return []
+
+
+def thumbnail(c):
+    """Small preview image of a candidate (PIL), or None."""
+    from PIL import Image
+    import io
+    try:
+        if c.get("thumb"):
+            r = requests.get(c["thumb"], timeout=20); r.raise_for_status()
+            return Image.open(io.BytesIO(r.content)).convert("RGB")
+        r = subprocess.run(["ffmpeg", "-loglevel", "error", "-ss", "1.5", "-i", c["url"], "-frames:v", "1", "-vf",
+                            "scale=480:-2", "-f", "image2pipe", "-vcodec", "png", "-"], capture_output=True, timeout=60)
+        return Image.open(io.BytesIO(r.stdout)).convert("RGB") if r.stdout else None
+    except Exception:
+        return None
+
+
+def fetch(c, seconds, grade="warm"):
+    """Download + prepare one chosen candidate -> local path."""
+    raw = _download(c)
+    out = os.path.join(CACHE, f"{c['uid']}_{grade}_{int(seconds * 10)}.mp4")
+    if not os.path.exists(out):
+        _prepare(raw, seconds + 0.5, grade, out)
+    _mark(c["uid"])
+    return out
 
 
 def get_clip(query, seconds, grade="warm", seed=None, exclude=()):

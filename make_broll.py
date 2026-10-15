@@ -98,15 +98,16 @@ Write 5 or 6 scenes. Each scene:
 - "layout": one of top | center | lower | question | number | quote.
   center = one big statement; question = a parent's question card; number = item n of a numbered list (listicles);
   quote = ONLY for a sentence from TODAY'S KEY, exactly as the book says it.
-- "broll": 3-7 English words to search REAL stock footage for this scene: everyday scenes of families, parents,
-  kids (7-14) studying, playing chess, at school, in a car, at a tournament, at home; or close-ups of hands, pieces,
-  clocks, trophies, notebooks. Concrete and visual (e.g. "mother hugging sad son couch", "kid concentrating chess
-  tournament"). No brands, no text, no celebrities.{success_rule}
+- "broll": 2-4 SIMPLE English words a stock-video site really has (subject + action), matching what the voice says:
+  e.g. "boy playing chess", "girl doing homework", "mother hugging son", "family car trip", "chess pieces closeup",
+  "child using tablet", "chess clock", "trophy", "classroom children", "father son talking". Children aged 7-14,
+  never babies or toddlers. Every scene a DIFFERENT shot. No brands, no text, no celebrities.{success_rule}
 - "overlay": none | chart | ladder | key_card | stat | list. {overlay_rule}
 - "params": for number {{"n": i, "total": 3}}; ladder {{"from_level": 0-5, "to_level": 0-5}}; stat {{"value": "250+",
   "label": "students trained"}} (approved numbers only); list {{"items": [max 3, max 5 words]}}; key_card {{}};
   quote {{"source": "Square 65, Key n"}}.
-Rules: max 2 overlays per reel; last scene leads naturally into the call to action; no prices, no guarantees,
+Rules: max 2 overlays per reel; NO call to action inside the scenes (no "comment", "link in bio", "book a call",
+"follow"): the end card adds the only one, so the last scene just leads naturally into it; no prices, no guarantees,
 no competitors; never a number about results unless it is in APPROVED CLAIMS or the REAL CASE.
 - caption_hook: Instagram first line for parents, max 12 words, one emoji allowed. caption_body: 1-2 useful sentences.
 Return JSON: {{"title": str, "summary": str, "shape": str, "caption_hook": str, "caption_body": str,
@@ -257,13 +258,19 @@ def validate(sc, pillar, info=None):
                 lay = "center"; p.pop("source", None)
         if ov != "none" and lay not in ("top", "number", "question"):
             lay = "top"                                   # never stack big text over a card
-        br = _words(re.sub(r"[^a-zA-Z ]", " ", str(s.get("broll") or "")), 7).lower() or "child playing chess"
+        br = _words(re.sub(r"[^a-zA-Z ]", " ", str(s.get("broll") or "")), 5).lower() or "child playing chess"
         if pillar == "success" and CHILD_WORDS.search(br):
             br = SAFE_SUCCESS_BROLL[i % len(SAFE_SUCCESS_BROLL)]
         s.update(layout=lay, overlay=ov, params=p, broll=br)
     words = sum(len(s["narration"].split()) for s in scenes)
     if not 55 <= words <= 140:
         raise ValueError(f"narration length {words} words (needs 75-115)")
+    cta_txt = " ".join(f"{s['headline']} {s['narration']}" for s in scenes).lower()
+    m = re.search(r"\b(comment|link in (?:the )?bio|book (?:a|your) (?:free )?call|dm us|send us a|click|sign up|"
+                  r"follow (?:us|for)|subscribe|tap the|watch (?:the|our) (?:free )?(?:video|training))\b", cta_txt)
+    if m:
+        raise ValueError(f"the scenes contain a call to action ({m.group(0)!r}); remove it, the end card adds the "
+                         "only call to action")
     hard, soft = guard.jargon({"scenes": scenes})
     if hard:
         raise ValueError(f"chess jargon a non-playing parent cannot follow: {hard[:4]}")
@@ -338,18 +345,118 @@ def camera(img, t, dur, move):
     return img.crop((x, y, x + W, y + H))
 
 
-def fetch_clips(scenes, durs, grade, seed):
-    paths, used = [], set()
-    for i, s in enumerate(scenes):
+SAFE_BROLL = ["boy playing chess", "girl playing chess", "chess pieces closeup", "chess board", "child studying",
+              "chess clock", "children classroom", "family home", "hands chess"]
+
+
+def _sheet(rows):
+    """rows: [(label, [PIL thumbs])] -> one contact sheet for the footage judge."""
+    from PIL import ImageDraw
+    cw, ch, lab, cols = 256, 144, 34, 6
+    sheet = Image.new("RGB", (cols * (cw + 8) + 8, len(rows) * (ch + lab + 10) + 8), (245, 245, 245))
+    d = ImageDraw.Draw(sheet)
+    f = D.font(D.F_UI, 18)
+    for r, (label, ims) in enumerate(rows):
+        y = 8 + r * (ch + lab + 10)
+        d.text((8, y + 4), label[:150], font=f, fill=(20, 20, 20))
+        for k, im in enumerate(ims[:cols]):
+            x = 8 + k * (cw + 8)
+            if im is None:
+                d.rectangle([x, y + lab, x + cw, y + lab + ch], fill=(200, 200, 200)); continue
+            t = im.copy(); t.thumbnail((cw, ch))
+            sheet.paste(t, (x + (cw - t.width) // 2, y + lab + (ch - t.height) // 2))
+            d.rectangle([x, y + lab, x + 30, y + lab + 24], fill=(0, 0, 0)); d.text((x + 8, y + lab + 2), str(k), font=f, fill=(255, 255, 255))
+    return sheet
+
+
+def judge_footage(scenes, need, cands, pillar):
+    """Gemini looks at the real thumbnails and picks, per scene, the clip that matches the voice (or none)."""
+    import reviewer
+    rows, idx = [], []
+    for i in need:
+        ims = [stock.thumbnail(c) for c in cands[i]]
+        rows.append((f"SCENE {i} (searched: {cands[i][0].get('query', '')}): voice says: {scenes[i]['narration'][:80]}", ims)); idx.append(i)
+    if not rows:
+        return {}
+    sheet = _sheet(rows)
+    rule = ("This is a REAL student's story: reject any clip where a child's face is clearly identifiable; prefer hands, "
+            "boards, clocks, trophies, halls, silhouettes. " if pillar == "success" else "")
+    res = reviewer._ask([{"text": f"""You are the footage editor of a premium chess academy's Instagram reels for US
+parents. Each row is one scene (what the voice says) with numbered candidate stock clips (thumbnails).
+For each scene pick the ONE candidate that best illustrates what the voice says, looks premium and real.
+REJECT: animation, 3D/CGI, cartoons, green screen, text or watermarks, starry skies/abstract backgrounds, empty
+furniture, babies or toddlers, snow/holiday scenes unrelated to the message, adults alone when the scene is about a
+child, anything unrelated to children, families, school or chess, low quality. {rule}
+If no candidate is good, pick -1 and give a better 2-4 word stock-video search (simple subject + action).
+Rows (scene numbers): {idx}
+Return JSON: {{"scenes": [{{"scene": int, "pick": int, "better_query": str}}]}}"""},
+                         {"inline_data": {"mime_type": "image/jpeg", "data": reviewer._jpeg_b64(sheet, 1600)}}], 0.2)
+    out = {}
+    for r in res.get("scenes", []):
         try:
-            p, inf = stock.get_clip(s["broll"], durs[i] + 0.6, grade, seed=f"{seed}-{i}", exclude=used)
-        except Exception as e:                       # never lose the post: designed background instead
-            print("stock:", str(e)[:150], "-> designed background", flush=True)
-            p, inf = None, {"uid": None, "query": None, "asked": s["broll"]}
-        if inf["uid"]:
-            used.add(inf["uid"])
-        s["_clip"] = inf
-        paths.append(p)
+            out[int(r["scene"])] = (int(r.get("pick", -1)), (r.get("better_query") or "").strip())
+        except Exception:
+            pass
+    return out
+
+
+def fetch_clips(scenes, durs, grade, seed, pillar="pain", judge=True, only=None, used=None):
+    """Search -> AI footage judge on real thumbnails (2 rounds, better queries) -> download + grade.
+    Returns a list of paths (None = designed background)."""
+    n = len(scenes)
+    only = list(range(n)) if only is None else list(only)
+    used = set(used or ())
+    judge = judge and bool(os.environ.get("GEMINI_API_KEY")) and os.environ.get("FOOTAGE_JUDGE", "on") != "off"
+    queries = {i: scenes[i]["broll"] for i in only}
+    chosen = {}
+    for rnd in range(3):
+        need = [i for i in only if i not in chosen]
+        if not need:
+            break
+        cands = {}
+        for i in need:
+            excl = used | {c["uid"] for c in chosen.values()}
+            cands[i] = stock.search(queries[i], durs[i] + 0.6, seed=f"{seed}-{i}-{rnd}", exclude=excl)
+        if not judge or rnd == 2:      # no AI eyes: only a clip whose tags clearly match (else designed background)
+            taken = {c["uid"] for c in chosen.values()}
+            for i in need:
+                ok = [c for c in cands[i] if c["uid"] not in taken and stock.relevance(c, queries[i]) >= 2
+                      or (c["uid"].startswith(("local-", "lib-")) and c["uid"] not in taken)]
+                if ok:
+                    chosen[i] = ok[0]; taken.add(ok[0]["uid"])
+            break
+        try:
+            verdict = judge_footage(scenes, [i for i in need if cands[i]], cands, pillar)
+        except Exception as e:
+            print("footage judge skipped:", str(e)[:150], flush=True)
+            judge = False                              # fall back to strict tag matching
+            continue
+        taken = {c["uid"] for c in chosen.values()}
+        for i in need:
+            pick, better = verdict.get(i, (-1, ""))
+            if cands[i] and 0 <= pick < len(cands[i]) and cands[i][pick]["uid"] not in taken:
+                chosen[i] = cands[i][pick]; taken.add(chosen[i]["uid"])
+                print(f"footage scene {i}: '{queries[i]}' -> {chosen[i]['uid']}", flush=True)
+            else:
+                nq = better or SAFE_BROLL[(i + rnd) % len(SAFE_BROLL)]
+                if pillar == "success" and CHILD_WORDS.search(nq):
+                    nq = SAFE_SUCCESS_BROLL[(i + rnd) % len(SAFE_SUCCESS_BROLL)]
+                print(f"footage scene {i}: rejected '{queries[i]}' -> trying '{nq}'", flush=True)
+                queries[i] = nq
+    paths = [None] * n
+    for i in only:
+        c = chosen.get(i)
+        s = scenes[i]
+        if c:
+            try:
+                paths[i] = stock.fetch(c, durs[i] + 0.6, grade)
+                s["_clip"] = {"uid": c["uid"], "query": queries[i], "asked": s["broll"]}
+                s["broll"] = queries[i]
+                continue
+            except Exception as e:
+                print("stock download:", str(e)[:150], flush=True)
+        print(f"footage scene {i}: no good clip -> designed background", flush=True)
+        s["_clip"] = {"uid": None, "query": None, "asked": s["broll"]}
     return paths
 
 
@@ -366,8 +473,10 @@ def scene_frame(base, s, t, dur, info, kind_first=False):
     return fr
 
 
-def storyboard_fn(paths, info):
+def storyboard_fn(paths, info, refetch=None):
     def make(sc, kind):
+        if refetch:
+            refetch(sc)
         tw, th, cols = 300, 533, 4
         shots = [(i, 0.0 if i == 0 else 3.0) for i in range(len(sc["scenes"]))]
         sheet = Image.new("RGB", (cols * (tw + 14) + 14, ((len(shots) + cols - 1) // cols) * (th + 50) + 14), (235, 235, 238))
@@ -421,9 +530,12 @@ def build(seed, out, pillar="pain", arms=None, agent=None, evergreen=False, mock
         sc = write_script(pillar, arms, ctx, info, agent)
         if os.environ.get("REVIEWER", "on") != "off":
             import director
-            sc, report = director.direct(sc, pillar, ctx, slots_text(), lambda x, p: validate(x, p, info), kind,
+            shape_w = sc.get("shape")
+            sc, report = director.direct(sc, pillar, ctx, slots_text(),
+                                         lambda x, p: validate({**x, "shape": x.get("shape") or shape_w}, p, info), kind,
                                          agent=agent, art=False)
     scenes = sc["scenes"]
+    shape0 = sc.get("shape")
     CT = brand.cta(kind)
     # ---- voice first: exact scene lengths
     voice.reset()
@@ -433,19 +545,28 @@ def build(seed, out, pillar="pain", arms=None, agent=None, evergreen=False, mock
     LEAD, PAD = 0.2, 0.4
     durs = [max(2.6, LEAD + len(a) / SR + PAD) for a in A[:-1]] + [max(4.6, LEAD + len(A[-1]) / SR + 1.6)]
     # ---- footage + art direction on a real storyboard
-    paths = fetch_clips(scenes, durs, grade, seed)
+    paths = fetch_clips(scenes, durs, grade, seed, pillar)
+    fetched = [s["broll"] for s in scenes]
+    clips_meta = [s.get("_clip") for s in scenes]
+
+    def refetch(sc_now):                               # the art director asked for other footage -> get it now,
+        changed = [i for i, s in enumerate(sc_now["scenes"])   # so its next look sees the new clips
+                   if i < len(fetched) and s["broll"] != fetched[i]]
+        for i, s in enumerate(sc_now["scenes"]):
+            if i < len(fetched) and i not in changed:
+                s["_clip"] = clips_meta[i]; s["broll"] = fetched[i]
+        if changed:
+            used = {(c or {}).get("uid") for k, c in enumerate(clips_meta) if k not in changed}
+            new = fetch_clips(sc_now["scenes"], durs, grade, f"{seed}-art", pillar, only=changed, used=used)
+            for i in changed:
+                paths[i] = new[i]; fetched[i] = sc_now["scenes"][i]["broll"]; clips_meta[i] = sc_now["scenes"][i]["_clip"]
+
     if not (evergreen or mock) and os.environ.get("REVIEWER", "on") != "off":
         import director
-        before = [s["broll"] for s in scenes]
-        sc = director.art_loop(sc, pillar, slots_text(), lambda x, p: validate(x, p, info), kind, report,
-                               storyboard_fn=storyboard_fn(paths, info))
+        sc = director.art_loop(sc, pillar, slots_text(), lambda x, p: validate({**x, "shape": x.get("shape") or shape0}, p, info),
+                               kind, report, storyboard_fn=storyboard_fn(paths, info, refetch))
+        refetch(sc)
         scenes = sc["scenes"]
-        for i, s in enumerate(scenes):
-            if i < len(before) and s["broll"] != before[i]:
-                try:
-                    paths[i], s["_clip"] = stock.get_clip(s["broll"], durs[i] + 0.6, grade, seed=f"{seed}-r{i}")
-                except Exception as e:
-                    print("refetch failed, keeping clip:", str(e)[:120], flush=True)
     starts = np.cumsum([0.0] + durs[:-1]); total = float(sum(durs))
     words = []
     for i, a in enumerate(A):
@@ -518,7 +639,7 @@ def build(seed, out, pillar="pain", arms=None, agent=None, evergreen=False, mock
         meta["director"] = {"hook_options": [h.get("headline") for h in (report.get("copy") or {}).get("hooks", [])],
                             "art_scores": [r["score"] for r in arts], "art_summary": arts[-1]["summary"] if arts else None}
         meta["brand_check"] = report.get("brand")
-    if not (evergreen or mock) and os.environ.get("REVIEWER", "on") != "off":
+    if not mock and os.environ.get("REVIEWER", "on") != "off" and os.environ.get("GEMINI_API_KEY"):
         try:
             import reviewer
             new_cap, rep = reviewer.review_video(out, {"title": sc.get("title")}, cap, kind="broll")

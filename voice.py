@@ -283,26 +283,31 @@ def _sane(audio, text, factor=2.6):
     return 0.3 < r < factor
 
 
+LEAK_WORDS = {"read", "aloud", "transcript", "colon", "instructions", "instruction", "delivery", "paragraph",
+              "paragraphs", "director", "directors", "notes", "voice", "perform", "verbatim", "narrator", "tone",
+              "pace", "continuous", "take", "words", "only", "after", "below", "exactly", "written", "say"}
+
+
 def _strip_extras(a, text):
-    """Cut words the model added before/after the script (e.g. it read 'Say' or a stage direction aloud).
-    Uses the recogniser's word timings; returns the audio unchanged when it cannot check."""
+    """Cut anything the model said before/after the script (stage directions, 'say', instructions).
+    Finds where the script really starts and ends inside the recognised words; unchanged when it cannot check."""
     heard = _asr(a)
     if not heard:
         return a
     ws = [_norm(w) for w in text.split() if _norm(w)]
     hw = [_norm(w) for w, _, _ in heard]
-    if not ws:
+    if not ws or not hw:
         return a
     def match(x, y):
         return x == y or (len(x) > 3 and len(y) > 3 and (x.startswith(y[:4]) or y.startswith(x[:4])))
-    start = next((j for j in range(min(4, len(hw))) if match(hw[j], ws[0]) or
-                  (len(ws) > 1 and j + 1 < len(hw) and match(hw[j + 1], ws[1]) and j > 0 and hw[j] in ("say", "says", "said"))), 0)
-    if start and hw[start] in ("say", "says", "said") and not match(hw[start], ws[0]):
-        start += 1
-    end = len(hw) - 1
-    for j in range(len(hw) - 1, max(-1, len(hw) - 5), -1):
-        if match(hw[j], ws[-1]):
-            end = j; break
+    def seq_at(j, words):                       # how many of the next 3 script words match from heard[j]
+        return sum(1 for k in range(min(3, len(words))) if j + k < len(hw) and match(hw[j + k], words[k]))
+    need = min(2, len(ws))
+    start = next((j for j in range(len(hw)) if seq_at(j, ws) >= need), 0)
+    tail = ws[-3:][::-1]
+    end = next((j for j in range(len(hw) - 1, start - 1, -1)
+                if sum(1 for k in range(len(tail)) if j - k >= 0 and match(hw[j - k], tail[k])) >= min(2, len(tail))),
+               len(hw) - 1)
     a0 = int(max(0, heard[start][1] - 0.06) * SR) if start > 0 else 0
     a1 = int(min(len(a) / SR, heard[end][2] + 0.18) * SR) if end < len(hw) - 1 else len(a)
     if a0 or a1 < len(a):
@@ -312,13 +317,22 @@ def _strip_extras(a, text):
     return a
 
 
+def _leaked(a, text):
+    """True if the take contains words that are not in the script but look like instructions read aloud,
+    or clearly more words than the script."""
+    heard = _asr(a)
+    if heard is None:
+        return False
+    hw = [_norm(w) for w, _, _ in heard if _norm(w)]
+    ws = {_norm(w) for w in text.split() if _norm(w)}
+    extra = [w for w in hw if w in LEAK_WORDS and w not in ws]
+    return len(extra) >= 2 or len(hw) > 1.25 * len(ws) + 3
+
+
 def _gemini_line(text, style, key, pace):
     """Up to 3 takes with different prompt shapes. A take is accepted when it says the right words with a
     natural length; otherwise the best acceptable one is kept. Fails only if every take is clearly wrong."""
-    prompts = [f"{NARRATOR}\nDelivery: {style or 'natural and engaging'}, {pace}.\n"
-               f"Read the transcript below exactly as written. Do not read these instructions.\nTRANSCRIPT:\n{text}",
-               f"Read aloud in a {style or 'warm, natural'} voice, only the words after the colon: {text}",
-               text]
+    prompts = [text, text, text]          # plain script only: no instructions that could be spoken aloud
     takes = []
     for pr in prompts:
         try:
@@ -328,7 +342,9 @@ def _gemini_line(text, style, key, pace):
                 raise
             print("voice: take error:", str(e)[:150], flush=True); continue
         sim = _similarity(a, text)
-        if (sim is None or sim >= 0.7) and _sane(a, text):
+        if _leaked(a, text):
+            print(f"voice: take rejected (extra words spoken) for {text[:40]!r}", flush=True); continue
+        if (sim is None or sim >= 0.75) and _sane(a, text):
             return a
         print(f"voice: retake {text!r} ({len(a) / SR:.1f}s, match {sim if sim is None else round(sim, 2)})", flush=True)
         if 0.3 < _ratio(a, text) < 3.5 and (sim is None or sim >= 0.6):
@@ -373,7 +389,7 @@ def _split_takes(a, texts):
     parts = [_tighten(_trim(_strip_extras(_trim(a[edges[k]:edges[k + 1]]), texts[k]))) for k in range(n)]
     for p, t in zip(parts, texts):
         sim = _similarity(p, t)
-        if not _sane(p, t, 3.2) or (sim is not None and sim < 0.7):
+        if not _sane(p, t, 3.2) or (sim is not None and sim < 0.75) or _leaked(p, t):
             raise RuntimeError("split pieces do not match the text")
     return parts
 
@@ -381,12 +397,10 @@ def _split_takes(a, texts):
 def _gemini_many(texts, styles, key, one_take, pace):
     if one_take and len(texts) > 1:
         try:
-            notes = "\n".join(f"- Paragraph {i + 1}: {s or 'natural'}" for i, s in enumerate(styles))
-            script = "\n\n".join(texts)
-            prompt = (f"{NARRATOR}\nPerform the TRANSCRIPT below in one continuous take, at {pace}, with a clear "
-                      f"breath pause between paragraphs. Read only the transcript, word for word.\n"
-                      f"DIRECTOR'S NOTES:\n{notes}\n\nTRANSCRIPT:\n{script}")
+            prompt = "\n\n".join(texts)          # plain script only (instructions get read aloud by TTS)
             take = _trim(_gemini_call(prompt, key))
+            if _leaked(take, prompt):
+                raise RuntimeError("one take contains extra spoken words")
             print(f"voice: one take {len(take) / SR:.1f}s for {sum(_words(t) for t in texts)} words", flush=True)
             if len(take) / SR > 2.2 * sum(_words(t) / 2.7 + 0.6 for t in texts) + 2:
                 raise RuntimeError("one take far too long (model added extra speech)")

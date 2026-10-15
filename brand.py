@@ -134,10 +134,11 @@ CTA = {
         url=lambda: f'Comment "{KEYWORD}"',
         caption=f'Parents: comment "{KEYWORD}" and we\'ll send you our free training video by DM.'),
     "comment": dict(
-        say="Did your child find it? Comment the move, and follow us for a new challenge every day.",
-        pills=["COMMENT THE MOVE", "FOLLOW FOR DAILY CHALLENGES"],
+        say="Does this sound like your child? Tell us in the comments, and follow us for new tips for chess parents.",
+        pills=["TELL US IN THE COMMENTS", "FOLLOW FOR TIPS FOR CHESS PARENTS"],
         url=lambda: "@" + IG_HANDLE,
-        caption=f"Follow @{IG_HANDLE} for a daily challenge for your child. Free training video for parents in bio."),
+        caption=f"Does this sound like your child? Tell us in the comments. Follow @{IG_HANDLE} for new tips for chess "
+                "parents. Free training video for parents in bio."),
 }
 
 
