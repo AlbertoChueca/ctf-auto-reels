@@ -184,5 +184,16 @@
 "date": "2026-10-15",
 "agent": "mythbuster",
 "evergreen": "faq-groups"
+},
+{
+"pillar": "pain",
+"format": "broll",
+"shape": "qa",
+"title": "Why Screen Time Isn't Chess Training",
+"headline": "Three Hours Online. Zero Progress?",
+"hook": "Hours on the computer, but their chess rating won\u2019t budge? \ud83d\udcc9",
+"date": "2026-10-15",
+"agent": "storyteller",
+"anchor_key": 6
 }
 ]

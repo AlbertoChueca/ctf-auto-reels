@@ -39,9 +39,7 @@
 "cta": "vsl",
 "agent": "storyteller",
 "headline": "Touching The Piece Too Fast",
-"media_id": "18130723951752948",
-"comments_count": 0,
-"like_count": 0
+"media_id": "18130723951752948"
 },
 "18435934354183480": {
 "date": "2026-10-12",
@@ -62,9 +60,7 @@
 "cta": "vsl",
 "agent": "parent_whisperer",
 "headline": "The Silent Drive Home",
-"media_id": "18435934354183480",
-"comments_count": 0,
-"like_count": 0
+"media_id": "18435934354183480"
 },
 "18170322232462613": {
 "date": "2026-10-13",
@@ -85,9 +81,7 @@
 "cta": "call",
 "agent": "mythbuster",
 "headline": "Tournament Anxiety Isn't Weakness",
-"media_id": "18170322232462613",
-"comments_count": 0,
-"like_count": 0
+"media_id": "18170322232462613"
 },
 "17968908432172586": {
 "date": "2026-10-13",
@@ -108,9 +102,7 @@
 "cta": "keyword",
 "agent": "storyteller",
 "headline": "The Draw Trap Stalling Ratings",
-"media_id": "17968908432172586",
-"comments_count": 1,
-"like_count": 1
+"media_id": "17968908432172586"
 },
 "17956716660253380": {
 "date": "2026-10-14",
@@ -131,9 +123,7 @@
 "cta": "call",
 "agent": "analyst",
 "headline": "Stop Analyzing Every Engine Mistake",
-"media_id": "17956716660253380",
-"comments_count": 1,
-"like_count": 0
+"media_id": "17956716660253380"
 },
 "18217466956356575": {
 "date": "2026-10-14",
@@ -154,8 +144,6 @@
 "cta": "call",
 "agent": "trend_scout",
 "headline": "Openings or Tactics First?",
-"media_id": "18217466956356575",
-"comments_count": 1,
-"like_count": 1
+"media_id": "18217466956356575"
 }
 }
