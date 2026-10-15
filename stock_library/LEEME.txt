@@ -1,0 +1,5 @@
+Biblioteca propia de clips (opcional). Pon aquí .mp4 verticales u horizontales, nombrados por su contenido en inglés:
+  kid-playing-chess-home-1.mp4, mother-hugging-son-couch.mp4, chess-clock-close-up.mp4, tournament-hall-people.mp4...
+El sistema elige el clip cuyo nombre coincide con lo que pide cada escena. Con 12 o más clips funciona incluso sin
+claves de Pixabay/Pexels. Usa solo clips con licencia libre (Pixabay, Mixkit, Pexels) o grabaciones propias sin
+niños identificables.
