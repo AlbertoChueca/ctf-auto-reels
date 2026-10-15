@@ -195,5 +195,17 @@
 "date": "2026-10-15",
 "agent": "storyteller",
 "anchor_key": 6
+},
+{
+"pillar": "pain",
+"format": "broll",
+"shape": "pov",
+"title": "Tears after a loss",
+"headline": "POV: the car ride home",
+"hook": "If your child cries after losing a chess game, read this \ud83d\udc9b",
+"date": "2026-10-15",
+"agent": "trend_scout",
+"evergreen": "br-tears-after-loss",
+"key": 9
 }
 ]
