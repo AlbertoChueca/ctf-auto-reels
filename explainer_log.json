@@ -207,5 +207,16 @@
 "agent": "trend_scout",
 "evergreen": "br-tears-after-loss",
 "key": 9
+},
+{
+"pillar": "pain",
+"format": "broll",
+"shape": "letter",
+"title": "Tournament Tears Are Not Failure",
+"headline": "Tournament Tears Are Not Failure",
+"hook": "Tournament tears are not a reason to quit chess. \u265f\ufe0f",
+"date": "2026-10-15",
+"agent": "mythbuster",
+"anchor_key": 29
 }
 ]
