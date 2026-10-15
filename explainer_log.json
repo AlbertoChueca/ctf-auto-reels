@@ -229,5 +229,16 @@
 "date": "2026-10-15",
 "agent": "trend_scout",
 "anchor_key": 40
+},
+{
+"pillar": "pain",
+"format": "broll",
+"shape": "qa",
+"title": "Why Private Chess Lessons Plateau",
+"headline": "Why Private Lessons Stall",
+"hook": "Why private 1-on-1 chess tutoring often stalls your child's progress.",
+"date": "2026-10-15",
+"agent": "mythbuster",
+"anchor_key": 39
 }
 ]
