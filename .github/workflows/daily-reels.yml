@@ -32,6 +32,7 @@ on:
 
 permissions:
   contents: write
+  actions: write      # to delete old video artifacts (keeps the free storage quota clean)
 
 concurrency:
   group: reels
@@ -43,6 +44,16 @@ jobs:
     timeout-minutes: 75
     steps:
       - uses: actions/checkout@v5
+
+      - name: Free artifact storage (delete videos older than 2 days)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cutoff=$(date -u -d '2 days ago' +%Y-%m-%dT%H:%M:%SZ)
+          gh api --paginate "repos/${{ github.repository }}/actions/artifacts?per_page=100" \
+            --jq ".artifacts[] | select(.created_at < \"$cutoff\") | .id" | while read id; do
+              gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/$id" && echo "deleted $id"; done
 
       - name: Choose slot
         id: lvl
@@ -110,13 +121,16 @@ jobs:
 
       - name: Save video for review
         if: always()
+        continue-on-error: true          # a full artifact quota must never mark the run as failed
         uses: actions/upload-artifact@v4
         with:
-          name: reel-${{ steps.lvl.outputs.level }}
+          name: reel-${{ steps.lvl.outputs.level }}-${{ github.run_number }}
           path: |
             out/*.mp4
             out/*.txt
-          retention-days: 14
+            !out/*_review.mp4
+          retention-days: 3
+          compression-level: 0
           if-no-files-found: ignore
 
       - name: Remember used stories, footage and results
