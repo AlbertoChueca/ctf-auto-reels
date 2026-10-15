@@ -176,5 +176,13 @@
 "agent": "parent_whisperer",
 "case": "vyom-vidyarthi",
 "anchor_key": 52
+},
+{
+"pillar": "faq",
+"title": "Groups or private?",
+"headline": "Groups or private?",
+"date": "2026-10-15",
+"agent": "mythbuster",
+"evergreen": "faq-groups"
 }
 ]
