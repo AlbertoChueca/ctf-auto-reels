@@ -111,5 +111,51 @@
 "media_id": "17968908432172586",
 "comments_count": 1,
 "like_count": 1
+},
+"17956716660253380": {
+"date": "2026-10-14",
+"slot": "storytag",
+"story": "The Game Analysis Myth",
+"hook": "Stop analyzing every engine mistake after your child's tournament games.",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 8.0,
+"permalink": "https://www.instagram.com/reel/DedsZLRCim3/",
+"arms": {
+"hook_style": "myth: open by busting a common chess-training myth parents believe (more games = more progress, etc.)",
+"theme": "consistency: short daily training beats random long sessions",
+"cta": "call"
+},
+"pillar": "key",
+"cta": "call",
+"agent": "analyst",
+"headline": "Stop Analyzing Every Engine Mistake",
+"media_id": "17956716660253380",
+"comments_count": 1,
+"like_count": 0
+},
+"18217466956356575": {
+"date": "2026-10-14",
+"slot": "story",
+"story": "Openings vs Tactics: What Ambitious Parents Need to Know",
+"hook": "Should your child memorize opening moves or focus on tactics? \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 6.2,
+"permalink": "https://www.instagram.com/reel/DefNc4wja18/",
+"arms": {
+"hook_style": "parent_question: open with a question parents ask coaches all the time, then the honest answer",
+"theme": "tactics vs memorising openings",
+"cta": "call"
+},
+"pillar": "faq",
+"cta": "call",
+"agent": "trend_scout",
+"headline": "Openings or Tactics First?",
+"media_id": "18217466956356575",
+"comments_count": 1,
+"like_count": 1
 }
 }
