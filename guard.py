@@ -179,3 +179,30 @@ def anchored(sc):
     if any(s.get("block") in ("key_card", "before_after", "success_timeline") for s in sc.get("scenes", [])):
         hits.append("signature block")
     return hits
+
+
+# ----------------------------------------------------------------------- the parent test (no chess knowledge needed)
+NOTATION = re.compile(r"\b(?:[KQRBN][a-h]?[1-8]?x?[a-h][1-8]|[a-h]x[a-h][1-8]|[a-h][1-8]=?[QRBN]?|O-O(?:-O)?)\b|\b\d\.\s?[KQRBN]?[a-h][1-8]")
+HARD_JARGON = ["zugzwang", "triangulation", "lucena", "philidor", "levenfish", "isolated pawn", "pawn structure",
+               "en passant", "fianchetto", "gambit", "skewer", "minority attack", "hanging pawns", "stonewall",
+               "grunfeld", "gruenfeld", "sicilian", "caro-kann", "najdorf", "prophylaxis", "the opposition",
+               "rook endgame", "bishop pair", "outpost", "passed pawn", "back rank", "discovered attack", "1.nc3",
+               "nc3", "repertoire", "theory of openings", "novelty"]
+SOFT_JARGON = ["endgame", "middlegame", "opening", "tactic", "calculation", "elo", "fide", "uscf", "blitz", "rapid",
+               "time control", "fork", "pin "]
+
+
+def jargon(sc):
+    """(hard, soft) chess jargon found in what the viewer reads or hears. Hard = never; soft = only if explained."""
+    parts = []
+    for s in sc.get("scenes", []):
+        parts += [s.get("headline", ""), s.get("narration", "")]
+        p = s.get("params") or {}
+        parts += [str(x) for x in (p.get("items") or []) + (p.get("steps") or []) + (p.get("points") or [])]
+    text = " ".join(parts)
+    low = text.lower()
+    hard = [j for j in HARD_JARGON if re.search(r"\b" + re.escape(j) + r"\b", low)]
+    if NOTATION.search(text):
+        hard.append("chess notation: " + NOTATION.search(text).group(0))
+    soft = [j.strip() for j in SOFT_JARGON if re.search(r"\b" + re.escape(j.strip()) + r"s?\b", low)]
+    return hard, soft

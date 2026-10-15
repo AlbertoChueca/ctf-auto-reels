@@ -28,35 +28,35 @@ CREATORS = {
         persona=("A calm International-Master-level coach who explains chess improvement like an engineer: precise, "
                  "structured, one clear framework per reel (3 steps, 1 rule, before/after). Hooks are specific and "
                  "intriguing ('The 3 skills between 1200 and 1500'). Speaks to analytical, high-achieving parents."),
-        pillars=["method", "faq", "proof", "key"],
+        pillars=["method", "faq", "proof", "key", "rating"],
         look={"light": "paper", "marker": "underline"}),
     "storyteller": dict(
         name="The Storyteller",
         persona=("A warm documentary narrator. Turns real student journeys into short emotional arcs: the moment of "
                  "doubt, the turning point, the result. Hooks open on a vivid moment ('He was stuck at 1100 for a "
                  "year'). Uses ONLY real, approved facts. Makes parents picture their own child."),
-        pillars=["success", "remix", "pain"],
+        pillars=["success", "remix", "pain", "benefits"],
         look={"light": "warm", "marker": "fill"}),
     "mythbuster": dict(
         name="The Myth Buster",
         persona=("A bold, contrarian expert who opens by breaking a belief parents hold ('More games won't fix it', "
                  "'Openings aren't the problem'). Pattern-interrupt hooks, short punchy lines, then a clear, credible "
                  "alternative. Never rude, never hype."),
-        pillars=["pain", "method", "remix", "key"],
+        pillars=["pain", "method", "remix", "key", "rating"],
         look={"light": "studio", "marker": "fill"}),
     "parent_whisperer": dict(
         name="The Parent Whisperer",
         persona=("Speaks from the parent's side of the table: the drive to the tournament, the tears after a loss, "
                  "the doubt about which coach to trust. Empathetic first sentence, then honest, practical answers to "
                  "the questions parents ask before hiring an academy. Builds trust and handles objections."),
-        pillars=["faq", "pain", "success", "key"],
+        pillars=["faq", "pain", "success", "key", "benefits"],
         look={"light": "paper", "marker": "fill"}),
     "trend_scout": dict(
         name="The Trend Scout",
         persona=("A creative short-form strategist obsessed with what makes people stop scrolling: curiosity gaps, "
                  "unexpected comparisons, 'POV' and 'nobody tells parents this' formats, numbered reveals. Re-invents "
                  "the account's best past ideas in fresh formats. Always original, never gimmicky."),
-        pillars=["remix", "pain", "faq", "method", "key"],
+        pillars=["remix", "pain", "faq", "method", "key", "benefits"],
         look={"light": "warm", "marker": "underline"}),
 }
 
@@ -84,6 +84,7 @@ def brief(cid):
             f"profile visits, follows, shares and saves, and the best creator gets more reels.\n{c['persona']}\n"
             + (f"YOUR NOTEBOOK (what you learned from your own results; apply it):\n{nb}\n" if nb else "")
             + (f"STUDIO LESSONS (shared by the best creator; apply them):\n{sn}\n" if sn else "")
+            + "Your viewer is a parent who does not play chess; their child loves it. Speak their language.\n"
             + "Be original: a hook you have never used, an angle the other creators have not used recently.")
 
 

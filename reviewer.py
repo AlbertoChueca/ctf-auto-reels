@@ -194,16 +194,16 @@ def review_video(path, story, caption, kind="puzzle"):
         data = base64.b64encode(open(small, "rb").read()).decode()
         first, rest = (caption.split("\n", 1) + [""])[:2]
         res = _ask([{"text": f"""{PRODUCER}
-Watch this finished reel ({'motion-graphics explainer for parents + call to action' if kind == 'explainer' else 'expert insight for parents + chess puzzle for their child + call to action'}).
+Watch this finished reel ({'real-footage story reel for chess parents + call to action' if kind == 'broll' else 'motion-graphics explainer for parents + call to action'}).
 Title: {story.get('title')}. Current Instagram caption first line: {first!r}
 
 Check and score 1-10: hook for a parent in the first 1.5 s, clarity and credibility, pacing, subtitles readable and in
-sync with the voice, voice natural and matching the words, {'animation and text easy to follow' if kind == 'explainer' else 'the chess board and moves easy to follow'}, visuals premium
+sync with the voice, voice natural and matching the words, {'footage matches the story and text is readable on it' if kind == 'broll' else 'animation and text easy to follow'}, visuals premium
 and consistent, call to action clear, honesty (no invented results or guarantees), likelihood parents comment, share,
 visit the profile and follow.
 "critical" = true ONLY if the reel is clearly broken (silent, frozen/black, unreadable, wrong/garbled voice,
-inappropriate or dishonest content). Then write a better FIRST caption line (max 12 words, one emoji max, written for
-parents, makes them stop and comment) and a short comment prompt line (max 12 words, {'invites parents to comment' if kind == 'explainer' else 'invites the child’s answer'}).
+inappropriate or dishonest content, or chess jargon a non-playing parent cannot follow). Then write a better FIRST caption line (max 12 words, one emoji max, written for
+parents, makes them stop and comment) and a short comment prompt line (max 12 words, invites parents to comment).
 Return JSON: {{"overall": number, "scores": {{...}}, "critical": bool, "issues": [str], "suggestions": [str],
 "caption_first_line": str, "comment_prompt": str}}"""},
                     {"inline_data": {"mime_type": "video/mp4", "data": data}}], 0.4)

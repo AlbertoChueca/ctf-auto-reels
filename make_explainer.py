@@ -76,6 +76,9 @@ PILLARS = {
                 ["trophy", "authority"]],
     "remix": [["pain", "rating_drop", "faq_question"], ["wrong_way", "faq_answer", "mentor"],
               ["roadmap", "method_steps"], ["authority", "progress", "trophy"]],
+    "benefits": [["pain", "faq_question"], ["wrong_way", "faq_answer"], ["method_steps", "roadmap"],
+                 ["authority", "progress", "trophy"]],
+    "rating": [["faq_question", "pain"], ["roadmap"], ["method_steps", "faq_answer"], ["authority", "progress"]],
     "key": [["pain", "faq_question", "rating_drop", "wrong_way"], ["key_card"], ["method_steps", "faq_answer", "roadmap"],
             ["authority", "progress", "trophy"]],
 }
@@ -94,6 +97,12 @@ PILLAR_BRIEF = {
     "success": "Tell the REAL story of TODAY'S STUDENT CASE below: where the child started, what changed with structured "
                "training, the milestones reached. Use ONLY its facts, exactly. Then connect it to the parent watching "
                "(it is a pattern, not a promise).",
+    "benefits": "Show a parent what chess training really gives their child beyond the board: focus, patience, "
+                "handling frustration, confidence, school habits, less passive screen time. Concrete everyday moments, "
+                "no exaggerated science claims.",
+    "rating": "Explain to a parent who has never played chess what a chess rating is (like a school grade or a race "
+              "time that goes up as skills grow), what our 6 Learning Path levels mean, and what really moves a child "
+              "from one level to the next.",
     "key": "Teach TODAY'S KEY from Square 65, the book by IM Alberto Chueca that condenses our method into 65 keys. "
            "Scene 1: the problem this key solves, as a parent sees it. Scene 2: the key_card (name it: 'Key n of Square "
            "65'). Scene 3: what to actually do, in concrete steps taken from the key. Scene 4: how we apply it with our "
@@ -144,15 +153,11 @@ Rules:
 - narration per scene: 8-20 spoken words, short sentences, contractions, numbers as words, expert-to-parent tone,
   no hype, no cliches, no chess notation. Total narration {words} words. The narration of each scene must match
   what its block shows.
-- narration is read aloud WORD FOR WORD to a parent: never put stage directions, brackets, labels ("Scene 2:",
-  "Hook:", "CTA"), pauses or notes in it. Acting directions go ONLY in "delivery".
-- Signature concepts must make sense to a parent hearing them for the first time: say what they are in plain words
-  (e.g. "Square 65, IM Alberto Chueca's book of 65 training keys"; "our three-phase class: tactics, theory, practice").
-  Never say "T-T-P" or a bare key number on its own.
-- The LAST scene leads naturally into this call to action, and only this one: "{cta_say}"
 - delivery: 3-8 word acting direction for the voice (calm, confident, warm; vary it).
 - No prices. No guarantees. No competitors. Never state a number about results, students or titles unless it is
   in APPROVED CLAIMS. Rating numbers are allowed ONLY inside a rating_drop block as an illustrative example.
+- PARENT TEST: the viewer is a parent who has NEVER played chess; their child loves it. No chess jargon or
+  notation. If a chess idea is needed, translate it into everyday words (school, sports, music practice).
 - COMPETITOR TEST: if another academy or a freelance coach could post this reel word for word, it fails. Carry at
   least one of OUR anchors (Square 65 key, Learning Path level, T-T-P or another signature concept, a real approved
   case, a coach credential) and use our vocabulary from the brand bible.
@@ -220,6 +225,8 @@ def pick_key(pillar=None, rng=None):
     if not bank:
         return None
     rng = rng or random.Random()
+    if os.environ.get("PARENT_KEYS_ONLY", "true") == "true":     # our audience: parents who don't play chess
+        bank = [k for k in bank if k.get("parent_friendly", True)] or bank
     pool = [k for k in bank if pillar is None or pillar in k.get("pillars", [])] or bank
     used = _used_keys()
     never = [k for k in pool if k["n"] not in used]
@@ -243,7 +250,7 @@ def context_for(pillar):
     ctx, extra = _context_main(pillar)
     if pillar in ("success", "remix") and not ctx:
         return ctx, extra
-    k = pick_key(pillar if pillar in ("pain", "faq", "method") else None, rng)
+    k = pick_key(pillar if pillar in ("pain", "faq", "method", "benefits") else None, rng)
     if k:                                            # every reel carries our method (competitor test)
         ctx += ("\n\nMETHOD ANCHOR (weave it in naturally, at least one sentence; e.g. 'In Square 65, IM Alberto "
                 "Chueca calls this...' or 'It's Key " + str(k["n"]) + " of our method'):\n" + key_text(k, full=False))
@@ -284,8 +291,7 @@ def write_script(pillar, arms=None, context="", agent=None, key=None):
         playbook=("WHAT WORKS FOR OUR AUDIENCE (from real results):\n" + strategy.playbook_text()) if strategy.playbook_text() else "",
         recent="; ".join(f"{r.get('agent') or '-'}/{r.get('pillar')}: {r.get('title')} ({r.get('headline')})" for r in recent) or "none",
         n=n, slots=_slots_text(pillar, allowed), catalog=json.dumps({k: v for k, v in BLOCKS.items() if k in allowed}),
-        words="75-110", context=context,
-        cta_say=brand.cta(arms.get("cta") if arms.get("cta") in brand.CTA else "keyword")["say"])}]}],
+        words="75-110", context=context)}]}],
         "generationConfig": {"responseMimeType": "application/json", "temperature": 1.0}}
     body0 = body
     last = None
@@ -317,23 +323,6 @@ def write_script(pillar, arms=None, context="", agent=None, key=None):
     raise RuntimeError(f"explainer script failed: {last}")
 
 
-# Narration is read aloud word for word: nothing that looks like a note to ourselves may reach the voice.
-_LABEL = re.compile(r"^\s*(?:scene|slot|hook|cta|narrator|narration|voice ?over|vo|line|step)\s*\d*\s*[:\-–]\s*", re.I)
-_INTERNAL = re.compile(r"\b(?:scene|slot)\s*\d|\b(?:cta|voice-?over|narration|stage direction|on-screen text|b-roll)\b"
-                       r"|\bhook\s*:|\bdelivery\s*:", re.I)
-
-
-def clean_spoken(text):
-    """Strip stage directions, brackets, markdown and labels; spell out acronyms parents shouldn't hear as letters."""
-    t = str(text or "")
-    t = re.sub(r"\[[^\]]*\]|\([^)]*\)|\{[^}]*\}|<[^>]*>", " ", t)        # [pause] (warmly) {beat} <break>
-    t = _LABEL.sub("", t)
-    t = re.sub(r"[*_#`~|]+", " ", t)
-    t = re.sub(r"\bT-?T-?P(?:\s+[Ss]ystem)?\b", "three-phase training system", t)
-    t = re.sub(r"\s+([,.!?])", r"\1", re.sub(r"\s+", " ", t)).strip()
-    return t
-
-
 def validate(sc, pillar):
     """Hard rules the AI cannot break: block per slot, lengths, params, approved claims only."""
     allowed = allowed_blocks()
@@ -346,11 +335,8 @@ def validate(sc, pillar):
         opts = [b for b in slots[i] if b in allowed] or ["mentor"]
         if s.get("block") not in opts:
             s["block"] = opts[0]
-        s["headline"] = " ".join(clean_spoken(s.get("headline", "")).split()[:6]) or "Chess parents"
-        s["narration"] = " ".join(clean_spoken(s.get("narration", "")).split()[:26])
-        if _INTERNAL.search(s["narration"]):
-            raise ValueError(f"scene {i + 1} narration contains a production note, not words for parents: "
-                             f"{s['narration'][:80]!r}")
+        s["headline"] = " ".join(str(s.get("headline", "")).split()[:6]) or "Chess parents"
+        s["narration"] = " ".join(str(s.get("narration", "")).split()[:26])
         s["highlight"] = [h for h in (s.get("highlight") or []) if isinstance(h, str)][:2]
         p = s.get("params") or {}
         if s["block"] == "authority":
@@ -393,6 +379,9 @@ def validate(sc, pillar):
     text = " ".join(f"{s['headline']} {s['narration']} {json.dumps(s['params'])}" for s in scenes if s["block"] != "rating_drop")
     text += " " + sc.get("caption_hook", "") + " " + sc.get("caption_body", "")
     text = re.sub(r"\b(?:age|aged|at)\s+\d+\b", " ", text)       # ages are not result claims
+    hard, _soft = guard.jargon({"scenes": scenes})
+    if hard:
+        raise ValueError(f"chess jargon a non-playing parent cannot follow: {hard[:4]}")
     ok, bad = guard.claims_ok(text)
     if not ok:
         raise ValueError(f"unapproved claims: {bad}")
@@ -483,11 +472,8 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent
     mix = np.zeros(n, np.float32)
     def put(x, at, g=1.0):
         a0 = max(0, int(at * SR)); b0 = min(n, a0 + len(x)); mix[a0:b0] += g * x[:b0 - a0]
-    A = [D.vo_compress(a) for a in A]                     # even, clear voice over the music
-    speech = np.zeros(n, bool)
     for i, a in enumerate(A):
         put(a.astype(np.float32), starts[i] + LEAD, 1.0)
-        s0 = int((starts[i] + LEAD) * SR); speech[s0:s0 + len(a)] = True
     for i in range(1, len(durs)):
         put(D.swell(0.55), starts[i] - 0.3, 0.8)
     for i in range(len(scenes)):
@@ -499,7 +485,7 @@ def build(seed, out, pillar="pain", arms=None, mock=None, evergreen=False, agent
         s0 = int((starts[i] + LEAD - 0.1) * SR); duck[max(0, s0):s0 + len(a) + int(0.2 * SR)] = 0.45
     duck = np.convolve(duck, np.ones(int(0.12 * SR)) / int(0.12 * SR), "same").astype(np.float32)   # smooth ducking
     mix += bed[:n] * duck
-    mix = D.master(mix, speech)
+    mix /= max(1.0, float(np.abs(mix).max()) / 0.92)
     wav = out.replace(".mp4", "_x.wav"); sf.write(wav, mix[:int(total * SR)], SR)
     # ---- video
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)

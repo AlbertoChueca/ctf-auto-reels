@@ -1,0 +1,77 @@
+[
+ {"id": "br-tears-after-loss", "pillar": "pain", "shape": "pov", "key": 9,
+  "title": "Tears after a loss", "caption_hook": "If your child cries after losing a chess game, read this 💛",
+  "caption_body": "A loss is information, not a verdict on who your child is. Here is how we teach kids to bounce back.",
+  "scenes": [
+   {"headline": "POV: the car ride home", "highlight": ["car ride"], "narration": "Your child just lost a game at the tournament. The car is silent. You don't know what to say.", "delivery": "quiet, empathetic", "layout": "top", "broll": "sad child in car back seat", "overlay": "none", "params": {}},
+   {"headline": "It's not about chess", "highlight": ["not"], "narration": "Those tears are not about one game. Your child is learning to lose, and that is a skill nobody teaches.", "delivery": "warm, reassuring", "layout": "center", "broll": "mother comforting child home", "overlay": "none", "params": {}},
+   {"headline": "A loss is a data point", "highlight": ["data point"], "narration": "In Square 65, IM Alberto Chueca calls a defeat a data point. It shows one thing to fix, not a flaw in your child.", "delivery": "calm, confident", "layout": "top", "broll": "hands chess pieces close up", "overlay": "key_card", "params": {}},
+   {"headline": "What helps tonight", "highlight": ["tonight"], "narration": "Ask what they learned, not whether they won. Then let the game go until tomorrow.", "delivery": "practical, gentle", "layout": "top", "broll": "father talking with son couch", "overlay": "list", "params": {"items": ["Hug first", "Ask what they learned", "Review it tomorrow"]}},
+   {"headline": "Confidence is trained", "highlight": ["trained"], "narration": "With the right coach, losses become fuel. Kids walk into the next tournament calmer and stronger.", "delivery": "uplifting, sure", "layout": "lower", "broll": "kid smiling playing chess", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-3-signs-coach", "pillar": "faq", "shape": "listicle", "key": 2,
+  "title": "3 signs your child needs a coach", "caption_hook": "3 signs your child is ready for a real chess coach ♟️",
+  "caption_body": "Loving chess is the start. Structure is what turns that love into progress.",
+  "scenes": [
+   {"headline": "3 signs they need a coach", "highlight": ["coach"], "narration": "Your child loves chess, but you can't tell if they're improving. Here are three signs it's time for a real coach.", "delivery": "clear, intriguing", "layout": "top", "broll": "child playing chess at home", "overlay": "none", "params": {}},
+   {"headline": "Same results for months", "highlight": ["months"], "narration": "They play every day, yet their rating has barely moved in months. More games alone won't change that.", "delivery": "honest, direct", "layout": "number", "broll": "boy thinking chess board", "overlay": "none", "params": {}},
+   {"headline": "Videos, but no plan", "highlight": ["no plan"], "narration": "They watch hours of chess videos. It feels like studying, but it's entertainment, not training.", "delivery": "knowing, light", "layout": "number", "broll": "kid watching tablet sofa", "overlay": "none", "params": {}},
+   {"headline": "Big emotions at tournaments", "highlight": ["emotions"], "narration": "They freeze or rush when it matters. That's not talent, it's a skill a coach can train.", "delivery": "warm, confident", "layout": "number", "broll": "tournament hall people", "overlay": "none", "params": {}},
+   {"headline": "The shortcut is guidance", "highlight": ["guidance"], "narration": "Learning alone is possible, but it's the longest path. A guide turns love for the game into real progress.", "delivery": "calm, expert", "layout": "lower", "broll": "teacher helping student desk", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-videos-myth", "pillar": "method", "shape": "myth_fact", "key": 3,
+  "title": "Watching videos is not training", "caption_hook": "Hours of chess videos… and still not improving? 👀",
+  "caption_body": "Real learning happens when your child has to think hard. Here is the difference.",
+  "scenes": [
+   {"headline": "Myth: more videos, more progress", "highlight": ["Myth"], "narration": "Many parents think hours of chess videos mean their child is studying. It looks productive.", "delivery": "curious, setting up", "layout": "top", "broll": "child watching laptop bedroom", "overlay": "none", "params": {}},
+   {"headline": "Watching videos is entertainment, not training", "highlight": ["entertainment"], "narration": "Square 65 says it plainly. Watching is entertainment. Training starts when your child has to think.", "delivery": "firm, clear", "layout": "quote", "broll": "chess board close up wooden", "overlay": "none", "params": {"source": "Square 65, Key 3"}},
+   {"headline": "Real learning feels hard", "highlight": ["hard"], "narration": "Like music practice, progress comes from effort. Solving, writing ideas down, and checking them with a coach.", "delivery": "warm, explanatory", "layout": "top", "broll": "kid concentrating notebook desk", "overlay": "none", "params": {}},
+   {"headline": "Less screen time, more growth", "highlight": ["more growth"], "narration": "Ninety focused minutes with a coach beat a whole afternoon of passive watching. Quality over quantity.", "delivery": "confident, upbeat", "layout": "center", "broll": "online class laptop child smiling", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-success-pranav", "pillar": "success", "shape": "story", "case": "pranav-sathish",
+  "title": "From 1100 to 1800 in 13 months", "caption_hook": "Stuck at 1100… then this happened 📈",
+  "caption_body": "A real journey from one of our students: structure, patience and the right guidance.",
+  "scenes": [
+   {"headline": "He was stuck at 1100", "highlight": ["stuck"], "narration": "One of our students loved chess, but he was stuck at eleven hundred. Lots of games, little progress.", "delivery": "story opening, intimate", "layout": "top", "broll": "hands moving chess piece close up", "overlay": "none", "params": {}},
+   {"headline": "Then came a plan", "highlight": ["plan"], "narration": "We started with a diagnosis, then a clear plan. Fewer random games, more focused training every week.", "delivery": "building, confident", "layout": "top", "broll": "notebook pen study desk", "overlay": "none", "params": {}},
+   {"headline": "13 months later", "highlight": ["13 months"], "narration": "In only thirteen months he went from eleven hundred to over eighteen hundred.", "delivery": "proud, measured", "layout": "top", "broll": "chess clock close up", "overlay": "chart", "params": {}},
+   {"headline": "And he kept going", "highlight": ["kept going"], "narration": "Later he crossed twenty three hundred and earned the National Master title. It started with structure.", "delivery": "uplifting, warm", "layout": "center", "broll": "trophy on table", "overlay": "none", "params": {}},
+   {"headline": "Your child's path starts here", "highlight": ["path"], "narration": "Every child is different. The first step is understanding exactly where yours is today.", "delivery": "inviting, calm", "layout": "lower", "broll": "tournament hall people", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-rating-ladder", "pillar": "rating", "shape": "qa",
+  "title": "What does my child's rating mean?", "caption_hook": "What does your child's chess rating actually mean? 🤔",
+  "caption_body": "Think of it like school grades for chess. Here is the path we use, level by level.",
+  "scenes": [
+   {"headline": "What does that number mean?", "highlight": ["number"], "narration": "Your child says their rating is eight hundred. Is that good? What comes next? Let's make it simple.", "delivery": "friendly, curious", "layout": "question", "broll": "parent looking at phone kitchen", "overlay": "none", "params": {}},
+   {"headline": "Think school grades", "highlight": ["school grades"], "narration": "A rating is like a grade for chess. It goes up when your child beats stronger players.", "delivery": "clear, warm", "layout": "top", "broll": "school classroom children", "overlay": "none", "params": {}},
+   {"headline": "Our 6-level path", "highlight": ["6-level"], "narration": "At our academy we use six levels. Each level has its own skills, so your child always knows the next step.", "delivery": "structured, confident", "layout": "top", "broll": "kid playing chess online laptop", "overlay": "ladder", "params": {"from_level": 1, "to_level": 3}},
+   {"headline": "Progress you can see", "highlight": ["see"], "narration": "You stop guessing. You see where your child is, what they're learning, and how far they've come.", "delivery": "reassuring, upbeat", "layout": "lower", "broll": "mother and son high five", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-benefits-life", "pillar": "benefits", "shape": "before_after", "key": 14,
+  "title": "What chess really teaches", "caption_hook": "Chess isn't just a game. It's training for life 🧠",
+  "caption_body": "Focus, patience and decisions under pressure: the skills that follow your child to school and beyond.",
+  "scenes": [
+   {"headline": "It's not just a game", "highlight": ["not just"], "narration": "You might think chess is a hobby. Done right, it's one of the best trainings for your child's mind.", "delivery": "intriguing, warm", "layout": "top", "broll": "child thinking chess board", "overlay": "none", "params": {}},
+   {"headline": "Decisions under pressure", "highlight": ["pressure"], "narration": "Every move is a decision with a clock running. Kids learn to stay calm and think before acting.", "delivery": "confident, clear", "layout": "top", "broll": "chess clock close up", "overlay": "none", "params": {}},
+   {"headline": "Skills that go to school", "highlight": ["school"], "narration": "Focus, patience, planning, handling mistakes. These skills follow them to the classroom and beyond.", "delivery": "warm, proud", "layout": "top", "broll": "kid studying at desk", "overlay": "list", "params": {"items": ["Focus", "Patience", "Planning"]}},
+   {"headline": "With structure, it multiplies", "highlight": ["structure"], "narration": "With a clear method and a great coach, chess becomes a habit that shapes who your child becomes.", "delivery": "inspiring, calm", "layout": "lower", "broll": "family at home evening", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-letter-parent", "pillar": "pain", "shape": "letter", "key": 8,
+  "title": "Dear chess parent", "caption_hook": "A message for every parent driving to chess tournaments 🚗♟️",
+  "caption_body": "Your child doesn't need pressure. They need a path.",
+  "scenes": [
+   {"headline": "Dear chess parent", "highlight": ["parent"], "narration": "Dear chess parent. After fifteen years of coaching kids, here is what we want you to know.", "delivery": "personal, sincere", "layout": "center", "broll": "father driving car morning", "overlay": "none", "params": {}},
+   {"headline": "Results come later", "highlight": ["later"], "narration": "At ten or twelve, the goal is not the rating. It's building the right habits and patterns.", "delivery": "calm, wise", "layout": "top", "broll": "child playing chess at home", "overlay": "none", "params": {}},
+   {"headline": "Pressure doesn't help", "highlight": ["Pressure"], "narration": "Pushing for wins makes kids afraid to lose. Serious fun and a clear plan make them fearless.", "delivery": "gentle, honest", "layout": "top", "broll": "mother hugging son", "overlay": "none", "params": {}},
+   {"headline": "Give them a path", "highlight": ["path"], "narration": "Your child already has the love for the game. Our job is to give them the path.", "delivery": "warm, inviting", "layout": "lower", "broll": "kid smiling chess", "overlay": "none", "params": {}}
+  ]},
+ {"id": "br-proof-numbers", "pillar": "proof", "shape": "story",
+  "title": "Why parents trust us", "caption_hook": "Choosing a chess coach? Here's what to look for ✅",
+  "caption_body": "Experience, a method and real results with kids like yours.",
+  "scenes": [
+   {"headline": "How to choose a coach", "highlight": ["choose"], "narration": "There are thousands of chess coaches online. As a parent, how do you know who to trust?", "delivery": "direct, curious", "layout": "question", "broll": "parent using laptop home", "overlay": "none", "params": {}},
+   {"headline": "Look for a method", "highlight": ["method"], "narration": "A great coach doesn't improvise. They diagnose your child, set goals, and follow a tested plan.", "delivery": "clear, expert", "layout": "top", "broll": "notebook pen study desk", "overlay": "none", "params": {}},
+   {"headline": "Look for real results", "highlight": ["results"], "narration": "We've trained more than two hundred fifty students, including more than thirty national champions.", "delivery": "proud, measured", "layout": "top", "broll": "trophy on table", "overlay": "stat", "params": {"value": "250+", "label": "students trained"}},
+   {"headline": "Look for a fit", "highlight": ["fit"], "narration": "Most of all, your child should love the classes. That's when real progress begins.", "delivery": "warm, inviting", "layout": "lower", "broll": "kid smiling online class", "overlay": "none", "params": {}}
+  ]}
+]

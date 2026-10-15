@@ -18,28 +18,33 @@ PERF = os.path.join(HERE, "performance.json")
 EXPLORE = float(os.environ.get("EXPLORE_RATE", "0.15"))
 MIN_AGE_DAYS = 3
 
-DEFAULT_ARMS = {
+DEFAULT_ARMS = {      # written for parents who do NOT play chess (no chess jargon in the levers themselves)
     "hook_style": [
-        "rating_mistake: open on the one habit that keeps a child's rating stuck, stated bluntly",
-        "myth: open by busting a common chess-training myth parents believe (more games = more progress, etc.)",
-        "what_strong_kids_do: open with what kids who reach 1800-2000 do differently in training",
+        "parent_moment: open on a moment every chess parent recognises (the silent car ride, tears after a loss)",
+        "myth: open by busting a belief parents hold (more games = more progress, videos = studying...)",
+        "what_strong_kids_do: open with what kids who become champions do differently, in everyday words",
         "student_story: open with a short real moment from a student's journey (only real, approved facts)",
-        "parent_question: open with a question parents ask coaches all the time, then the honest answer",
-        "coach_secret: open with a training detail top coaches use and most kids never hear",
-        "tournament_moment: open at a tense tournament moment that every chess parent recognises",
+        "parent_question: open with a question parents ask before hiring a coach, then the honest answer",
+        "coach_secret: open with something an experienced coach knows and most parents never hear",
+        "pov: open with 'POV: your child just...' in second person",
+        "number_reveal: open with '3 signs / 3 mistakes / 3 things' and deliver them fast",
     ],
     "theme": [
-        "calculation: seeing two or three moves ahead before touching a piece",
-        "blitz habit: too many fast online games and no structured training",
-        "tournament nerves and time management",
-        "tactics vs memorising openings",
-        "learning from lost games (game review with a coach)",
-        "consistency: short daily training beats random long sessions",
-        "confidence, focus and school skills that chess builds",
-        "why group training with kids of the same level speeds up progress",
+        "losing well: tears, frustration and bouncing back after a defeat",
+        "screen time: endless online games and videos vs real focused training",
+        "tournament nerves: staying calm when it matters",
+        "progress you can see: what a rating means and the 6-level path",
+        "choosing the right coach: method, experience and fit",
+        "consistency: short regular training beats random long sessions",
+        "life skills: focus, patience and decisions that help at school",
+        "small groups of the same level: friends, motivation and faster progress",
+        "the parent's role: support without pressure",
     ],
-    "cta": ["keyword", "vsl", "call"],
+    "cta": ["keyword", "vsl", "call", "comment"],
+    "format": ["broll", "broll", "motion"],
+    "shape": ["story", "listicle", "myth_fact", "pov", "letter", "qa", "before_after"],
 }
+ARMS_VERSION = 2
 THINK_FACTOR = {"fast": 0.75, "normal": 1.0, "long": 1.3}
 WORDS = {"short": "22-30", "normal": "30-40"}
 
@@ -47,12 +52,14 @@ WORDS = {"short": "22-30", "normal": "30-40"}
 def arms():
     try:
         a = json.load(open(ARMS_FILE))
+        if a.get("_v") != ARMS_VERSION:          # old levers spoke chess jargon: start the parent version fresh
+            a = {"cta": a.get("cta", DEFAULT_ARMS["cta"])}
+        a.pop("_v", None)
         for k, v in DEFAULT_ARMS.items():
-            a.setdefault(k, v)
-        a["cta"] = [c for c in a.get("cta", []) if c in DEFAULT_ARMS["cta"]] or list(DEFAULT_ARMS["cta"])
+            a.setdefault(k, list(dict.fromkeys(v)))
         return a
     except Exception:
-        return {k: list(v) for k, v in DEFAULT_ARMS.items()}
+        return {k: list(dict.fromkeys(v)) for k, v in DEFAULT_ARMS.items()}
 
 
 LEAD_WEIGHT = float(os.environ.get("LEAD_WEIGHT", "1.0"))
@@ -193,6 +200,9 @@ Return JSON: {{"playbook": str, "new_options": [{{"lever": "hook_style"|"theme",
     added = []
     for o in (out.get("new_options") or [])[:2]:
         lev, opt = o.get("lever"), (o.get("option") or "").strip()
+        import guard
+        if guard.jargon({"scenes": [{"headline": "", "narration": opt}]})[0]:
+            continue                                         # parents don't play chess: no jargon levers
         if lev in ("hook_style", "theme") and opt and short(opt) not in [short(x) for x in A[lev]] and len(A[lev]) < 10:
             A[lev].append(opt); added.append(short(opt))
     # retire clear losers so the pool stays focused (kept in file history)
@@ -206,5 +216,5 @@ Return JSON: {{"playbook": str, "new_options": [{{"lever": "hook_style"|"theme",
                       if n >= 8 and m < median and m < best - 2.5 * sd / math.sqrt(n)]
             if losers:
                 a = min(losers)[1]; A[lev].remove(a); added.append(f"retired {short(a)}")
-    json.dump(A, open(ARMS_FILE, "w"), indent=1)
+    json.dump({**A, "_v": ARMS_VERSION}, open(ARMS_FILE, "w"), indent=1)
     return f"strategist: playbook updated; changes: {', '.join(added) or 'none'}"

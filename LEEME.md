@@ -6,17 +6,39 @@ Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
 
 ## Qué se publica (calendario automático, hora de Nueva York)
 
-Sin puzzles: todo son reels de motion graphics para padres.
+Sin puzzles. Todo está pensado para **un padre que no juega al ajedrez y cuyo hijo lo adora**.
 
 | Día | 12:00 | 21:00 |
 |---|---|---|
-| Lunes | Dolor → solución | **Clave de Square 65** |
-| Martes | **Éxito de alumno** | **Remix** de un reel anterior |
-| Miércoles | Pregunta de padres (FAQ) | **Clave de Square 65** |
+| Lunes | Dolor del padre → solución | **Clave de Square 65** |
+| Martes | **Éxito de alumno** | Pregunta de padres (FAQ) |
+| Miércoles | **Beneficios** (lo que el ajedrez da a tu hijo) | **Clave de Square 65** |
 | Jueves | **Remix** de un reel anterior | **Éxito de alumno** |
-| Viernes | Método / hoja de ruta | **Clave de Square 65** |
-| Sábado | **Éxito de alumno** | Pregunta de padres (FAQ) |
-| Domingo | **Remix** de un reel anterior | **Clave de Square 65** |
+| Viernes | Pregunta de padres (FAQ) | **Clave de Square 65** |
+| Sábado | **Éxito de alumno** | **Remix** de un reel anterior |
+| Domingo | **¿Qué significa el rating?** (los 6 niveles) | **Beneficios** |
+
+## Dos formatos (el autopiloto aprende cuál funciona mejor)
+
+1. **Vídeo real** (`make_broll.py`, formato principal): escenas reales de familias, niños estudiando, coche camino
+   del torneo, manos moviendo piezas, trofeos… sacadas de **Pixabay (y Pexels si tienes clave)** (gratis, licencia comercial, sin
+   atribución). Encima: voz, titulares animados en 6 composiciones distintas (arriba, centro, abajo, pregunta,
+   lista numerada, cita del libro) y tarjetas de cristal con datos reales:
+   - **Gráfica de progreso real** del caso del día (p. ej. 1100 → 1800 en 13 meses), dibujándose en pantalla.
+   - **Escalera de los 6 niveles** del Learning Path (para que el padre entienda dónde está su hijo).
+   - **Tarjeta de clave de Square 65**, cifra aprobada (250+ alumnos…) o lista de 3 puntos.
+   Cada reel tiene una **estructura** distinta: historia, "3 señales…", mito vs. realidad, POV, carta al padre,
+   pregunta-respuesta, antes/después. Cada creador IA tiene su propio **etalonaje** (cálido, frío, contrastado,
+   suave) y cada reel su música y movimientos de cámara. Un clip no se repite en 60 días (`stock_used.json`).
+   En los éxitos de alumnos solo se usan planos **no identificables** (manos, tablero, trofeo, sala de torneo) con
+   la etiqueta "Illustrative footage": el vídeo ilustra, nunca se hace pasar por el alumno.
+2. **Motion graphics** (`make_explainer.py`): el formato anterior, ahora como alternativa para dar variedad.
+
+Al principio ~70 % de los reels son de vídeo real; después decide el autopiloto según visitas al perfil y follows.
+
+**Prueba del padre** (`guard.jargon` + guardián de marca): si el guion usa jerga que un padre no entiende
+("fianchetto", "pawn structure", notación…) se rechaza y se reescribe; términos como "opening" o "endgame" solo se
+permiten de forma puntual y explicados con comparaciones del día a día (notas del colegio, deporte, música).
 
 - **Éxito de alumno**: historias reales sacadas SOLO de lo que la Academia ya publica: las páginas de alumnos de la
   web (`success_sync.py`, cada domingo) y los casos que aparecen en tus propios reels (`content_bank.py`). Rota los
@@ -37,6 +59,8 @@ Sin puzzles: todo son reels de motion graphics para padres.
   hechos reales de tu web). Siempre sale un reel de la Academia.
 
 ## 100 % gratis
+- Vídeo real: Pexels y Pixabay son gratuitos (solo hay que crear una clave, ver abajo). Sin clave, el sistema
+  sigue funcionando con motion graphics.
 - No se usa generación de imágenes con IA: todo el diseño está hecho en código.
 - Gemini se usa en su capa gratuita (guiones, voz y análisis de vídeos). Si la voz de Gemini supera el límite
   gratuito, el sistema cambia solo a una voz local gratuita (Kokoro) para que el reel salga igualmente.
@@ -85,7 +109,7 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
 ## Conversión
 - **CTA** que el piloto automático prueba y optimiza: comentar la palabra clave (por defecto `PLAN`), ver la VSL,
   reservar llamada o comentar+seguir.
-- **Palabra clave + DM**: el bot responde SOLO a quien comenta `PLAN`. Le envía por DM "Fill out the form of the video here" con el enlace a la home (con UTM) y contesta en público "Check your DMs". Máximo 1 DM por persona y semana. El resto de comentarios no se contestan: quedan para ti.
+- **Palabra clave + DM**: quien comenta `PLAN` recibe por DM el enlace a la VSL (con UTM). Solo a quien lo pide,
   máximo 1 DM por persona y semana.
 - **Piloto automático**: cada reel es un experimento (gancho, tema, nivel, CTA). La recompensa pesa mucho las
   visitas al perfil y los follows. Los lunes un estratega IA reescribe `playbook.md`.
@@ -106,14 +130,18 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
      instagram_basic, instagram_content_publish, instagram_manage_insights, instagram_manage_comments,
      **instagram_manage_messages** (DMs de palabra clave), pages_show_list, pages_read_engagement,
      **pages_manage_posts** (Facebook Reels).
-   - `GEMINI_API_KEY` (pon un aviso de presupuesto en Google Cloud; coste estimado 10-20 $/mes).
+   - `GEMINI_API_KEY` (capa gratuita de Google AI Studio).
+   - `PIXABAY_API_KEY` (**gratis**, para el vídeo real): crea cuenta en pixabay.com, entra en
+     pixabay.com/api/docs y copia la clave que aparece en el apartado "Parameters" (key).
+     `PEXELS_API_KEY` es opcional (Pexels tiene pausada la emisión de claves nuevas).
+   - Alternativa sin claves: carpeta `stock_library/` con 12+ clips propios o de licencia libre (ver su LEEME).
    - `ZERNIO_API_KEY` (opcional, YouTube/TikTok; necesitas un perfil distinto al de StreakChess).
    - `AC_API_KEY` (opcional, para contar leads orgánicos de ActiveCampaign en el informe).
 3. **Datos aprobados**: `claims.json` ya trae aprobadas las cifras de tu web (250+ alumnos, 30+ campeones
    nacionales, 15+ países, títulos). `cases.json` trae los casos de Pranav y Vyom de tu web y se amplía solo cada
    domingo. Pon `"approved": false` en cualquiera que no quieras usar.
 4. **Prueba**: Actions → *Daily reels* → Run workflow → elige `pillar` (success, remix, faq…) con `dry_run`
-   marcado. El vídeo queda en *Artifacts*.
+   marcado. Puedes forzar `format` = broll (vídeo real) o motion. El vídeo queda en *Artifacts*.
 5. Listo. Los horarios corren solos.
 
 ## Variables opcionales (Settings → Variables)

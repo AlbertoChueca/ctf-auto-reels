@@ -28,9 +28,9 @@ def log(entry):
 
 
 # ---- weekly calendar (US date), Mon..Sun: 14 reels a week, success stories and remixes get the most slots
-MIDDAY = {0: "pain", 1: "success", 2: "faq", 3: "remix", 4: "method", 5: "success", 6: "remix"}
-EVENING = {0: "key", 1: "remix", 2: "key", 3: "success", 4: "key", 5: "faq", 6: "key"}   # key = Square 65 key
-PILLARS = ("pain", "faq", "method", "proof", "success", "remix", "key")
+MIDDAY = {0: "pain", 1: "success", 2: "benefits", 3: "remix", 4: "faq", 5: "success", 6: "rating"}
+EVENING = {0: "key", 1: "faq", 2: "key", 3: "success", 4: "key", 5: "remix", 6: "benefits"}   # key = Square 65 key
+PILLARS = ("pain", "faq", "method", "proof", "success", "remix", "key", "benefits", "rating")
 us_today = (now - datetime.timedelta(hours=5)).date()
 wd = us_today.weekday()
 pillar = os.environ.get("PILLAR_OVERRIDE", "auto")
@@ -59,8 +59,6 @@ try:
     import strategy
     fixed = {"cta": brand.CTA_MODE} if brand.CTA_MODE in brand.CTA else {}
     arms = strategy.choose(seed=f"{now:%Y-%m-%d-%H}-{slot}", fixed=fixed)
-    if arms.get("cta") not in ("keyword", "vsl", "call"):
-        arms["cta"] = "keyword"
     if slot == "story":
         strat_msg = strategy.weekly_strategist()
     strategy.write_report()
@@ -85,18 +83,48 @@ except Exception as e:
 
 out = f"out/{today}_{slot}_{now.hour:02d}.mp4"
 
-# ---- render: AI script (2 tries) -> evergreen script (no AI text needed)
-from make_explainer import build
-meta, engine, errors = None, None, []
-for eng in ["explainer", "explainer", "evergreen"]:
+# ---- render. Two formats:
+#   broll  = real stock footage + voice + kinetic text + real charts (make_broll)  <- default, most engaging
+#   motion = motion-graphics explainer (make_explainer)
+# Fallbacks keep a post going out: AI script -> other format -> evergreen real-footage -> evergreen motion.
+import stock
+fmt = os.environ.get("FORMAT_OVERRIDE", "auto")
+if fmt not in ("broll", "motion"):
+    fmt = arms.get("format") or "broll"
     try:
-        if eng == "explainer" and not os.environ.get("GEMINI_API_KEY") and os.environ.get("STORY_MOCK") != "1":
-            raise RuntimeError("GEMINI_API_KEY not set")
-        meta = build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen"), agent=agent)
+        n_measured = strategy.stats()[3]
+    except Exception:
+        n_measured = 0
+    if n_measured < 12 and random.Random(f"{seed}-fmt-{slot}").random() < 0.7:
+        fmt = "broll"                                # early on: mostly real footage, still testing motion
+if not stock.available():
+    fmt = "motion"
+arms["format"] = fmt
+ai = bool(os.environ.get("GEMINI_API_KEY")) or os.environ.get("STORY_MOCK") == "1"
+chain = (["broll", "explainer"] if fmt == "broll" else ["explainer", "explainer"]) if ai else []
+chain += (["evergreen_broll"] if stock.available() else []) + ["evergreen"]
+meta, engine, errors = None, None, []
+for eng in chain:
+    try:
+        if eng in ("broll", "evergreen_broll"):
+            import make_broll
+            meta = make_broll.build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen_broll"), agent=agent)
+        else:
+            from make_explainer import build
+            meta = build(seed, out, pillar=pillar, arms={**arms, "format": "motion"}, evergreen=(eng == "evergreen"),
+                         agent=agent)
+            meta["format"] = "motion"
+            meta["arms"] = {k: v for k, v in arms.items() if k != "shape"}
         meta["qc"] = guard.qc(out)                  # hard checks: streams, duration, real audio
+        meta.setdefault("arms", arms)
+        meta["arms"] = {**(meta.get("arms") or {}), "format": meta.get("format", "motion")}
+        if meta.get("shape"):
+            meta["arms"]["shape"] = meta["shape"]
         engine = eng
         break
     except Exception as e:
+        if type(e).__name__ == "RejectReel" and eng == chain[-1]:
+            raise
         errors.append(f"{eng}: {str(e)[:300]}")
         print(f"[{eng}] failed:\n{traceback.format_exc()[-1500:]}", flush=True)
 if meta is None:
@@ -115,10 +143,12 @@ except Exception:
 summary = os.environ.get("GITHUB_STEP_SUMMARY")
 if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
-        f.write(f"## {'✅ AI reel' if engine == 'explainer' else '⚠️ Evergreen reel (AI script failed)'} · pillar `{pillar}`\n\n"
+        f.write(f"## {'✅ AI reel' if engine in ('explainer', 'broll') else '⚠️ Evergreen reel (AI script failed)'} · pillar `{pillar}`\n\n"
                 f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used}` · narrator: `{brand.NARRATOR}`\n"
                 + (f"- Creator: **{studio.CREATORS[meta['agent']]['name']}** · {studio_msg}\n" if meta.get("agent") else f"- {studio_msg}\n")
                 + (f"- Title: {meta.get('story')}\n" if meta.get("story") else "")
+                + f"- Format: **{'real footage' if meta.get('format') == 'broll' else 'motion graphics'}**"
+                + (f" · shape `{meta.get('shape')}` · grade `{meta.get('grade')}`" if meta.get('shape') else "") + "\n"
                 + (f"- Blocks: {', '.join(meta.get('blocks') or [])}\n")
                 + (f"- Student case: `{meta.get('case')}`\n" if meta.get("case") else "")
                 + (f"- Remix of: `{meta.get('remix_of')}`\n" if meta.get("remix_of") else "")
@@ -172,7 +202,7 @@ brake = guard.health()
 if brake:
     guard.pause(brake)
     print("BRAKE:", brake)
-log({k: meta.get(k) for k in ("engine", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
+log({k: meta.get(k) for k in ("engine", "format", "shape", "footage", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
                               "case", "remix_of", "director", "agent", "key",
                               "anchor_key", "brand_check")})

@@ -102,7 +102,7 @@ def enc_args(out, scale=True):
     return ((["-vf", f"scale={OUT_W}:{OUT_H}:flags=bicubic"] if scale else []) +
             ["-c:v", "libx264", "-preset", "veryfast", "-profile:v", "high", "-crf", "23", "-maxrate", "2500k",
              "-bufsize", "5000k", "-g", str(FPS * 2), "-pix_fmt", "yuv420p", "-r", str(FPS),
-             "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
+             "-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2",
              "-movflags", "+faststart", "-use_editlist", "0", out])
 
 

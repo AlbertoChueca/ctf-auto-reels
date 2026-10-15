@@ -879,13 +879,26 @@ def chime():
     return (s * env(n, 0.005, 0.3) * 0.35).astype(np.float32)
 
 
-def music(total):
-    """Warm, modern bed: soft pad + gentle muted plucks, 92 bpm. Sits low under the voice."""
+PROGRESSIONS = [   # (chords, bpm): warm, hopeful, reflective, confident, cinematic
+    ([(220.0, 277.18, 329.63, 415.3), (185.0, 233.08, 277.18, 369.99), (196.0, 246.94, 293.66, 369.99),
+      (164.81, 207.65, 246.94, 329.63)], 92),
+    ([(196.0, 246.94, 293.66, 392.0), (164.81, 196.0, 246.94, 329.63), (130.81, 164.81, 196.0, 261.63),
+      (146.83, 185.0, 220.0, 293.66)], 100),
+    ([(220.0, 261.63, 329.63, 392.0), (174.61, 220.0, 261.63, 349.23), (130.81, 164.81, 196.0, 261.63),
+      (196.0, 246.94, 293.66, 392.0)], 84),
+    ([(146.83, 185.0, 220.0, 277.18), (164.81, 207.65, 246.94, 311.13), (123.47, 155.56, 185.0, 246.94),
+      (110.0, 138.59, 164.81, 220.0)], 96),
+    ([(130.81, 155.56, 196.0, 233.08), (103.83, 130.81, 155.56, 207.65), (116.54, 146.83, 174.61, 233.08),
+      (98.0, 123.47, 146.83, 196.0)], 78),
+]
+
+
+def music(total, variant=0):
+    """Warm, modern bed: soft pad + gentle muted plucks. 5 variants (chords + tempo). Sits low under the voice."""
     n = int(total * SR); t = np.arange(n) / SR
-    chords = [(220.0, 277.18, 329.63, 415.3), (185.0, 233.08, 277.18, 369.99),
-              (196.0, 246.94, 293.66, 369.99), (164.81, 207.65, 246.94, 329.63)]
+    chords, bpm = PROGRESSIONS[variant % len(PROGRESSIONS)]
     out = np.zeros(n, np.float32)
-    bar = 60 / 92 * 4
+    bar = 60 / bpm * 4
     for i in range(int(total / bar) + 1):
         a0, b0 = int(i * bar * SR), min(n, int((i + 1) * bar * SR) + int(0.4 * SR))
         if a0 >= n:
@@ -903,42 +916,3 @@ def music(total):
             out[s0:s0 + ln] += 0.022 * np.sin(2 * np.pi * f * tk) * np.exp(-tk * 9) * (1 - np.exp(-tk * 400))
     fade = np.clip(t / 1.2, 0, 1) * np.clip((total - t) / 1.5, 0, 1)
     return out * fade
-
-
-# ======================================================================= mastering (clean, broadcast-style)
-def vo_compress(a, thr_db=-20.0, ratio=3.0, att=0.008, rel=0.12):
-    """Gentle voice compressor: evens out loud and soft words so every word is clear over the music."""
-    a = a.astype(np.float32)
-    if len(a) < 100:
-        return a
-    x = np.abs(a).astype(np.float64)
-    ka, kr = np.exp(-1.0 / (att * SR)), np.exp(-1.0 / (rel * SR))
-    env = np.empty_like(x); e = 0.0
-    for i in range(0, len(x), 64):                       # block-wise follower (fast enough in pure numpy/python)
-        blk = x[i:i + 64].max()
-        e = ka * e + (1 - ka) * blk if blk > e else kr * e + (1 - kr) * blk
-        env[i:i + 64] = e
-    ref = np.max(x) + 1e-9
-    db = 20 * np.log10(env / ref + 1e-9)
-    over = np.maximum(0.0, db - thr_db)
-    gain = 10 ** (-(over - over / ratio) / 20)
-    k = int(0.005 * SR)
-    gain = np.convolve(gain, np.ones(k) / k, "same")
-    y = a * gain
-    return (y / (np.max(np.abs(y)) + 1e-9) * 0.9).astype(np.float32)
-
-
-def master(mix, speech_mask=None, target_db=-16.0, ceiling=0.89):
-    """Final master: remove DC/rumble, set a consistent loudness (speech around -16 dBFS RMS, close to the
-    -14 LUFS platforms normalise to) and catch peaks with a soft limiter (no clipping, no harsh distortion)."""
-    m = mix.astype(np.float64)
-    k = int(SR / 40)
-    m = m - np.convolve(m, np.ones(k) / k, "same")                     # high-pass ~40 Hz
-    sel = m[speech_mask] if speech_mask is not None and speech_mask.any() else m
-    rms = np.sqrt(np.mean(sel ** 2)) + 1e-9
-    m = m * (10 ** (target_db / 20) / rms)
-    knee = ceiling * 0.8                                               # soft knee limiter above ~-3 dBFS
-    a = np.abs(m)
-    over = a > knee
-    m[over] = np.sign(m[over]) * (knee + (ceiling - knee) * np.tanh((a[over] - knee) / (ceiling - knee)))
-    return m.astype(np.float32)

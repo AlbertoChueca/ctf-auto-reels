@@ -140,131 +140,6 @@ def align(a, text):
     return out
 
 
-
-# ------------------------------------------------------------------ take verification (no stray words, ever)
-# Words that only appear when the model reads our prompt aloud ("Read aloud in a calm voice, only the words after the
-# colon...", "Paragraph 2: warm"). If any of them is heard and is not in the script, the take is thrown away.
-LEAK_STRONG = {"aloud", "transcript", "colon", "paragraph", "paragraphs", "director", "directors", "delivery",
-               "instructions", "instruction", "narrator", "prompt"}
-LEAK_SOFT = {"read", "reads", "voice", "perform", "pace", "brisk", "tone", "words", "quote", "unquote"}
-
-
-def _num_tokens(n):
-    if n < 20: return [_ONES[n]]
-    if n < 100: return [_TENS[n // 10]] + ([] if n % 10 == 0 else [_ONES[n % 10]])
-    if n < 1000: return [_ONES[n // 100], "hundred"] + ([] if n % 100 == 0 else _num_tokens(n % 100))
-    if n < 10000: return [_ONES[n // 1000], "thousand"] + ([] if n % 1000 == 0 else _num_tokens(n % 1000))
-    return [str(n)]
-
-
-def _tokens(word):
-    """Spoken tokens of one written word: '300' -> three hundred, '90-minute' -> ninety minute, 'T-T-P' -> t t p."""
-    w = word.lower().replace("%", " percent").replace("&", " and ")
-    out = []
-    for part in re.split(r"[^a-z0-9']+", w):
-        part = part.strip("'")
-        if not part:
-            continue
-        for chunk in re.findall(r"\d+|[a-z']+", part):
-            out += _num_tokens(int(chunk)) if chunk.isdigit() else [chunk.replace("'", "")]
-    return [t for t in out if t]
-
-
-def verify_take(a, text):
-    """Checks a recorded take against its script with speech recognition.
-    Returns (clean_audio, ok, reason). clean_audio is cropped to exactly the script's words (anything the model said
-    before or after - an instruction, a breath of static, a garbled tail - is cut), with gentle fades.
-    When speech recognition is unavailable returns (a, None, 'unverified')."""
-    heard = _asr(a)
-    if heard is None:
-        return a, None, "unverified"
-    if not heard:
-        return a, False, "no speech heard"
-    st = [t for w in text.split() for t in _tokens(w)]
-    ht, hidx = [], []
-    for k, (w, _, _) in enumerate(heard):
-        for t in _tokens(w):
-            ht.append(t); hidx.append(k)
-    if not st or not ht:
-        return a, False, "empty"
-    import difflib
-    sm = difflib.SequenceMatcher(None, st, ht, autojunk=False)
-    matched = set()
-    for i, j, n in sm.get_matching_blocks():
-        matched.update(range(j, j + n))
-    if not matched:
-        return a, False, "nothing matches the script"
-    coverage = sum(n for _, _, n in sm.get_matching_blocks()) / len(st)
-    j0, j1 = min(matched), max(matched)
-    inside_extra = [ht[j] for j in range(j0, j1 + 1) if j not in matched]
-    script_set = set(st)
-    leaked = [t for t in ht if t not in script_set and t in LEAK_STRONG]
-    soft = [t for t in ht if t not in script_set and t in LEAK_SOFT]
-    reason = f"coverage {coverage:.2f}, {len(inside_extra)} extra word(s) inside"
-    if leaked or len(soft) >= 3:
-        return a, False, f"read instructions aloud ({' '.join((leaked + soft)[:6])})"
-    if coverage < 0.8:
-        return a, False, reason
-    if len(inside_extra) > max(2, int(0.12 * len(st))):
-        return a, False, reason + f": {' '.join(inside_extra[:6])}"
-    w0, w1 = hidx[j0], hidx[j1]
-    a0 = int(max(0.0, heard[w0][1] - 0.10) * SR)
-    a1 = int(min(len(a) / SR, heard[w1][2] + 0.24) * SR)
-    out = a[a0:a1].copy()
-    if a0 or a1 < len(a):
-        dropped = [w for k, (w, _, _) in enumerate(heard) if k < w0 or k > w1]
-        if dropped:
-            print(f"voice: cut words outside the script {dropped[:8]} from {text[:40]!r}", flush=True)
-        _asr_cache.clear()
-    # silence the gaps between words (removes hiss, clicks and breaths in long pauses; words untouched)
-    words = [(s - a0 / SR, e - a0 / SR) for k, (_, s, e) in enumerate(heard) if w0 <= k <= w1]
-    out = _gate_gaps(out, words)
-    return fade(out), True, reason
-
-
-def _gate_gaps(a, words, min_gap=0.34, pre=0.07, post=0.16, ramp=0.025):
-    """Fade to digital silence inside pauses longer than min_gap (between recognised words)."""
-    if len(words) < 2:
-        return a
-    g = np.ones(len(a), np.float32)
-    r = max(1, int(ramp * SR))
-    for (_, e), (s, _) in zip(words[:-1], words[1:]):
-        if s - e < min_gap:
-            continue
-        x0, x1 = int((e + post) * SR), int((s - pre) * SR)
-        if x1 - x0 < 2 * r:
-            continue
-        g[x0:x0 + r] = np.minimum(g[x0:x0 + r], np.linspace(1, 0, r))
-        g[x0 + r:x1 - r] = 0
-        g[x1 - r:x1] = np.minimum(g[x1 - r:x1], np.linspace(0, 1, r))
-    return (a * g).astype(np.float32)
-
-
-def energy_gate(a, floor_db=-42.0):
-    """Without speech recognition: smooth downward gate for anything far below the speech level."""
-    if len(a) < SR // 10:
-        return a
-    hop = int(SR * 0.01)
-    env = np.sqrt(np.convolve(a.astype(np.float64) ** 2, np.ones(hop * 2) / (hop * 2), "same"))
-    ref = np.percentile(env, 95) + 1e-9
-    db = 20 * np.log10(env / ref + 1e-9)
-    g = np.clip((db - floor_db) / 8.0, 0, 1)
-    k = int(0.03 * SR)
-    g = np.convolve(g, np.ones(k) / k, "same")
-    return (a * g).astype(np.float32)
-
-
-def fade(a, fin=0.012, fout=0.045):
-    """Short fades at both ends: a clip that starts or stops abruptly sounds like a click / burst of noise."""
-    a = a.astype(np.float32).copy()
-    n_in, n_out = min(len(a) // 4, int(fin * SR)), min(len(a) // 4, int(fout * SR))
-    if n_in > 1:
-        a[:n_in] *= np.linspace(0, 1, n_in) ** 2
-    if n_out > 1:
-        a[-n_out:] *= np.linspace(1, 0, n_out) ** 2
-    return a
-
-
 # ------------------------------------------------------------------ helpers
 def _trim(a):
     if len(a) == 0:
@@ -295,15 +170,17 @@ def _tighten(a, max_gap=0.32):
 
 
 def polish(a, light=False):
-    """Gentle cleanup: high-pass ~80 Hz, short fades, level. No exciter or saturation (they made hiss audible)."""
+    """Gentle cleanup. Gemini audio only gets a high-pass + level; local TTS gets a bit more 'mic' colour."""
     a = a.astype(np.float32)
     if len(a) < 10:
         return a
     k = int(SR / 80)
     a = a - np.convolve(a, np.ones(k) / k, "same")                                    # high-pass ~80 Hz
-    if not light:                                                                     # local engines: gate the room
-        a = energy_gate(a)
-    a = fade(a)
+    if not light:
+        hi = a - np.convolve(a, np.ones(6) / 6, "same")
+        a = a + 0.25 * hi
+        a = a / (np.max(np.abs(a)) + 1e-6)
+        a = np.sign(a) * (1 - np.exp(-1.6 * np.abs(a))) / (1 - np.exp(-1.6))
     tail = np.zeros(int(SR * 0.1), np.float32)
     out = np.concatenate([a, tail])
     return (out / (np.max(np.abs(out)) + 1e-6) * 0.9).astype(np.float32)
@@ -436,42 +313,36 @@ def _strip_extras(a, text):
 
 
 def _gemini_line(text, style, key, pace):
-    """Records one line. Every take is checked word by word with speech recognition and cropped to exactly the
-    script; a take where the model says anything else (e.g. reads our directions aloud) is thrown away.
-    Never publishes an unverified take with instructions in the prompt: without speech recognition only the bare
-    script is sent to the model, so there is nothing it could read aloud."""
-    verifiable = _asr(np.zeros(SR // 2, np.float32)) is not None
-    styled = (f"{NARRATOR} Style: {style or 'natural and engaging'}, {pace}.\n"
-              f"Say only the text between the quotation marks, word for word, and nothing else:\n\"{text}\"")
-    prompts = [styled, text, text] if verifiable else [text, text]
-    last = "no take"
+    """Up to 3 takes with different prompt shapes. A take is accepted when it says the right words with a
+    natural length; otherwise the best acceptable one is kept. Fails only if every take is clearly wrong."""
+    prompts = [f"{NARRATOR}\nDelivery: {style or 'natural and engaging'}, {pace}.\n"
+               f"Read the transcript below exactly as written. Do not read these instructions.\nTRANSCRIPT:\n{text}",
+               f"Read aloud in a {style or 'warm, natural'} voice, only the words after the colon: {text}",
+               text]
+    takes = []
     for pr in prompts:
         try:
-            raw = _trim(_gemini_call(pr, key))
+            a = _tighten(_trim(_strip_extras(_trim(_gemini_call(pr, key)), text)))
         except Exception as e:
             if "unreachable" in str(e) or "no Gemini TTS" in str(e):
                 raise
             print("voice: take error:", str(e)[:150], flush=True); continue
-        a, ok, why = verify_take(raw, text)
-        if ok is None:                               # cannot verify: bare script only, length sanity check
-            if pr == text and _sane(a, text):
-                return _tighten(fade(a))
-            last = "unverified take"; continue
-        if ok and _sane(a, text, 3.0):
-            return _tighten(a)
-        last = why
-        print(f"voice: retake {text[:50]!r}: {why}", flush=True)
-    raise RuntimeError(f"bad take for {text[:60]!r}: {last}")
+        sim = _similarity(a, text)
+        if (sim is None or sim >= 0.7) and _sane(a, text):
+            return a
+        print(f"voice: retake {text!r} ({len(a) / SR:.1f}s, match {sim if sim is None else round(sim, 2)})", flush=True)
+        if 0.3 < _ratio(a, text) < 3.5 and (sim is None or sim >= 0.6):
+            takes.append(((sim or 0.7), -abs(np.log(_ratio(a, text))), a))
+    if takes:
+        return max(takes, key=lambda x: (x[0], x[1]))[2]
+    raise RuntimeError(f"bad take for: {text!r}")
 
 
 def _split_takes(a, texts):
-    """Split one continuous take into len(texts) pieces at the longest natural pauses, then verify each piece."""
+    """Split one continuous take into len(texts) pieces at the longest natural pauses."""
     n = len(texts)
     if n == 1:
-        p, ok, why = verify_take(a, texts[0])
-        if not ok:
-            raise RuntimeError(why)
-        return [p]
+        return [a]
     hop = int(SR * 0.01)
     env = np.sqrt(np.convolve(a ** 2, np.ones(hop * 3) / (hop * 3), "same"))[::hop]
     thr = max(0.012, 0.06 * np.percentile(env, 95))
@@ -486,6 +357,7 @@ def _split_takes(a, texts):
             i = j
         else:
             i += 1
+    # expected cut points from word counts, choose the longest pause near each one
     w = np.array([_words(t) for t in texts], float)
     exp_cuts = np.cumsum(w)[:-1] / w.sum() * len(env)
     cuts, used = [], set()
@@ -498,29 +370,27 @@ def _split_takes(a, texts):
     if cuts != sorted(cuts):
         raise RuntimeError("pauses out of order")
     edges = [0] + [c * hop for c in cuts] + [len(a)]
-    parts = []
-    for k in range(n):
-        p, ok, why = verify_take(_trim(a[edges[k]:edges[k + 1]]), texts[k])
-        if not ok or not _sane(p, texts[k], 3.2):
-            raise RuntimeError(f"piece {k + 1} does not match its text ({why})")
-        parts.append(_tighten(p))
+    parts = [_tighten(_trim(_strip_extras(_trim(a[edges[k]:edges[k + 1]]), texts[k]))) for k in range(n)]
+    for p, t in zip(parts, texts):
+        sim = _similarity(p, t)
+        if not _sane(p, t, 3.2) or (sim is not None and sim < 0.7):
+            raise RuntimeError("split pieces do not match the text")
     return parts
 
 
 def _gemini_many(texts, styles, key, one_take, pace):
-    verifiable = _asr(np.zeros(SR // 2, np.float32)) is not None
-    if one_take and len(texts) > 1 and verifiable:       # a single take is only used when we can check every word
+    if one_take and len(texts) > 1:
         try:
+            notes = "\n".join(f"- Paragraph {i + 1}: {s or 'natural'}" for i, s in enumerate(styles))
             script = "\n\n".join(texts)
-            mood = ", ".join(dict.fromkeys(s for s in styles if s)) or "warm and natural"
-            prompt = (f"{NARRATOR} Style: {mood}, {pace}, a clear breath pause between paragraphs.\n"
-                      f"Say only the text between the quotation marks, word for word, and nothing else:\n\"{script}\"")
+            prompt = (f"{NARRATOR}\nPerform the TRANSCRIPT below in one continuous take, at {pace}, with a clear "
+                      f"breath pause between paragraphs. Read only the transcript, word for word.\n"
+                      f"DIRECTOR'S NOTES:\n{notes}\n\nTRANSCRIPT:\n{script}")
             take = _trim(_gemini_call(prompt, key))
             print(f"voice: one take {len(take) / SR:.1f}s for {sum(_words(t) for t in texts)} words", flush=True)
-            full, ok, why = verify_take(take, " ".join(texts))         # crop anything said before/after the script
-            if not ok:
-                raise RuntimeError(f"one take rejected: {why}")
-            return _split_takes(full, texts)
+            if len(take) / SR > 2.2 * sum(_words(t) / 2.7 + 0.6 for t in texts) + 2:
+                raise RuntimeError("one take far too long (model added extra speech)")
+            return _split_takes(take, texts)
         except Exception as e:
             if "unreachable" in str(e) or "no Gemini TTS" in str(e):
                 raise

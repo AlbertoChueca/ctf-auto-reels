@@ -63,14 +63,18 @@ Our anchors found automatically: {hits or 'NONE'}
 1) Score 1-10 "distinctiveness": 10 = only ChessTalentsFactory could have made this (our method, our concepts by name,
    our cases, our coaches); 1 = any academy or freelance coach could post it word for word.
 2) Score 1-10 "voice": matches the brand bible voice and vocabulary, no banned words, premium and calm.
-3) If either score is below 8, rewrite the script so it passes: weave in the METHOD ANCHOR / today's key / case
+3) Score 1-10 "parent_test": a parent who has NEVER played chess (their child loves it) understands every word,
+   sees why it matters for THEIR child, and knows what to do next. Chess terms must be translated into everyday
+   analogies (school grades, sports, music practice) or removed.
+4) If any score is below 8, rewrite the script so it passes: weave in the METHOD ANCHOR / today's key / case
    above by name, use our vocabulary, remove anything generic or off-voice. Keep the hook if it is strong, keep the
    same scenes and blocks (allowed per slot: {slots_text}), keep the JSON schema, keep it honest.
-Return JSON: {{"distinctiveness": number, "voice": number, "issues": [str], "script": <full script JSON or null>}}"""}], 0.5)
+Return JSON: {{"distinctiveness": number, "voice": number, "parent_test": number, "issues": [str],
+"script": <full script JSON or null>}}"""}], 0.5)
     return res, hits
 
 
-def copy_chief(sc, pillar, context, slots_text, kind="keyword"):
+def copy_chief(sc, pillar, context, slots_text):
     res = _ask([{"text": f"""{ROLE}
 {guard.approved_text()}
 {context}
@@ -87,10 +91,7 @@ angles: a sharp question, a counter-intuitive claim, a specific moment parents r
 insight. Score each 1-10 for scroll-stop, clarity, curiosity, relevance to this pillar and credibility. Pick the best.
 Step 2. Rewrite the whole script around the chosen hook: one idea per scene, concrete words parents use, narration
 8-20 words per scene, total 75-110 words, headlines max 6 words with 1-2 highlight words, narration matching what
-each block shows, last scene ends with a line that leads naturally into THIS reel's only call to action
-("{brand.cta(kind)['say'][:60]}..."), never a different one. Narration is spoken to a parent: no internal
-labels (scene, hook, slot, block, CTA, anchor), no stage directions, no brackets, no acronyms read as letters;
-explain any signature concept in plain words the first time it appears.
+each block shows, last scene ends with a line that leads into the call to action ("{brand.cta('keyword')['say'][:40]}...").
 Keep the JSON schema, the same number of scenes, and params valid for each block.
 Return JSON: {{"hooks": [{{"headline": str, "line": str, "score": number}}], "chosen": int,
 "script": <the full improved script JSON>, "notes": str}}"""}], 0.7)
@@ -138,8 +139,8 @@ def storyboard(sc, kind="keyword"):
     return sheet
 
 
-def art_director(sc, pillar, slots_text, kind):
-    sheet = storyboard(sc, kind)
+def art_director(sc, pillar, slots_text, kind, storyboard_fn=None):
+    sheet = storyboard_fn(sc, kind) if storyboard_fn else storyboard(sc, kind)
     res = _ask([{"text": f"""{ROLE}
 You are now the ART DIRECTOR. Below is the storyboard of a reel: the first frame (also the cover), one key frame per
 scene (in order) and the end card. Script: {json.dumps(sc['scenes'], ensure_ascii=False)}
@@ -175,50 +176,19 @@ def apply_fixes(sc, fixes):
             s["highlight"] = f["highlight"]
         if f.get("block"):
             s["block"] = f["block"]
+        for k in ("layout", "broll", "overlay"):
+            if f.get(k):
+                s[k] = f[k]
         if isinstance(f.get("params"), dict):
             s["params"] = {**(s.get("params") or {}), **f["params"]}
     return sc
 
 
-def direct(sc, pillar, context, slots_text, validate, kind, agent=None):
-    """Full creative review. Always returns a valid script (the best version that passed validation).
-    The director polishes but keeps the creator's voice and angle, so creators stay distinct."""
-    report = {"pillar": pillar, "agent_id": agent}
-    if agent:
-        import studio
-        context = (context + f"\nThis script was written by {studio.CREATORS[agent]['name']} "
-                   f"({studio.CREATORS[agent]['persona'][:160]}...). Keep its voice and angle; improve, don't flatten.")
-    try:
-        new, info = copy_chief(sc, pillar, context, slots_text, kind)
-        if sc.get("_key"):
-            new["_key"] = sc["_key"]
-        sc = validate(new, pillar)
-        report["copy"] = info
-        print("director/copy: hook =", sc["scenes"][0]["headline"], "|", info.get("notes", "")[:120], flush=True)
-    except Exception as e:
-        report["copy_error"] = str(e)[:200]; print("director/copy skipped:", str(e)[:200], flush=True)
-    try:                                              # brand guardian: the competitor test
-        res, hits = brand_guardian(sc, pillar, context, slots_text)
-        dist, voice = float(res.get("distinctiveness") or 0), float(res.get("voice") or 0)
-        rewrote = False
-        if (dist < 8 or voice < 8 or not hits) and isinstance(res.get("script"), dict):
-            new = res["script"]
-            for k in ("caption_hook", "caption_body", "title", "summary", "_key"):
-                if sc.get(k) is not None:
-                    new.setdefault(k, sc.get(k))
-            new = validate(new, pillar)
-            if guard.anchored(new):
-                sc, rewrote = new, True
-        report["brand"] = {"distinctiveness": dist, "voice": voice, "anchors": guard.anchored(sc),
-                           "issues": (res.get("issues") or [])[:4], "rewrote": rewrote}
-        print(f"director/brand: distinctiveness {dist}/10, voice {voice}/10, anchors {guard.anchored(sc)}"
-              + (" -> rewritten" if rewrote else ""), flush=True)
-    except Exception as e:
-        report["brand_error"] = str(e)[:200]; print("director/brand skipped:", str(e)[:200], flush=True)
+def art_loop(sc, pillar, slots_text, validate, kind, report, storyboard_fn=None, rounds=2):
     report["art"] = []
-    for rnd in range(2):
+    for rnd in range(rounds):
         try:
-            res = art_director(sc, pillar, slots_text, kind)
+            res = art_director(sc, pillar, slots_text, kind, storyboard_fn)
         except Exception as e:
             report["art_error"] = str(e)[:200]; print("director/art skipped:", str(e)[:200], flush=True); break
         score = float(res.get("score") or 0)
@@ -231,5 +201,47 @@ def direct(sc, pillar, context, slots_text, validate, kind, agent=None):
             sc = validate(apply_fixes(sc, res["fixes"]), pillar)
         except Exception as e:
             print("director/art fixes rejected by validation:", str(e)[:150], flush=True); break
+    return sc
+
+
+def direct(sc, pillar, context, slots_text, validate, kind, agent=None, art=True):
+    """Full creative review. Always returns a valid script (the best version that passed validation).
+    The director polishes but keeps the creator's voice and angle, so creators stay distinct."""
+    report = {"pillar": pillar, "agent_id": agent}
+    if agent:
+        import studio
+        context = (context + f"\nThis script was written by {studio.CREATORS[agent]['name']} "
+                   f"({studio.CREATORS[agent]['persona'][:160]}...). Keep its voice and angle; improve, don't flatten.")
+    try:
+        new, info = copy_chief(sc, pillar, context, slots_text)
+        if sc.get("_key"):
+            new["_key"] = sc["_key"]
+        sc = validate(new, pillar)
+        report["copy"] = info
+        print("director/copy: hook =", sc["scenes"][0]["headline"], "|", info.get("notes", "")[:120], flush=True)
+    except Exception as e:
+        report["copy_error"] = str(e)[:200]; print("director/copy skipped:", str(e)[:200], flush=True)
+    try:                                              # brand guardian: the competitor test
+        res, hits = brand_guardian(sc, pillar, context, slots_text)
+        dist, voice = float(res.get("distinctiveness") or 0), float(res.get("voice") or 0)
+        ptest = float(res.get("parent_test") or 0)
+        hard, soft = guard.jargon(sc)
+        rewrote = False
+        if (dist < 8 or voice < 8 or ptest < 8 or not hits or hard or len(soft) > 2) and isinstance(res.get("script"), dict):
+            new = res["script"]
+            for k in ("caption_hook", "caption_body", "title", "summary", "_key"):
+                if sc.get(k) is not None:
+                    new.setdefault(k, sc.get(k))
+            new = validate(new, pillar)
+            if guard.anchored(new) and not guard.jargon(new)[0]:
+                sc, rewrote = new, True
+        report["brand"] = {"distinctiveness": dist, "voice": voice, "parent_test": ptest, "anchors": guard.anchored(sc),
+                           "issues": (res.get("issues") or [])[:4], "rewrote": rewrote}
+        print(f"director/brand: distinctiveness {dist}/10, voice {voice}/10, parent test {ptest}/10, anchors {guard.anchored(sc)}"
+              + (" -> rewritten" if rewrote else ""), flush=True)
+    except Exception as e:
+        report["brand_error"] = str(e)[:200]; print("director/brand skipped:", str(e)[:200], flush=True)
+    if art:
+        sc = art_loop(sc, pillar, slots_text, validate, kind, report)
     _log({"agent": "director", **report})
     return sc, report
