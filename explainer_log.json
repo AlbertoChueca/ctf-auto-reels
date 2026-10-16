@@ -262,5 +262,16 @@
 "date": "2026-10-16",
 "agent": "parent_whisperer",
 "key": 50
+},
+{
+"pillar": "faq",
+"format": "broll",
+"shape": "story",
+"title": "Screen Time vs Structured Chess Training",
+"headline": "From 1100 to 1800 in 13 months",
+"hook": "Watching chess videos feels like practice, but ratings stay flat \u265f\ufe0f",
+"date": "2026-10-16",
+"agent": "analyst",
+"anchor_key": 24
 }
 ]
