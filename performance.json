@@ -145,5 +145,118 @@
 "agent": "trend_scout",
 "headline": "Openings or Tactics First?",
 "media_id": "18217466956356575"
+},
+"17905820316578930": {
+"date": "2026-10-15",
+"slot": "storytag",
+"story": "What to Say After a Round Four Loss",
+"hook": "What do you say on the quiet drive home after round four? \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "explainer",
+"review_score": 9.0,
+"permalink": "https://www.instagram.com/reel/DegPkjmCmdE/",
+"arms": {
+"hook_style": "parent_question: open with a question parents ask coaches all the time, then the honest answer",
+"theme": "learning from lost games (game review with a coach)",
+"cta": "call"
+},
+"pillar": "success",
+"cta": "call",
+"agent": "parent_whisperer",
+"headline": "Silence in the Car Ride",
+"media_id": "17905820316578930"
+},
+"18109592909210921": {
+"date": "2026-10-15",
+"slot": "story",
+"story": "Groups or private?",
+"hook": "Group or private chess lessons? The honest answer \ud83d\udc47",
+"level": null,
+"mode": null,
+"engine": "evergreen",
+"review_score": null,
+"permalink": "https://www.instagram.com/reel/DehDVNeAGMR/",
+"arms": {
+"hook_style": "pov: open with 'POV: your child just...' in second person",
+"theme": "losing well: tears, frustration and bouncing back after a defeat",
+"cta": "comment",
+"format": "motion"
+},
+"pillar": "faq",
+"cta": "comment",
+"agent": null,
+"headline": "Groups or private?",
+"media_id": "18109592909210921"
+},
+"17890903572455937": {
+"date": "2026-10-15",
+"slot": "story",
+"story": "Tournament Tears Are Not Failure",
+"hook": "Tournament tears are not a reason to quit chess. \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 6.8,
+"permalink": "https://www.instagram.com/reel/DehxGMhEUXj/",
+"arms": {
+"hook_style": "parent_moment: open on a moment every chess parent recognises (the silent car ride, tears after a loss)",
+"theme": "losing well: tears, frustration and bouncing back after a defeat",
+"cta": "call",
+"shape": "letter"
+},
+"pillar": "pain",
+"cta": "call",
+"agent": "mythbuster",
+"headline": "Tournament Tears Are Not Failure",
+"media_id": "17890903572455937"
+},
+"17993281188048040": {
+"date": "2026-10-15",
+"slot": "story",
+"story": "Why Private Chess Lessons Plateau",
+"hook": "Why private 1-on-1 chess tutoring often stalls your child's progress.",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 8.5,
+"permalink": "https://www.instagram.com/reel/Deh6QnijXOj/",
+"arms": {
+"hook_style": "number_reveal: open with '3 signs / 3 mistakes / 3 things' and deliver them fast",
+"theme": "small groups of the same level: friends, motivation and faster progress",
+"cta": "call",
+"shape": "qa"
+},
+"pillar": "pain",
+"cta": "call",
+"agent": "mythbuster",
+"headline": "Why Private Lessons Stall",
+"media_id": "17993281188048040",
+"comments_count": 0,
+"like_count": 0
+},
+"18121246058471382": {
+"date": "2026-10-15",
+"slot": "story",
+"story": "POV: 3 Signs Solitary Training Is Stalling Your Child",
+"hook": "POV: your child spent hours alone on chess apps, yet progress stalled \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 8.7,
+"permalink": "https://www.instagram.com/reel/Deh76jJktLy/",
+"arms": {
+"hook_style": "number_reveal: open with '3 signs / 3 mistakes / 3 things' and deliver them fast",
+"theme": "small groups of the same level: friends, motivation and faster progress",
+"cta": "call",
+"shape": "pov"
+},
+"pillar": "pain",
+"cta": "call",
+"agent": "trend_scout",
+"headline": "POV: 3 signs solitary training fails",
+"media_id": "18121246058471382",
+"comments_count": 2,
+"like_count": 1
 }
 }

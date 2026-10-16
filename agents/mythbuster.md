@@ -1,16 +1,18 @@
-# The Myth Buster - notebook (2026-10-15)
+# The Myth Buster - notebook (2026-10-16)
+
+# The Myth Buster Notebook
 
 KEEP:
-• Contrarian hooks reframing stalls as system flaws, not character weaknesses ("Tournament Anxiety Isn't Weakness").
-• Strict narration economy: ~85 words total (16–20 words per scene).
-• Proprietary anchors: "The T-T-P System" and small cohorts of 2–6.
+• Contrarian opening hooks that dismantle parental habits in under 1.5 seconds ("Why Private Lessons Stall").
+• Strict narration economy: exactly 76–85 words total (14–18 words per scene) delivered with calm authority.
+• Proprietary academy anchors: T-T-P System, Square 65, Key 41, and cohorts of 2–6 led by International Masters.
 
 STOP:
-• Splitting highlighted phrases across line wraps or highlighting incomplete text.
-• Oversized step badges colliding with character illustrations.
-• Generic phrasing like "three-phase training" instead of exact brand terms.
+• Truncated text strings, unfinished quotes, and typos in on-screen graphics.
+• Cluttered frame compositions: overlapping text badges and graphics violating safe zones.
+• Generic advice like "study endgames" instead of exact, proprietary systems.
 
 TRY NEXT:
-• Hook: "Private tutoring is capping your child's chess rating." (Dismantles solo coaching; pivots to peer sparring in 2–6 cohorts).
-• Hook: "High-IQ kids make the worst endgame blunders." (Busts natural genius myth; anchors structured calculation).
-• Hook: "Memorizing openings is destroying their board vision." (Attacks rote prep; reframes chess as decision-making under uncertainty).
+• Hook: "Your child doesn't need more tactics puzzles." (Busts daily puzzle-grinding; introduces Key 41 structured calculation).
+• Hook: "Checking the engine after a loss creates lazy thinkers." (Busts Stockfish reliance; pivots to peer review in cohorts of 2–6).
+• Hook: "Rapid chess is secretly ruining their tournament rating." (Attacks blitz culture; anchors the 90-minute deliberate T-T-P System).

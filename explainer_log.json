@@ -251,5 +251,16 @@
 "date": "2026-10-15",
 "agent": "trend_scout",
 "anchor_key": 42
+},
+{
+"pillar": "key",
+"format": "broll",
+"shape": "myth_fact",
+"title": "Why Fast Screen Games Don't Fix Time Pressure",
+"headline": "Endless Fast Games Build Speed?",
+"hook": "Does endless speed chess actually help your child under time pressure? \u23f1\ufe0f",
+"date": "2026-10-16",
+"agent": "parent_whisperer",
+"key": 50
 }
 ]
