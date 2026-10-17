@@ -1,16 +1,18 @@
-# The Trend Scout - notebook (2026-10-16)
+# The Trend Scout - notebook (2026-10-17)
+
+# The Trend Scout - notebook
 
 KEEP:
-- Dilemma & POV hooks targeting acute tournament friction ("POV: 3 signs solitary training fails") driving high save intent.
-- Tight structural discipline: 75–85 total words, 15–20 words/scene, maximum 6-word headlines.
-- Core brand anchors: T-T-P System, Square 65 keys, Deliberate Practice, and FIDE Trainers.
+- High-save POV and dilemma hooks targeting acute tournament friction (e.g., "POV: 3 signs solitary training fails").
+- Strict script economy: 75–85 total words, 15–20 words per scene, and headlines under 6 words.
+- Non-negotiable brand anchors: T-T-P System, Technical Diagnosis, Square 65 keys, and FIDE Trainers.
 
 STOP:
-- Wide UI pills stretching across screen and colliding with coach illustrations.
-- Abstract, generic advice disconnected from rated weekend tournaments and post-loss emotions.
+- Wide UI pills stretching across the frame and colliding with coach illustrations.
+- Generic improvement tips detached from rated weekend tournament dynamics or post-round emotions.
 - Exceeding 20 words in any single scene narration.
 
 TRY NEXT:
-- Unexpected Analogy Hook: "Why memorizing chess openings is like teaching sheet music without rhythm." (Reframes calculation via the T-T-P System).
-- 'Nobody Tells Parents This' Format: "Nobody tells tournament parents this: the 1000-rating plateau is rarely tactical blindness." (Directly introduces Technical Diagnosis).
-- Numbered Reverse Reveal: "3 common post-loss car ride habits quietly destroying tournament confidence." (Ties FIDE Trainer methods to Square 65).
+- 'Nobody tells parents this' format: "Nobody tells parents this about the 1000-rating plateau: it’s rarely calculation error."
+- Unexpected comparison hook: "Why memorizing chess openings is like giving an 8-year-old a sports car without brakes." (Reframes calculation via T-T-P System).
+- Numbered reverse reveal: "3 post-round car ride habits quietly destroying tournament confidence." (Anchors Square 65 Key 50 and Deliberate Practice).

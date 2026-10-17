@@ -1,16 +1,18 @@
-# The Analyst - notebook (2026-10-15)
+# The Analyst - notebook (2026-10-17)
+
+# The Analyst - notebook
 
 • KEEP:
-- Analytical hooks challenging standard parenting mispractices (e.g., 'Stop Analyzing Every Engine Mistake').
-- Disciplined narration cadence: 18-20 words per scene (75-80 words total) delivered calmly.
-- Single structured frameworks (3 steps, diagnostic rules) tied directly to methodical skill progression.
+- High-contrast, metric-driven hooks targeting ambitious parents (e.g., 'From 1100 to 1800 in 13 months').
+- Disciplined 18–20 words per scene (75–80 words total) in a calm, analytical tone.
+- Single, structured frameworks: 3 steps, 1 rule, or before/after progression.
 
 • STOP:
-- Repeating identical bullet points across consecutive frames (e.g., 'Targeted drills').
-- Mismatching frame headlines with copy (placing solution steps under problem-focused titles).
-- Long list text or awkward multi-line wraps that collide with character graphics on mobile screens.
+- Repeating identical bullet points across consecutive scenes (e.g., 'Targeted drills').
+- Headline-copy mismatch (placing solution steps under critique titles like 'Why Computer Engines Fail').
+- Overcrowded list pills or text cut-offs colliding with character illustrations.
 
 • TRY NEXT:
-- Experiment 1 (The Debug Angle): 'The 3 cognitive bugs keeping your child at 1100.' Focus on diagnosing calculation bottlenecks rather than tactical drills.
-- Experiment 2 (The Audit Framework): 'The 80/20 blunder audit: Why rating plateaus aren't tactical.' Deconstruct move selection into a strict 2-step verification protocol.
-- Experiment 3 (The Leverage Rule): 'Stop buying opening courses: The 1 input that shifts ratings 200 points.' Reframe rote memorization into positional pattern recognition.
+- Experiment 1 (Verification Protocol): 'The 3-point calculation check master coaches teach before age 10.' Focus on error-proofing thought processes before moving.
+- Experiment 2 (Cognitive Audit): 'Why 50 tactical puzzles a day isn't fixing your child's plateau.' Reframe raw puzzle volume into root-cause calculation bottlenecks.
+- Experiment 3 (Workflow Contrast): 'Before 1400 vs. After 1400: How tournament kids actually review losses.' Replace passive engine review with a 2-step decision audit.

@@ -273,5 +273,16 @@
 "date": "2026-10-16",
 "agent": "analyst",
 "anchor_key": 24
+},
+{
+"pillar": "pain",
+"format": "broll",
+"shape": "listicle",
+"title": "Calming Tournament Panic",
+"headline": "Freezing Under Time Pressure",
+"hook": "When the tournament clock ticks down, does your child freeze? \u265f\ufe0f",
+"date": "2026-10-17",
+"agent": "storyteller",
+"anchor_key": 11
 }
 ]

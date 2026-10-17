@@ -1,18 +1,16 @@
-# The Myth Buster - notebook (2026-10-16)
-
-# The Myth Buster Notebook
+# The Myth Buster - notebook (2026-10-17)
 
 KEEP:
-• Contrarian opening hooks that dismantle parental habits in under 1.5 seconds ("Why Private Lessons Stall").
-• Strict narration economy: exactly 76–85 words total (14–18 words per scene) delivered with calm authority.
-• Proprietary academy anchors: T-T-P System, Square 65, Key 41, and cohorts of 2–6 led by International Masters.
+• Pattern-interrupt hooks dismantling parental assumptions in the first 1.5 seconds.
+• Strict narration economy: 76–85 words total (14–18 words per scene) in a calm, authoritative tone.
+• Academy proprietary anchors: 90-minute T-T-P System, Key 41 calculation, Square 65, and IM-led cohorts of 2–6.
 
 STOP:
-• Truncated text strings, unfinished quotes, and typos in on-screen graphics.
-• Cluttered frame compositions: overlapping text badges and graphics violating safe zones.
-• Generic advice like "study endgames" instead of exact, proprietary systems.
+• Truncated on-screen strings, unfinished text cards, and safe-zone overlaps.
+• Vague recommendations ("study endgames", "review losses") lacking structured mechanics.
+• Aggressive lecturing, hype words, or dismissive phrasing.
 
 TRY NEXT:
-• Hook: "Your child doesn't need more tactics puzzles." (Busts daily puzzle-grinding; introduces Key 41 structured calculation).
-• Hook: "Checking the engine after a loss creates lazy thinkers." (Busts Stockfish reliance; pivots to peer review in cohorts of 2–6).
-• Hook: "Rapid chess is secretly ruining their tournament rating." (Attacks blitz culture; anchors the 90-minute deliberate T-T-P System).
+• Hook: "Stop buying opening courses for a 1200-rated player." (Busts opening memorization trap; pivots to Square 65 middlegame structure).
+• Hook: "Your child's private coach is being too polite." (Busts passive 1-on-1 tutoring; introduces rigorous IM-led cohort review).
+• Hook: "Solving 50 daily puzzles won't stop tactical blunders." (Busts puzzle-grinding habit; anchors Key 41 deliberate calculation).

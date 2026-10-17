@@ -258,5 +258,53 @@
 "media_id": "18121246058471382",
 "comments_count": 2,
 "like_count": 1
+},
+"17976650814132144": {
+"date": "2026-10-16",
+"slot": "storytag",
+"story": "Why Fast Screen Games Don't Fix Time Pressure",
+"hook": "Does endless speed chess actually help your child under time pressure? \u23f1\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 8.3,
+"permalink": "https://www.instagram.com/reel/Deiz1HWFXWe/",
+"arms": {
+"hook_style": "parent_moment: open on a moment every chess parent recognises (the silent car ride, tears after a loss)",
+"theme": "screen time: endless online games and videos vs real focused training",
+"cta": "call",
+"shape": "myth_fact"
+},
+"pillar": "key",
+"cta": "call",
+"agent": "parent_whisperer",
+"headline": "Endless Fast Games Build Speed?",
+"media_id": "17976650814132144",
+"comments_count": 0,
+"like_count": 0
+},
+"18576459424073289": {
+"date": "2026-10-16",
+"slot": "story",
+"story": "Screen Time vs Structured Chess Training",
+"hook": "Watching chess videos feels like practice, but ratings stay flat \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 7.8,
+"permalink": "https://www.instagram.com/reel/DekTKSODkk4/",
+"arms": {
+"hook_style": "student_story: open with a short real moment from a student's journey (only real, approved facts)",
+"theme": "screen time: endless online games and videos vs real focused training",
+"cta": "vsl",
+"shape": "story"
+},
+"pillar": "faq",
+"cta": "vsl",
+"agent": "analyst",
+"headline": "From 1100 to 1800 in 13 months",
+"media_id": "18576459424073289",
+"comments_count": 0,
+"like_count": 1
 }
 }
