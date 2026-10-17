@@ -284,5 +284,17 @@
 "date": "2026-10-17",
 "agent": "storyteller",
 "anchor_key": 11
+},
+{
+"pillar": "success",
+"format": "broll",
+"shape": "before_after",
+"title": "Why More Games Hurt Your Child's Rating",
+"headline": "More Games Equal More Progress?",
+"hook": "More chess games do not mean faster progress. Here is why. \u265f\ufe0f",
+"date": "2026-10-17",
+"agent": "parent_whisperer",
+"case": "omya-vidyarthi",
+"anchor_key": 53
 }
 ]
