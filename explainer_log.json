@@ -307,5 +307,16 @@
 "date": "2026-10-18",
 "agent": "trend_scout",
 "anchor_key": 55
+},
+{
+"pillar": "rating",
+"format": "broll",
+"shape": "qa",
+"title": "Why Kids Move Too Slowly in Chess",
+"headline": "Why Does My Child Move Slowly?",
+"hook": "Why does your child freeze on the chess clock? \u23f1\ufe0f",
+"date": "2026-10-18",
+"agent": "analyst",
+"anchor_key": 45
 }
 ]
