@@ -158,5 +158,62 @@
    "50",
    "14"
   ]
+ },
+ {
+  "id": "ig-18119292178764101",
+  "approved": true,
+  "source": "instagram",
+  "name": "",
+  "url": "https://www.instagram.com/reel/DemwCGOgnNO/",
+  "text": "Started stuck at an 1100 rating; Surged from 1100 to 1900+ rating in two years (+800 points); Became World Chess Champion U10 Girls' Rapid",
+  "facts": [
+   "Started stuck at an 1100 rating",
+   "Surged from 1100 to 1900+ rating in two years (+800 points)",
+   "Became World Chess Champion U10 Girls' Rapid"
+  ],
+  "numbers": [
+   "10",
+   "1100",
+   "1900",
+   "800"
+  ]
+ },
+ {
+  "id": "ig-18576459424073289",
+  "approved": true,
+  "source": "instagram",
+  "name": "",
+  "url": "https://www.instagram.com/reel/DekTKSODkk4/",
+  "text": "Stuck at 1100 rating while playing 4 hours daily; Jumped from 1100 to over 1800 rating in 13 months; Cut screen time in half with a structured plan",
+  "facts": [
+   "Stuck at 1100 rating while playing 4 hours daily",
+   "Jumped from 1100 to over 1800 rating in 13 months",
+   "Cut screen time in half with a structured plan"
+  ],
+  "numbers": [
+   "1100",
+   "13",
+   "1800",
+   "4"
+  ]
+ },
+ {
+  "id": "ig-18056870680668148",
+  "approved": true,
+  "source": "instagram",
+  "name": "",
+  "url": "https://www.instagram.com/reel/C-0iixYAEu9/",
+  "text": "Started with the academy at 1500 US rating; Reached 2400 FIDE rating; Earned International Master (IM) title; Achieved 2 Grandmaster (GM) norms",
+  "facts": [
+   "Started with the academy at 1500 US rating",
+   "Reached 2400 FIDE rating",
+   "Earned International Master (IM) title",
+   "Achieved 2 Grandmaster (GM) norms"
+  ],
+  "numbers": [
+   "1500",
+   "2",
+   "2400"
+  ]
  }
 ]
