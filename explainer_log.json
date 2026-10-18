@@ -296,5 +296,16 @@
 "agent": "parent_whisperer",
 "case": "omya-vidyarthi",
 "anchor_key": 53
+},
+{
+"pillar": "benefits",
+"format": "broll",
+"shape": "pov",
+"title": "POV: What Strong Kids Do Differently",
+"headline": "What Strong Kids Do Differently",
+"hook": "What kids who win tournaments do when screens turn off \u265f\ufe0f",
+"date": "2026-10-18",
+"agent": "trend_scout",
+"anchor_key": 55
 }
 ]

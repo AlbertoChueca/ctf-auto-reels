@@ -306,5 +306,53 @@
 "media_id": "18576459424073289",
 "comments_count": 0,
 "like_count": 1
+},
+"18159468139504147": {
+"date": "2026-10-17",
+"slot": "storytag",
+"story": "Calming Tournament Panic",
+"hook": "When the tournament clock ticks down, does your child freeze? \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 7.5,
+"permalink": "https://www.instagram.com/reel/DelXcPNgcBp/",
+"arms": {
+"hook_style": "student_story: open with a short real moment from a student's journey (only real, approved facts)",
+"theme": "tournament nerves: staying calm when it matters",
+"cta": "comment",
+"shape": "listicle"
+},
+"pillar": "pain",
+"cta": "comment",
+"agent": "storyteller",
+"headline": "Freezing Under Time Pressure",
+"media_id": "18159468139504147",
+"comments_count": 0,
+"like_count": 0
+},
+"18119292178764101": {
+"date": "2026-10-17",
+"slot": "story",
+"story": "Why More Games Hurt Your Child's Rating",
+"hook": "More chess games do not mean faster progress. Here is why. \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 8.8,
+"permalink": "https://www.instagram.com/reel/DemwCGOgnNO/",
+"arms": {
+"hook_style": "myth: open by busting a belief parents hold (more games = more progress, videos = studying...)",
+"theme": "progress you can see: what a rating means and the 6-level path",
+"cta": "comment",
+"shape": "before_after"
+},
+"pillar": "success",
+"cta": "comment",
+"agent": "parent_whisperer",
+"headline": "More Games Equal More Progress?",
+"media_id": "18119292178764101",
+"comments_count": 2,
+"like_count": 0
 }
 }
