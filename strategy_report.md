@@ -1,6 +1,6 @@
 # ChessTalentsFactory autopilot - what is winning
 
-_Updated 2026-10-18 · 2 reels with results (3+ days old) · average score 1.04_
+_Updated 2026-10-19 · 4 reels with results (3+ days old) · average score 0.69_
 
 
 Still collecting data: options are being tested evenly for now.
@@ -11,10 +11,10 @@ Still collecting data: options are being tested evenly for now.
 | option | reels | avg score |
 |---|---|---|
 | number_reveal | 2 | 1.04 |
-| parent_moment | 0 | - |
+| student_story | 1 | 0.69 |
+| parent_moment | 1 | 0.00 |
 | myth | 0 | - |
 | what_strong_kids_do | 0 | - |
-| student_story | 0 | - |
 | parent_question | 0 | - |
 | coach_secret | 0 | - |
 | pov | 0 | - |
@@ -24,8 +24,8 @@ Still collecting data: options are being tested evenly for now.
 | option | reels | avg score |
 |---|---|---|
 | small groups of the same level | 2 | 1.04 |
+| screen time | 2 | 0.35 |
 | losing well | 0 | - |
-| screen time | 0 | - |
 | tournament nerves | 0 | - |
 | progress you can see | 0 | - |
 | choosing the right coach | 0 | - |
@@ -37,9 +37,9 @@ Still collecting data: options are being tested evenly for now.
 
 | option | reels | avg score |
 |---|---|---|
-| call | 2 | 1.04 |
+| vsl | 1 | 0.69 |
+| call | 3 | 0.69 |
 | keyword | 0 | - |
-| vsl | 0 | - |
 | comment | 0 | - |
 
 ## shape
@@ -47,9 +47,9 @@ Still collecting data: options are being tested evenly for now.
 | option | reels | avg score |
 |---|---|---|
 | pov | 1 | 2.08 |
+| story | 1 | 0.69 |
+| myth_fact | 1 | 0.00 |
 | qa | 1 | 0.00 |
-| story | 0 | - |
 | listicle | 0 | - |
-| myth_fact | 0 | - |
 | letter | 0 | - |
 | before_after | 0 | - |

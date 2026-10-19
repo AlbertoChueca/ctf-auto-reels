@@ -354,5 +354,53 @@
 "media_id": "18119292178764101",
 "comments_count": 2,
 "like_count": 0
+},
+"18098577419652901": {
+"date": "2026-10-18",
+"slot": "storytag",
+"story": "POV: What Strong Kids Do Differently",
+"hook": "What kids who win tournaments do when screens turn off \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 6.2,
+"permalink": "https://www.instagram.com/reel/Den9OULij5y/",
+"arms": {
+"hook_style": "what_strong_kids_do: open with what kids who become champions do differently, in everyday words",
+"theme": "screen time: endless online games and videos vs real focused training",
+"cta": "comment",
+"shape": "pov"
+},
+"pillar": "benefits",
+"cta": "comment",
+"agent": "trend_scout",
+"headline": "What Strong Kids Do Differently",
+"media_id": "18098577419652901",
+"comments_count": 4,
+"like_count": 0
+},
+"18113426693164260": {
+"date": "2026-10-18",
+"slot": "story",
+"story": "Why Kids Move Too Slowly in Chess",
+"hook": "Why does your child freeze on the chess clock? \u23f1\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 8.7,
+"permalink": "https://www.instagram.com/reel/DepWLBbiWwK/",
+"arms": {
+"hook_style": "parent_question: open with a question parents ask before hiring a coach, then the honest answer",
+"theme": "the parent's role: support without pressure",
+"cta": "call",
+"shape": "qa"
+},
+"pillar": "rating",
+"cta": "call",
+"agent": "analyst",
+"headline": "Why Does My Child Move Slowly?",
+"media_id": "18113426693164260",
+"comments_count": 0,
+"like_count": 0
 }
 }
