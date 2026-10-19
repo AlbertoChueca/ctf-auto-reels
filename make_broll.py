@@ -36,6 +36,7 @@ GRADE_BY_AGENT = {"analyst": "cool", "storyteller": "warm", "mythbuster": "punch
 OVERLAYS = ["none", "chart", "ladder", "key_card", "stat", "list"]
 SAFE_SUCCESS_BROLL = ["hands moving chess piece close up", "chess board close up wooden", "trophy on table",
                       "tournament hall people", "chess clock close up", "notebook pen study desk"]
+CHESS_WORDS = re.compile(r"\b(chess|board ?game|pieces?|tournament|trophy|clock|knight|queen|king|pawn)\b", re.I)
 CHILD_WORDS = re.compile(r"\b(boy|girl|child|children|kid|kids|son|daughter|teen|face|portrait|student)\b", re.I)
 
 
@@ -261,6 +262,8 @@ def validate(sc, pillar, info=None):
         if ov != "none" and lay not in ("top", "number", "question"):
             lay = "top"                                   # never stack big text over a card
         br = _words(re.sub(r"[^a-zA-Z ]", " ", str(s.get("broll") or "")), 5).lower() or "child playing chess"
+        if not CHESS_WORDS.search(br):                    # only chess footage: no dogs, puddles or globes
+            br = "chess " + _words(br, 3)
         if pillar == "success" and CHILD_WORDS.search(br):
             br = SAFE_SUCCESS_BROLL[i % len(SAFE_SUCCESS_BROLL)]
         s.update(layout=lay, overlay=ov, params=p, broll=br)
@@ -586,18 +589,23 @@ def build(seed, out, pillar="pain", arms=None, agent=None, evergreen=False, mock
     mix = np.zeros(n, np.float32)
     def put(x, at, g=1.0):
         a0 = max(0, int(at * SR)); b0 = min(n, a0 + len(x)); mix[a0:b0] += g * x[:b0 - a0]
+    import formats as FM
+    A = [FM.vo_compress(a, sr=SR) for a in A]            # even, clear voice over the music
+    speech = np.zeros(n, bool)
     for i, a in enumerate(A):
         put(a.astype(np.float32), starts[i] + LEAD, 1.0)
+        s0 = int((starts[i] + LEAD) * SR); speech[s0:s0 + len(a)] = True
     for i in range(1, len(durs)):
         put(D.swell(0.5), starts[i] - 0.28, 0.55)
     put(D.chime(), starts[-1] + 1.4, 0.6)
-    bed = D.music(n / SR, variant=rng.randrange(len(D.PROGRESSIONS)))
+    bed48, _track = FM.music(n / SR, seed=rng.randrange(1000), energy=0.4)  # real-sounding bed (or assets/music)
+    bed = np.interp(np.arange(n) * (FM.SR / SR), np.arange(len(bed48)), bed48).astype(np.float32) * 0.35
     duck = np.ones(n, np.float32)
     for i, a in enumerate(A):
         s0 = int((starts[i] + LEAD - 0.1) * SR); duck[max(0, s0):s0 + len(a) + int(0.2 * SR)] = 0.42
     duck = np.convolve(duck, np.ones(int(0.12 * SR)) / int(0.12 * SR), "same").astype(np.float32)
     mix += bed[:n] * duck * 1.15
-    mix /= max(1.0, float(np.abs(mix).max()) / 0.92)
+    mix = FM.master(mix, speech, sr=SR)
     wav = out.replace(".mp4", "_b.wav"); sf.write(wav, mix[:int(total * SR)], SR)
     # ---- video
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)

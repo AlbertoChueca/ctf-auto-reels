@@ -1,0 +1,996 @@
+{
+ "_note": "Banco de preguntas reales de padres. Edita, borra o añade libremente: los reels eligen la menos usada. 'formats' = formatos donde encaja (text, chat, carousel, voice).",
+ "topics": [
+  {
+   "id": "car-ride",
+   "q": "My kid goes silent in the car after losing a tournament game.",
+   "angle": "Don't analyse the game in the car. Food, rest, one kind sentence. Review it calmly a day later, with a coach.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "cries-losing",
+   "q": "My child cries every time they lose.",
+   "angle": "Tears mean they care. Separate the result from effort; praise how they thought, not the outcome. Losing well is a skill we teach.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "wants-quit",
+   "q": "My kid says they want to quit chess after a bad tournament.",
+   "angle": "Wait a week before deciding. Quitting after a loss is emotion; quitting after a calm week is information. Lower the pressure, keep the routine.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "rating-stuck",
+   "q": "My child's rating hasn't moved in months.",
+   "angle": "Plateaus are normal. They usually mean the same mistakes repeat: playing fast, not checking threats, no plan after the opening. More games won't fix it; fixing one habit at a time will.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "blitz-all-day",
+   "q": "My kid plays fast online games for hours. Is that practice?",
+   "angle": "Fast games are fun, not training. They reward quick reflexes and bad habits. Fewer, slower games plus a short review beat hours of blitz.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "how-much-practice",
+   "q": "How much should my child practice chess each week?",
+   "angle": "Consistency beats marathon sessions. Short focused daily practice plus one or two lessons a week works better than a long weekend binge.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "talent",
+   "q": "Is my child actually talented at chess?",
+   "angle": "Early talent matters less than how they train. The kids who go far are the ones who enjoy solving problems and train with structure.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "too-young",
+   "q": "Is my child too young for chess lessons?",
+   "angle": "Most kids can start once they can sit and focus for short periods. Young beginners need short, playful lessons; the habits they build early last.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "too-old",
+   "q": "Is it too late for my 12-year-old to get good at chess?",
+   "angle": "No. Older beginners learn faster because they focus better. What matters is training with a plan, not the starting age.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "school-grades",
+   "q": "Does chess actually help with school?",
+   "angle": "Chess trains focus, patience and thinking before acting. Parents often notice it in homework habits before they notice it in ratings.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "screen-time",
+   "q": "Chess on a tablet is still screen time. Should I worry?",
+   "angle": "It depends on what they do on the screen. Puzzles and lessons are active thinking; endless fast games are closer to scrolling.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel"
+   ]
+  },
+  {
+   "id": "first-tournament",
+   "q": "When should my child play their first tournament?",
+   "angle": "When they know the rules well and can play a full slow game calmly. The first tournament is about the experience, not the result.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "tournament-nerves",
+   "q": "My child gets nervous at tournaments and plays worse.",
+   "angle": "Nerves come from feeling unprepared or from pressure about results. A pre-game routine, goals about behaviour (not wins), and practice games with a clock help.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "moves-too-fast",
+   "q": "My kid moves way too fast and blunders.",
+   "angle": "Fast moving is the most common habit we fix. Kids need a simple routine before every move: what does my opponent want?",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "time-trouble",
+   "q": "My child takes forever on one move and runs out of time.",
+   "angle": "Spending ages on one move usually means no plan. We teach kids when to think deeply and when to move on.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "group-or-private",
+   "q": "Group lessons or private lessons: which is better?",
+   "angle": "Both work. Small groups of the same level add healthy competition and friends; private lessons go deeper on the child's own games. Many kids do best with a mix.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "online-or-in-person",
+   "q": "Can online chess lessons really work?",
+   "angle": "Chess is one of the few sports that works perfectly online: the board is the same, lessons can be recorded, and kids train with top coaches anywhere.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "youtube-enough",
+   "q": "Can't my kid just learn from YouTube videos?",
+   "angle": "Videos are great for inspiration. But watching isn't training: kids improve when someone looks at their own games and fixes their own mistakes.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "apps-enough",
+   "q": "My child uses chess apps every day. Isn't that enough?",
+   "angle": "Apps are good for practice and puzzles. They don't tell you why your child keeps losing the same way. That's what a coach does.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "cheap-coach",
+   "q": "Why pay more for a coach when there are cheaper options?",
+   "angle": "A strong player isn't always a good teacher. What you pay for is a plan, experience with kids, and someone who tracks progress.",
+   "formats": [
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "what-rating-means",
+   "q": "What does my child's chess rating actually mean?",
+   "angle": "A rating is a running estimate of strength based on results against others. It moves up and down; the trend over months matters, not one weekend.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "rating-drop",
+   "q": "My child's rating dropped after a tournament. Should I worry?",
+   "angle": "A drop after one event is normal, especially when playing stronger kids. Look at the trend over three to six months.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "parent-role",
+   "q": "What should I do as a parent if I don't play chess?",
+   "angle": "You don't need to play. Your job is routine, encouragement and perspective; the chess is the coach's job.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "praise",
+   "q": "What should I say after my child wins or loses?",
+   "angle": "Praise effort and decisions, not results. 'I loved how long you thought on that move' builds a better player than 'you're so smart'.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "pressure",
+   "q": "Am I putting too much pressure on my child?",
+   "angle": "Signs: they hide results, dread tournaments, or play to avoid losing. Shift goals to effort and learning; results follow.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "motivation",
+   "q": "How do I keep my child motivated in chess?",
+   "angle": "Kids stay motivated when they see progress and have friends in the game. Small goals, celebrating improvement, and a group to belong to.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "homework",
+   "q": "Should chess lessons come with homework?",
+   "angle": "Yes, light and regular. Short assignments between lessons are where the lesson actually sticks.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "review-games",
+   "q": "Should my child review their lost games?",
+   "angle": "Yes, but with guidance. Reviewing alone with a computer often teaches nothing; a coach finds the one habit that cost the game.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "computer-analysis",
+   "q": "My kid checks every game with the computer. Is that good?",
+   "angle": "The computer shows the best move, not why your child missed it. Kids learn more from finding their own mistakes with a human guide.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "openings",
+   "q": "Should my child memorise chess openings?",
+   "angle": "Not early on. Below intermediate level, games are decided by tactics and endgames, not memorised openings.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "puzzles-daily",
+   "q": "Do daily chess puzzles really help?",
+   "angle": "Yes, if they're the right level and done carefully. Ten minutes a day of slow, honest solving builds pattern recognition.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "burnout",
+   "q": "Can kids burn out from chess?",
+   "angle": "Yes, when it becomes only about results. Rest weeks, variety and fun games keep the love of the game.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "sibling",
+   "q": "My two kids play chess. Should they train together?",
+   "angle": "Only if their levels are close. Different levels together usually frustrate both.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel"
+   ]
+  },
+  {
+   "id": "girls-chess",
+   "q": "My daughter is the only girl at her tournaments.",
+   "angle": "Many girls feel that. A supportive group and role models make a big difference; skill has nothing to do with gender.",
+   "formats": [
+    "text",
+    "chat",
+    "voice"
+   ]
+  },
+  {
+   "id": "travel-tournaments",
+   "q": "Is it worth travelling for chess tournaments?",
+   "angle": "Big events are great experiences once a child is ready. Before that, local events give more games and less pressure.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel"
+   ]
+  },
+  {
+   "id": "summer",
+   "q": "How should my child use the summer for chess?",
+   "angle": "Summer is the best time to make a jump: more time, less school stress. A focused plan for a few weeks beats random play.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "how-long-progress",
+   "q": "How long until I see my child improve?",
+   "angle": "With consistent training, parents usually notice better habits within weeks and results within a few months. Every child is different.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "first-lesson",
+   "q": "What happens in a first chess lesson with a new coach?",
+   "angle": "A good coach starts by assessing: watching the child play and finding what's holding them back before teaching anything.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "signs-good-coach",
+   "q": "How do I know if a chess coach is good?",
+   "angle": "Good coaches explain clearly to kids, give a plan, track progress, and talk to parents. Strength alone isn't enough.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "signs-ready-coach",
+   "q": "How do I know my child is ready for a real coach?",
+   "angle": "They love the game, play regularly and want to win more. That's the moment structure helps most.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "focus",
+   "q": "My child can't focus for a whole game.",
+   "angle": "Focus is trainable. Longer games slowly, a routine at the board, and fewer distractions at home help.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "confidence",
+   "q": "My kid thinks they're bad at chess.",
+   "angle": "Confidence comes from seeing their own progress. Small wins, tracked over time, change how kids see themselves.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "overconfident",
+   "q": "My child thinks they're already really good.",
+   "angle": "Healthy confidence is great. Playing slightly stronger opponents and reviewing honestly keeps them improving.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "draws",
+   "q": "My child keeps drawing games they should win.",
+   "angle": "Usually it's not knowing how to finish. Converting an advantage is a skill, and it's taught with endgame practice.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "endgames",
+   "q": "Why do coaches care so much about endgames?",
+   "angle": "Endgames teach how pieces really work and how to win won positions. Many kids lose points there without noticing.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "losing-to-younger",
+   "q": "My child loses to younger kids and feels embarrassed.",
+   "angle": "Age doesn't predict strength in chess. Focus on what can be learned from the game, not who was across the board.",
+   "formats": [
+    "text",
+    "chat",
+    "voice"
+   ]
+  },
+  {
+   "id": "cheating-online",
+   "q": "Is online chess safe for kids?",
+   "angle": "Use child-safe settings, turn off chat, and play rated games on trusted platforms. Supervised online play is fine.",
+   "formats": [
+    "text",
+    "carousel"
+   ]
+  },
+  {
+   "id": "college",
+   "q": "Does chess help with college applications?",
+   "angle": "Long-term commitment and achievement in any activity helps. Chess shows focus and discipline; the habits matter more than the title.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "schedule-busy",
+   "q": "We're a busy family. Can chess fit our schedule?",
+   "angle": "Yes. Online lessons fit evenings and travel; short daily practice beats long sessions anyway.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "travel-family",
+   "q": "We travel a lot. Can my child keep training?",
+   "angle": "Online lessons and recorded classes travel with you. Keep a simple weekly routine wherever you are.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "kid-vs-adult-coach",
+   "q": "Should a strong adult player coach my young child?",
+   "angle": "Teaching kids is its own skill. Look for coaches with experience with children your child's age.",
+   "formats": [
+    "chat",
+    "carousel"
+   ]
+  },
+  {
+   "id": "one-lesson-week",
+   "q": "Is one lesson a week enough?",
+   "angle": "It can be, if there's practice in between. Without practice, one lesson a week mostly maintains, it doesn't build.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "home-practice",
+   "q": "What should my child practise at home?",
+   "angle": "Puzzles at the right level, one slow game, and reviewing it. Simple, short, consistent.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "tournament-day",
+   "q": "What should we do on tournament day?",
+   "angle": "Good sleep, a normal breakfast, snacks, water, and no talk about rating. Between rounds: rest, not analysis.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "between-rounds",
+   "q": "What should my child do between tournament rounds?",
+   "angle": "Rest, eat, move a bit. Deep analysis between rounds usually drains energy for the next game.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "bad-sport",
+   "q": "My child gets angry when they lose.",
+   "angle": "Anger means they care. Teach a reset routine and model calm yourself. Sportsmanship is part of chess training.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "cheer-or-silent",
+   "q": "Should I watch my child play at tournaments?",
+   "angle": "If it makes them nervous, step back. Many kids play better when parents wait outside.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "compare-kids",
+   "q": "Other kids at the club improve faster. Why not mine?",
+   "angle": "Kids develop at different speeds. Compare your child to their own past, not to others.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "gifted-early",
+   "q": "My child learned fast and is ahead of their age group.",
+   "angle": "Great start. Early fast learners need structure soon, before habits like playing too fast settle in.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "chess-friends",
+   "q": "My kid has no chess friends.",
+   "angle": "Training in a small group of kids at the same level gives them friends who get it. That keeps them playing.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "what-to-ask-coach",
+   "q": "What questions should I ask before hiring a chess coach?",
+   "angle": "Ask how they assess, what the plan looks like, how they report progress, and how they handle kids who lose motivation.",
+   "formats": [
+    "carousel",
+    "chat",
+    "text"
+   ]
+  },
+  {
+   "id": "progress-reports",
+   "q": "How will I know if lessons are working?",
+   "angle": "You should get regular, clear updates: what was worked on, what improved, what's next. If you don't, ask.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "weekend-binge",
+   "q": "My child only plays chess on weekends, for hours.",
+   "angle": "Long sessions once a week help less than short daily practice. Spread it out.",
+   "formats": [
+    "text",
+    "carousel",
+    "chat"
+   ]
+  },
+  {
+   "id": "thinking-routine",
+   "q": "What should my child think about before each move?",
+   "angle": "A simple routine: what does my opponent want, what are all checks and captures, is my piece safe after I move?",
+   "formats": [
+    "carousel",
+    "text",
+    "voice"
+   ]
+  },
+  {
+   "id": "calm-under-pressure",
+   "q": "How can my child stay calm in close games?",
+   "angle": "Breathing, sitting on their hands for a moment, and a routine they trust. Calm is practised, not wished for.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "winning-position-lose",
+   "q": "My child gets winning positions and then loses them.",
+   "angle": "Common. Kids relax when ahead. Converting is a skill: stay careful, trade down, keep checking threats.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "parent-learn-chess",
+   "q": "Should I learn chess to help my child?",
+   "angle": "It's a lovely way to connect, but not necessary. Ask them to teach you; explaining helps them learn too.",
+   "formats": [
+    "text",
+    "chat",
+    "voice"
+   ]
+  },
+  {
+   "id": "coach-change",
+   "q": "When should we change chess coaches?",
+   "angle": "If there's no plan, no visible progress over months, or your child dreads lessons, it's time to talk or change.",
+   "formats": [
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "rating-goals",
+   "q": "Should my child have a rating goal?",
+   "angle": "Rating goals are fine long-term, but daily goals should be about habits: think before moving, finish games calmly.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "losing-streak",
+   "q": "My child is on a losing streak.",
+   "angle": "Streaks happen. Take a short break from rated games, play some fun training games, and review one game calmly.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "strong-opponents",
+   "q": "Should my child play stronger opponents?",
+   "angle": "Yes, regularly. Losing to stronger players with a review afterwards is one of the fastest ways to improve.",
+   "formats": [
+    "text",
+    "carousel",
+    "chat"
+   ]
+  },
+  {
+   "id": "weak-opponents",
+   "q": "My child only wants to play weaker opponents to win.",
+   "angle": "Easy wins feel good but teach little. Mix in harder games so wins mean something.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "memory",
+   "q": "Does chess need a great memory?",
+   "angle": "Less than people think. Chess is about patterns and thinking, and both grow with practice.",
+   "formats": [
+    "text",
+    "carousel",
+    "chat"
+   ]
+  },
+  {
+   "id": "adhd-free",
+   "q": "My child is very energetic. Can they still do chess?",
+   "angle": "Many energetic kids love chess. Short, active lessons and movement breaks work well.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "tablet-vs-board",
+   "q": "Should my child practise on a real board too?",
+   "angle": "Yes. Tournaments are on real boards, and seeing a physical board is different. Mix both.",
+   "formats": [
+    "text",
+    "carousel"
+   ]
+  },
+  {
+   "id": "sleep",
+   "q": "Does sleep really affect how my child plays?",
+   "angle": "A lot. Tired kids blunder more. Tournament weeks need normal bedtimes.",
+   "formats": [
+    "text",
+    "carousel"
+   ]
+  },
+  {
+   "id": "tournament-pack",
+   "q": "What should we pack for a chess tournament?",
+   "angle": "Water, healthy snacks, a sweater, a pencil, a quiet activity for breaks, and nothing that adds pressure.",
+   "formats": [
+    "carousel",
+    "text"
+   ]
+  },
+  {
+   "id": "chess-and-math",
+   "q": "Is chess connected to math?",
+   "angle": "Both train logical thinking and patience. Chess won't replace math, but the thinking habits overlap.",
+   "formats": [
+    "text",
+    "carousel",
+    "chat"
+   ]
+  },
+  {
+   "id": "why-small-groups",
+   "q": "Why do small groups work so well for kids?",
+   "angle": "Same level, same age, more questions answered, and friendly competition. Kids push each other.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "signs-plateau",
+   "q": "Signs your child has hit a chess plateau",
+   "angle": "Same rating for months, same types of losses, playing lots but not improving, losing interest.",
+   "formats": [
+    "carousel",
+    "text"
+   ]
+  },
+  {
+   "id": "habits-strong-kids",
+   "q": "What do strong young players do differently?",
+   "angle": "They play slower, review their games, solve puzzles regularly, and stay calm after mistakes.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "mistakes-parents",
+   "q": "Common mistakes chess parents make",
+   "angle": "Talking rating all the time, analysing in the car, comparing with other kids, too many tournaments too soon.",
+   "formats": [
+    "carousel",
+    "text",
+    "voice"
+   ]
+  },
+  {
+   "id": "myths",
+   "q": "Myths parents believe about chess",
+   "angle": "More games means more progress. Talent decides everything. Videos are training. Openings first.",
+   "formats": [
+    "carousel",
+    "text"
+   ]
+  },
+  {
+   "id": "what-to-expect-month",
+   "q": "What to expect in your child's first month with a coach",
+   "angle": "Assessment, a few habits fixed, some homework, and a clear plan. Big rating jumps come later.",
+   "formats": [
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "weekly-plan",
+   "q": "What a good weekly chess routine looks like for kids",
+   "angle": "One or two lessons, short daily puzzles, one slow game with review, rest.",
+   "formats": [
+    "carousel",
+    "text"
+   ]
+  },
+  {
+   "id": "talk-after-game",
+   "q": "What to say to your child after a chess game",
+   "angle": "Ask what they enjoyed, what they'd do differently, and say you're proud of their effort.",
+   "formats": [
+    "carousel",
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "chess-skills-life",
+   "q": "Life skills chess builds in kids",
+   "angle": "Patience, focus, handling losing, planning ahead, taking responsibility for decisions.",
+   "formats": [
+    "carousel",
+    "text",
+    "voice"
+   ]
+  },
+  {
+   "id": "when-tournaments-often",
+   "q": "How often should my child play tournaments?",
+   "angle": "Enough to test what they learn, not so often that there's no time to train. Training and playing need balance.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "goal-setting",
+   "q": "How to set chess goals with your child",
+   "angle": "Short-term habit goals, medium-term event goals, long-term dreams. Write them together.",
+   "formats": [
+    "carousel",
+    "voice"
+   ]
+  },
+  {
+   "id": "homework-skip",
+   "q": "My child skips chess homework.",
+   "angle": "Make it short and fixed in the routine, like brushing teeth. Ten minutes they actually do beats an hour they avoid.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "lesson-boring",
+   "q": "My kid says chess lessons are boring.",
+   "angle": "Lessons should be challenging and varied. Boredom often means the level is wrong: too easy or too hard.",
+   "formats": [
+    "text",
+    "chat",
+    "voice"
+   ]
+  },
+  {
+   "id": "bored-easy",
+   "q": "My child is bored playing at their club.",
+   "angle": "Usually they've outgrown it. They need stronger opponents and a structured plan.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "prepare-big-event",
+   "q": "How do we prepare for a big tournament?",
+   "angle": "Weeks before: focused practice and slow games. Days before: rest and confidence. Day of: routine.",
+   "formats": [
+    "carousel",
+    "voice",
+    "text"
+   ]
+  },
+  {
+   "id": "lose-to-friend",
+   "q": "My child lost to a friend and it hurt more.",
+   "angle": "Losing to friends stings. Remind them friends make each other better; that's a gift.",
+   "formats": [
+    "text",
+    "chat"
+   ]
+  },
+  {
+   "id": "ratings-online-vs-otb",
+   "q": "Why is my child's online rating different from their tournament rating?",
+   "angle": "Different pools, different time controls. Online and tournament ratings aren't directly comparable.",
+   "formats": [
+    "text",
+    "chat",
+    "carousel"
+   ]
+  }
+ ]
+}

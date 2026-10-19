@@ -34,10 +34,14 @@ class VoiceError(RuntimeError):
     """The engine locked for this reel failed; the caller must redo the whole reel with another engine."""
 
 
+MODEL_LOCK = None    # the first Gemini TTS model that works is used for every line of the reel
+
+
 def reset(force=None):
     """Call at the start of every reel. force: None (best available), 'local' (no Gemini) or 'kokoro'."""
-    global LOCK
+    global LOCK, MODEL_LOCK
     LOCK = force
+    MODEL_LOCK = None
 
 
 # ------------------------------------------------------------------ speech recognition (captions + checks)
@@ -235,7 +239,9 @@ def _gemini_call(prompt, key):
     next model or to the free local voice instead of waiting minutes)."""
     from make_story import _retry_delay
     last = None
-    for model in [m for m in _tts_models(key) if m not in _TTS_DEAD][:3]:
+    global MODEL_LOCK
+    models = [MODEL_LOCK] if MODEL_LOCK else [m for m in _tts_models(key) if m not in _TTS_DEAD][:3]
+    for model in models:
         for attempt in range(3):
             try:
                 r = requests.post(f"{API}/models/{model}:generateContent", headers={"x-goog-api-key": key},
@@ -262,6 +268,7 @@ def _gemini_call(prompt, key):
                         mime = d.get("mimeType") or d.get("mime_type") or ""
                         rate = int((re.findall(r"rate=(\d+)", mime) or [24000])[0])
                         pcm = np.frombuffer(base64.b64decode(d["data"]), dtype="<i2").astype(np.float32) / 32768
+                        MODEL_LOCK = model
                         return _resample(pcm, rate)
                 last = RuntimeError(f"{model}: no audio in response"); break
             except requests.exceptions.ConnectionError as e:
@@ -329,10 +336,19 @@ def _leaked(a, text):
     return len(extra) >= 2 or len(hw) > 1.25 * len(ws) + 3
 
 
+
+def _style(style):
+    """'warm, confident, inviting' -> 'in a warm, confident voice' (max 4 plain words, letters and commas only)."""
+    w = [x for x in re.findall(r"[a-z]+", (style or "").lower()) if x not in ("and", "voice", "tone", "a", "the")][:4]
+    return f"in a {', '.join(w or ['warm', 'calm'])} voice"
+
+
 def _gemini_line(text, style, key, pace):
     """Up to 3 takes with different prompt shapes. A take is accepted when it says the right words with a
     natural length; otherwise the best acceptable one is kept. Fails only if every take is clearly wrong."""
-    prompts = [text, text, text]          # plain script only: no instructions that could be spoken aloud
+    # Google's documented short style form ("Say warmly: ..."). Anything spoken that is not the script is cut
+    # (_strip_extras) or the take is rejected (_leaked); the last attempt is the bare script.
+    prompts = [f"Say {_style(style)}: {text}", f"Say {_style(style)}: {text}", text]
     takes = []
     for pr in prompts:
         try:
@@ -397,8 +413,10 @@ def _split_takes(a, texts):
 def _gemini_many(texts, styles, key, one_take, pace):
     if one_take and len(texts) > 1:
         try:
-            prompt = "\n\n".join(texts)          # plain script only (instructions get read aloud by TTS)
-            take = _trim(_gemini_call(prompt, key))
+            script = "\n\n".join(texts)
+            mood = _style(", ".join(dict.fromkeys(x for x in styles if x)) or "warm, calm")
+            take = _trim(_strip_extras(_trim(_gemini_call(f"Say {mood}, with a short pause between paragraphs:\n\n{script}", key)), script))
+            prompt = script
             if _leaked(take, prompt):
                 raise RuntimeError("one take contains extra spoken words")
             print(f"voice: one take {len(take) / SR:.1f}s for {sum(_words(t) for t in texts)} words", flush=True)

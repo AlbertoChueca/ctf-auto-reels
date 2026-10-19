@@ -95,14 +95,14 @@ def grain(fr, fi):
 
 # Light, social-media friendly output: drawn at 1080x1920, encoded at 720x1280, ~2.5 Mbps, AAC 48 kHz stereo,
 # no edit lists, moov atom first (Instagram's API is strict about these).
-OUT_W, OUT_H = 720, 1280
+OUT_W, OUT_H = 1080, 1920
 
 
 def enc_args(out, scale=True):
     return ((["-vf", f"scale={OUT_W}:{OUT_H}:flags=bicubic"] if scale else []) +
-            ["-c:v", "libx264", "-preset", "veryfast", "-profile:v", "high", "-crf", "23", "-maxrate", "2500k",
-             "-bufsize", "5000k", "-g", str(FPS * 2), "-pix_fmt", "yuv420p", "-r", str(FPS),
-             "-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2",
+            ["-c:v", "libx264", "-preset", "medium", "-profile:v", "high", "-crf", "20", "-maxrate", "6000k",
+             "-bufsize", "10000k", "-g", str(FPS * 2), "-pix_fmt", "yuv420p", "-r", str(FPS),
+             "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
              "-movflags", "+faststart", "-use_editlist", "0", out])
 
 

@@ -1,12 +1,16 @@
-"""One publishing slot for ChessTalentsFactory (no puzzles).
+"""One publishing slot for ChessTalentsFactory: ONE post a day, rotating formats made for parents.
 
-python run_daily.py <story|storytag> [--dry-run]
+python run_daily.py story [--dry-run]
 
-story = midday slot, storytag = evening slot. The weekly calendar decides the pillar of each slot:
-pain, faq, method, success (real student stories), remix, proof, key (a principle of our method), benefits, rating.
-Every reel is a real-footage reel (make_broll). If the AI script fails twice, a pre-written evergreen
-script (evergreen_broll.json, real facts only) is used, so a post always goes out.
-Every post: Instagram reel + Story, Facebook Reel, random US location, YouTube/TikTok when configured.
+Weekly calendar (New York date), override with FORMAT_OVERRIDE:
+  Mon carousel  Tue chat  Wed challenge  Thu voice  Fri carousel  Sat kinetic  Sun challenge
+  carousel   7-slide advice carousel (make_carousel)         - most saved/shared format
+  chat       text conversation parent <-> coach (make_textreel) - no narrator
+  kinetic    big confident text lines + music (make_textreel)   - no narrator
+  challenge  "can your child find the winning move?" (make_challenge) - families answer in the comments
+  voice      the narrated real-footage reel (make_broll), with a verified expressive voice
+Every engine has an offline fallback (pre-written scripts / built-in puzzles), so a post always goes out.
+Every post: Instagram (carousel or reel) + Story, Facebook Reel, YouTube/TikTok when configured.
 """
 import datetime, json, os, random, sys, traceback
 import brand, guard
@@ -41,6 +45,13 @@ if pillar == "proof" and not (guard.has("avg_gain") or guard.has("fide_titles"))
 if pillar == "success" and not guard.cases():
     pillar = "pain"
 
+CALENDAR = {0: "carousel", 1: "chat", 2: "challenge", 3: "voice", 4: "carousel", 5: "kinetic", 6: "challenge"}
+FORMATS = ("carousel", "chat", "kinetic", "challenge", "voice")
+fmt = os.environ.get("FORMAT_OVERRIDE", "auto")
+if fmt not in FORMATS:
+    fmt = CALENDAR[wd]
+print("format:", fmt, flush=True)
+
 why = guard.paused()
 if why and not dry and os.environ.get("FORCE_PUBLISH") != "true":
     print(f"PAUSED: {why}. Delete paused.json (or run with force) to resume.")
@@ -57,7 +68,7 @@ except Exception as e:
 arms, strat_msg = {}, ""
 try:
     import strategy
-    fixed = {"cta": brand.CTA_MODE} if brand.CTA_MODE in brand.CTA else {}
+    fixed = {"cta": brand.CTA_MODE if brand.CTA_MODE in brand.CTA else "keyword"}   # one CTA everywhere: comment PLAN
     arms = strategy.choose(seed=f"{now:%Y-%m-%d-%H}-{slot}", fixed=fixed)
     if slot == "story":
         strat_msg = strategy.weekly_strategist()
@@ -69,6 +80,8 @@ except Exception as e:
 # ---- the studio: 5 creators compete; they learn once a day from their own real results
 agent, studio_msg = None, ""
 try:
+    if fmt != "voice" or os.environ.get("STUDIO", "off") != "on":
+        raise RuntimeError("off (one consistent voice; turn on with STUDIO=on once real views are measured)")
     import studio
     studio_msg = studio.learn(); print(studio_msg, flush=True)
     recent_agents = []
@@ -83,26 +96,51 @@ except Exception as e:
 
 out = f"out/{today}_{slot}_{now.hour:02d}.mp4"
 
-# ---- render: every reel is a real-footage reel (make_broll): stock footage + voice + kinetic text + real charts.
-# AI script (2 tries, each with its own repair round) -> pre-written evergreen real-footage script (real facts only).
-# Without footage (no key / API down) the same design runs on a premium brand background, so a post always goes out.
-arms.pop("format", None)
+# ---- render
 ai = bool(os.environ.get("GEMINI_API_KEY"))
-chain = (["broll", "broll"] if ai else []) + ["evergreen_broll"]
 meta, engine, errors = None, None, []
-for eng in chain:
-    try:
-        import make_broll
-        meta = make_broll.build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen_broll"), agent=agent)
-        meta["qc"] = guard.qc(out)                  # hard checks: streams, duration, real audio
-        meta["arms"] = dict(meta.get("arms") or arms)
-        if meta.get("shape"):
-            meta["arms"]["shape"] = meta["shape"]
-        engine = eng
-        break
-    except Exception as e:
-        errors.append(f"{eng}: {str(e)[:300]}")
-        print(f"[{eng}] failed:\n{traceback.format_exc()[-1500:]}", flush=True)
+slides = None
+if fmt == "voice":
+    arms.pop("format", None)
+    chain = (["broll", "broll"] if ai else []) + ["evergreen_broll"]
+    for eng in chain:
+        try:
+            import make_broll
+            meta = make_broll.build(seed, out, pillar=pillar, arms=arms, evergreen=(eng == "evergreen_broll"), agent=agent)
+            meta["qc"] = guard.qc(out)
+            meta["arms"] = dict(meta.get("arms") or arms)
+            if meta.get("shape"):
+                meta["arms"]["shape"] = meta["shape"]
+            engine = eng
+            break
+        except Exception as e:
+            errors.append(f"{eng}: {str(e)[:300]}")
+            print(f"[{eng}] failed:\n{traceback.format_exc()[-1500:]}", flush=True)
+    if meta is None:                                   # narrated reel impossible today -> a text reel instead
+        fmt = "kinetic"
+if fmt in ("carousel", "chat", "kinetic", "challenge") and meta is None:
+    tries = [(fmt, True), (fmt, False)] if fmt != "challenge" else [(fmt, True)]
+    tries += [("kinetic", False)]                      # last resort: pre-written text reel, no AI, no download
+    for f_, use_ai in tries:
+        try:
+            if f_ == "carousel":
+                import make_carousel
+                meta = make_carousel.build(seed, out.replace(".mp4", "_carousel"), use_ai=use_ai)
+                slides = meta.pop("slides")
+                os.replace(meta["reel"], out); os.replace(meta["reel"].replace(".mp4", ".txt"), out.replace(".mp4", ".txt"))
+            elif f_ == "challenge":
+                import make_challenge
+                meta = make_challenge.build(seed, out)
+            else:
+                import make_textreel
+                meta = make_textreel.build(seed, out, style=f_, use_ai=use_ai)
+            meta["qc"] = guard.qc(out)
+            fmt, engine = f_, meta.get("engine")
+            break
+        except Exception as e:
+            meta = None
+            errors.append(f"{f_}: {str(e)[:300]}")
+            print(f"[{f_}] failed:\n{traceback.format_exc()[-1500:]}", flush=True)
 if meta is None:
     n_fail = guard.record_run(False, "; ".join(errors))
     if n_fail >= 2:
@@ -119,13 +157,14 @@ except Exception:
 summary = os.environ.get("GITHUB_STEP_SUMMARY")
 if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
-        f.write(f"## {'✅ AI reel' if engine == 'broll' else '⚠️ Evergreen reel (AI script failed)'} · pillar `{pillar}`\n\n"
-                f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used}` · narrator: `{brand.NARRATOR}`\n"
+        f.write(f"## {fmt} · {'✅ AI copy' if engine in ('broll', 'ai', 'lichess') else '⚠️ fallback content'} · engine `{engine}`\n\n"
+                + (f"- Topic: `{meta.get('topic')}` · music: `{meta.get('music')}`\n" if fmt != "voice" else "")
+                + f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used if fmt == 'voice' else 'none (music only)'}`\n"
                 + (f"- Creator: **{studio.CREATORS[meta['agent']]['name']}** · {studio_msg}\n" if meta.get("agent") else f"- {studio_msg}\n")
                 + (f"- Title: {meta.get('story')}\n" if meta.get("story") else "")
-                + f"- Format: **real footage** · shape `{meta.get('shape')}` · grade `{meta.get('grade')}` · clips: "
-                + f"{sum(1 for x in (meta.get('footage') or []) if x)}/{len(meta.get('footage') or [])}\n"
-                + (f"- Blocks: {', '.join(meta.get('blocks') or [])}\n")
+                + (f"- Format: **real footage** · shape `{meta.get('shape')}` · grade `{meta.get('grade')}` · clips: "
+                   f"{sum(1 for x in (meta.get('footage') or []) if x)}/{len(meta.get('footage') or [])}\n" if fmt == "voice" else "")
+                + (f"- Blocks: {', '.join(meta.get('blocks') or [])}\n" if meta.get("blocks") else "")
                 + (f"- Student case: `{meta.get('case')}`\n" if meta.get("case") else "")
                 + (f"- Remix of: `{meta.get('remix_of')}`\n" if meta.get("remix_of") else "")
                 + (f"- Director: hooks considered: {' | '.join(meta['director'].get('hook_options') or [])}\n"
@@ -147,9 +186,17 @@ if dry:
     print("DRY RUN: not publishing")
     sys.exit(0)
 
-from publish_ig import publish_reel, publish_story
+from publish_ig import publish_reel, publish_story, publish_carousel
 if loc: print("Location:", loc["name"])
-media = publish_reel(out, caption, location_id=loc and loc["id"])
+media = None
+if slides:
+    try:
+        media = publish_carousel(slides, caption, location_id=loc and loc["id"]); meta["published_as"] = "carousel"
+    except Exception as e:
+        print("Carousel failed, publishing the same slides as a reel:", str(e)[:300], flush=True)
+        errors.append(f"carousel publish: {str(e)[:200]}")
+if media is None:
+    media = publish_reel(out, caption, location_id=loc and loc["id"]); meta["published_as"] = "reel"
 meta.update(location=loc and loc["name"], permalink=media.get("permalink"), media_id=media.get("id"), engine=engine)
 
 try:  # also share it as a Story (never blocks the reel)
@@ -178,7 +225,8 @@ brake = guard.health()
 if brake:
     guard.pause(brake)
     print("BRAKE:", brake)
-log({k: meta.get(k) for k in ("engine", "format", "shape", "footage", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
+meta["format"] = fmt
+log({k: meta.get(k) for k in ("engine", "format", "published_as", "topic", "puzzle", "music", "shape", "footage", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
                               "case", "remix_of", "director", "agent", "key",
                               "anchor_key", "brand_check")})

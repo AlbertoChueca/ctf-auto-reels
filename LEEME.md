@@ -1,24 +1,45 @@
 # ChessTalentsFactory – Reels orgánicos automáticos
 
-Publica sola **2 reels al día** en Instagram + Story, **Facebook Reels**, YouTube Shorts y TikTok, pensados para
-padres estadounidenses, con un único objetivo: que vean la VSL, reserven llamada y lleguen convencidos.
-Tu tiempo continuo: cero. Cada lunes recibes un informe por email.
+Publica sola **1 publicación al día** (12:00 Nueva York) en Instagram + Story, **Facebook Reels**, YouTube Shorts y
+TikTok, pensada para **padres que no juegan al ajedrez**. Objetivo: que se paren, guarden, comenten "PLAN" y entren
+en el embudo. Tu tiempo continuo: cero.
 
-## Qué se publica (calendario automático, hora de Nueva York)
+## Qué se publica (versión 3, octubre 2026)
 
-Sin puzzles ni dibujos. Todo está pensado para **un padre que no juega al ajedrez y cuyo hijo lo adora**.
+Menos cantidad, más calidad y formatos variados. La mayoría **sin narrador**: nada suena a IA.
 
-| Día | 12:00 | 21:00 |
+| Día | Formato | Qué es |
 |---|---|---|
-| Lunes | Dolor del padre → solución | **Clave de Square 65** |
-| Martes | **Éxito de alumno** | Pregunta de padres (FAQ) |
-| Miércoles | **Beneficios** (lo que el ajedrez da a tu hijo) | **Clave de Square 65** |
-| Jueves | **Remix** de un reel anterior | **Éxito de alumno** |
-| Viernes | Pregunta de padres (FAQ) | **Clave de Square 65** |
-| Sábado | **Éxito de alumno** | **Remix** de un reel anterior |
-| Domingo | **¿Qué significa el rating?** (los 6 niveles) | **Beneficios** |
+| Lunes | **Carrusel** (`make_carousel.py`) | 7 diapositivas de consejo: "5 señales…", "Qué decir cuando…". El formato que más se guarda |
+| Martes | **Chat** (`make_textreel.py chat`) | Conversación de mensajes entre un padre y nuestro coach, con "escribiendo…" |
+| Miércoles | **Reto** (`make_challenge.py`) | "¿Encuentra tu hijo la jugada?" Puzzle real, cuenta atrás, solución animada |
+| Jueves | **Voz** (`make_broll.py`) | El reel narrado, con voz expresiva verificada palabra a palabra |
+| Viernes | **Carrusel** | Otro tema del banco de preguntas |
+| Sábado | **Texto** (`make_textreel.py kinetic`) | Frases grandes que entran palabra a palabra: POV, mito vs verdad, "nadie te dice…" |
+| Domingo | **Reto** | Otro puzzle, a otro nivel |
 
-## Formato: vídeo real (`make_broll.py`)
+- **Banco de preguntas de padres** (`parent_topics.json`, 95 temas en lenguaje de padre: el coche después de
+  perder, lágrimas, pantallas, colegio, cuánto entrenar…). Cada publicación usa el tema menos usado. Edítalo
+  libremente: añade las preguntas que oyes en tus llamadas.
+- **Sin jerga**: se rechaza cualquier texto con términos que un padre no entiende (claves, T-T-P, "metodología",
+  notación…). Square 65 ya no es titular.
+- **Fondo cinematográfico**: un tablero real con posiciones de partidas clásicas, desenfocado, con luz cálida.
+  Todo en código, nada de stock aleatorio ni imágenes de IA.
+- **Música**: una base cálida tipo lo-fi/piano generada en código y masterizada. **Mejora fácil:** sube 10-20
+  pistas sin copyright a `assets/music/` (YouTube Audio Library o Pixabay Music, gratis) y se usarán ellas,
+  rotando la menos usada.
+- **Retos**: puzzles de la base pública de Lichess (CC0, se descarga y se guarda en caché la primera vez) a nivel
+  infantil; si no se puede descargar, usa 20 puzzles propios verificados por ordenador. Nunca repite un puzzle.
+- **Reserva siempre lista**: si la IA falla, cada formato tiene contenido ya escrito (`evergreen_faceless.json`,
+  8 por formato). Si un carrusel no se puede publicar, se publica el mismo contenido como reel.
+- **CTA único** en todo: comentar `PLAN` (el bot responde por DM con el enlace al formulario).
+- **Estudio de creadores desactivado** (`STUDIO=off`) hasta que haya datos reales de visualizaciones; con un solo
+  estilo coherente se aprende más rápido.
+
+Para probar un formato: *Actions → Daily reels → Run workflow* → `format` + `dry_run`. Las diapositivas y vídeos
+quedan en *Artifacts*.
+
+## Formato voz: vídeo real (`make_broll.py`, solo los jueves)
 
 Escenas reales de familias, niños estudiando, coche camino del torneo, manos moviendo piezas, trofeos… sacadas de
 **Pixabay** (y Pexels si tienes clave; gratis, licencia comercial, sin atribución). Encima: voz, titulares animados en

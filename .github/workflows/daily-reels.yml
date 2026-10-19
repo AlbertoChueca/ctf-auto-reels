@@ -2,24 +2,18 @@ name: Daily reels
 
 on:
   schedule:
-    - cron: "0 16 * * *"   # midday reel  -> 12:00 New York (13:00 PY)   (weekly calendar in run_daily.py)
-    - cron: "0 1 * * *"    # evening reel -> 21:00 New York (22:00 PY)
+    - cron: "0 16 * * *"   # ONE post a day -> 12:00 New York (13:00 PY). Format calendar in run_daily.py
   workflow_dispatch:
     inputs:
-      level:
-        description: "Slot: story = midday, storytag = evening (only matters with pillar auto)"
+      format:
+        description: "Post type (auto = weekly calendar: Mon carousel, Tue chat, Wed challenge, Thu voice, Fri carousel, Sat kinetic, Sun challenge)"
         type: choice
-        options: [story, storytag]
-        default: story
+        options: [auto, carousel, chat, kinetic, challenge, voice]
+        default: auto
       pillar:
-        description: "Reel type (auto = weekly calendar). New version: benefits + rating, no puzzles"
+        description: "Only for format voice: topic family (auto = calendar)"
         type: choice
         options: [auto, key, success, remix, pain, faq, method, proof, benefits, rating]
-        default: auto
-      creator:
-        description: "AI creator (auto = the studio picks the one with the best results)"
-        type: choice
-        options: [auto, analyst, storyteller, mythbuster, parent_whisperer, trend_scout]
         default: auto
       dry_run:
         description: "Only generate the video (do not publish)"
@@ -58,12 +52,7 @@ jobs:
       - name: Choose slot
         id: lvl
         run: |
-          case "${{ github.event.schedule }}" in
-            "0 16 * * *") L=story ;;
-            "0 1 * * *")  L=storytag ;;
-            *)            L="${{ inputs.level }}" ;;
-          esac
-          echo "level=$L" >> "$GITHUB_OUTPUT"
+          echo "level=story" >> "$GITHUB_OUTPUT"
 
       - uses: actions/setup-python@v6
         with:
@@ -83,6 +72,12 @@ jobs:
             models
             ~/.cache/huggingface
           key: voices-v4
+
+      - name: Cache puzzle database (challenge reels)
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: puzzles-v1
 
       - name: Download Kokoro voice
         run: |
@@ -104,7 +99,8 @@ jobs:
           PILLAR_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.pillar || 'auto' }}
           FORCE_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.force || false }}
           FB_REELS: ${{ vars.FB_REELS || 'on' }}
-          AGENT_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.creator || 'auto' }}
+          FORMAT_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.format || 'auto' }}
+          STUDIO: ${{ vars.STUDIO || 'off' }}
           STUDENT_NAMES: ${{ vars.STUDENT_NAMES || 'none' }}
           DM_KEYWORD: ${{ vars.DM_KEYWORD || 'PLAN' }}
           REEL_FORMAT: ${{ vars.REEL_FORMAT }}
@@ -128,6 +124,7 @@ jobs:
           path: |
             out/*.mp4
             out/*.txt
+            out/*_carousel/*.jpg
             !out/*_review.mp4
           retention-days: 3
           compression-level: 0
@@ -138,6 +135,6 @@ jobs:
         run: |
           git config user.name "reels-bot"
           git config user.email "reels-bot@users.noreply.github.com"
-          for f in log.jsonl explainer_log.json review_log.jsonl performance.json strategy_arms.json stock_used.json strategy_report.md playbook.md paused.json failures.json content_bank.json; do [ -f "$f" ] && git add "$f"; done
+          for f in log.jsonl formats_log.json used.json explainer_log.json review_log.jsonl performance.json strategy_arms.json stock_used.json strategy_report.md playbook.md paused.json failures.json content_bank.json; do [ -f "$f" ] && git add "$f"; done
           [ -d agents ] && git add agents
           git diff --cached --quiet || (git commit -m "Reel ${{ steps.lvl.outputs.level }} $(date +%F)" && (git push || (git pull --rebase && git push)))

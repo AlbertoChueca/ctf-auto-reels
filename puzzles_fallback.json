@@ -1,0 +1,202 @@
+[
+{
+"id": "ctf-1",
+"fen": "6k1/5ppp/8/8/8/8/5PPP/3R2K1 w - - 0 1",
+"setup": null,
+"solution": [
+"d1d8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-1b",
+"fen": "3r2k1/5ppp/8/8/8/8/5PPP/6K1 b - - 0 1",
+"setup": null,
+"solution": [
+"d8d1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-2",
+"fen": "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+"setup": null,
+"solution": [
+"h5f7"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-2b",
+"fen": "rnb1k1nr/pppp1ppp/8/2b1p3/4P2q/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 4 4",
+"setup": null,
+"solution": [
+"h4f2"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-3",
+"fen": "6rk/6pp/8/6N1/8/8/8/6K1 w - - 0 1",
+"setup": null,
+"solution": [
+"g5f7"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-3b",
+"fen": "6k1/8/8/8/6n1/8/6PP/6RK b - - 0 1",
+"setup": null,
+"solution": [
+"g4f2"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-4",
+"fen": "k7/8/1K6/8/8/8/8/7R w - - 0 1",
+"setup": null,
+"solution": [
+"h1h8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-4b",
+"fen": "7r/8/8/8/8/1k6/8/K7 b - - 0 1",
+"setup": null,
+"solution": [
+"h8h1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-5",
+"fen": "6k1/6p1/6Kp/8/8/8/8/1R6 w - - 0 1",
+"setup": null,
+"solution": [
+"b1b8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-5b",
+"fen": "1r6/8/8/8/8/6kP/6P1/6K1 b - - 0 1",
+"setup": null,
+"solution": [
+"b8b1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-6",
+"fen": "6k1/4Rppp/8/8/8/8/5PPP/6K1 w - - 0 1",
+"setup": null,
+"solution": [
+"e7e8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-6b",
+"fen": "6k1/5ppp/8/8/8/8/4rPPP/6K1 b - - 0 1",
+"setup": null,
+"solution": [
+"e2e1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-7",
+"fen": "4r1k1/5ppp/8/8/8/8/5PPP/1R2R1K1 w - - 0 1",
+"setup": null,
+"solution": [
+"e1e8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-7b",
+"fen": "1r2r1k1/5ppp/8/8/8/8/5PPP/4R1K1 b - - 0 1",
+"setup": null,
+"solution": [
+"e8e1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-8",
+"fen": "5k2/8/5K2/8/8/8/8/R7 w - - 0 1",
+"setup": null,
+"solution": [
+"a1a8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-8b",
+"fen": "r7/8/8/8/8/5k2/8/5K2 b - - 0 1",
+"setup": null,
+"solution": [
+"a8a1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-9",
+"fen": "6k1/pp3ppp/8/8/8/8/PP3PPP/2Q3K1 w - - 0 1",
+"setup": null,
+"solution": [
+"c1c8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-9b",
+"fen": "2q3k1/pp3ppp/8/8/8/8/PP3PPP/6K1 b - - 0 1",
+"setup": null,
+"solution": [
+"c8c1"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-10",
+"fen": "6k1/5p1p/6pB/8/8/8/5PPP/3Q2K1 w - - 0 1",
+"setup": null,
+"solution": [
+"d1d8"
+],
+"rating": null,
+"themes": "mateIn1"
+},
+{
+"id": "ctf-10b",
+"fen": "3q2k1/5ppp/8/8/8/6Pb/5P1P/6K1 b - - 0 1",
+"setup": null,
+"solution": [
+"d8d1"
+],
+"rating": null,
+"themes": "mateIn1"
+}
+]

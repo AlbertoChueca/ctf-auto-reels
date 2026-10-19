@@ -1,0 +1,774 @@
+[
+ {
+  "id": "k-car",
+  "shape": "pov",
+  "hook": "POV: your child lost the last round and the car goes silent.",
+  "hook_hl": "silent",
+  "beats": [
+   {
+    "text": "You want to help. So you ask what went wrong.",
+    "hl": "help"
+   },
+   {
+    "text": "That's the moment they shut down.",
+    "hl": "shut"
+   },
+   {
+    "text": "Right after a loss, kids don't need analysis. They need a snack and a kind word.",
+    "hl": "kind"
+   },
+   {
+    "text": "Review the game tomorrow, calmly, with their coach.",
+    "hl": "tomorrow"
+   }
+  ],
+  "close": "Calm parents raise calmer competitors.",
+  "caption_hook": "The car ride after a loss matters more than you think 🚗",
+  "caption_body": "Save the analysis for tomorrow. Tonight, just be on their side.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-blitz",
+  "shape": "myth_truth",
+  "hook": "Myth: more games means faster progress.",
+  "hook_hl": "Myth",
+  "beats": [
+   {
+    "text": "Hours of fast online games feel like practice.",
+    "hl": "feel"
+   },
+   {
+    "text": "The truth: they mostly repeat the same habits, fast.",
+    "hl": "truth"
+   },
+   {
+    "text": "Kids improve when someone looks at their games and fixes one habit at a time.",
+    "hl": "fixes"
+   },
+   {
+    "text": "Fewer games. Slower games. Always a short review.",
+    "hl": "review"
+   }
+  ],
+  "close": "That's how training is different from playing.",
+  "caption_hook": "More games isn't the same as more progress ♟️",
+  "caption_body": "One slow game with a review teaches more than ten fast ones.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-nobody",
+  "shape": "nobody_tells",
+  "hook": "Nobody tells chess parents this:",
+  "hook_hl": "parents",
+  "beats": [
+   {
+    "text": "A rating plateau is normal. Almost every child hits one.",
+    "hl": "normal"
+   },
+   {
+    "text": "It usually means the same mistakes keep repeating.",
+    "hl": "same"
+   },
+   {
+    "text": "Not lack of talent. Not lack of effort.",
+    "hl": "talent"
+   },
+   {
+    "text": "Find the habit behind the losses, and the rating moves again.",
+    "hl": "habit"
+   }
+  ],
+  "close": "Plateaus are a signal, not a verdict.",
+  "caption_hook": "Stuck at the same rating for months? Read this 👇",
+  "caption_body": "Plateaus happen to almost every young player. What matters is what you change next.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-fast",
+  "shape": "if_you",
+  "hook": "If your child moves before you can blink...",
+  "hook_hl": "blink",
+  "beats": [
+   {
+    "text": "It's the most common habit we see in young players.",
+    "hl": "common"
+   },
+   {
+    "text": "They see one idea and play it immediately.",
+    "hl": "immediately"
+   },
+   {
+    "text": "Before every move, one question: what does my opponent want?",
+    "hl": "opponent"
+   },
+   {
+    "text": "That single pause saves more games than any opening.",
+    "hl": "pause"
+   }
+  ],
+  "close": "Slowing down is a skill. It can be taught.",
+  "caption_hook": "Does your child play too fast? Try this tonight ⏱️",
+  "caption_body": "One question before every move. Ask them to say it out loud for a week.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-praise",
+  "shape": "quiet_truth",
+  "hook": "What you say after a game shapes the next one.",
+  "hook_hl": "say",
+  "beats": [
+   {
+    "text": "\"You're so smart\" makes kids afraid to lose.",
+    "hl": "afraid"
+   },
+   {
+    "text": "\"I loved how long you thought on that move\" makes them think longer.",
+    "hl": "thought"
+   },
+   {
+    "text": "Praise the effort and the decisions, not the result.",
+    "hl": "decisions"
+   },
+   {
+    "text": "Results follow the habits you celebrate.",
+    "hl": "habits"
+   }
+  ],
+  "close": "Small words. Big difference over a season.",
+  "caption_hook": "The one sentence to say after every chess game 💬",
+  "caption_body": "Praise what they control: effort, focus, decisions. Wins come later.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-tears",
+  "shape": "pov",
+  "hook": "POV: your child cries after every loss.",
+  "hook_hl": "cries",
+  "beats": [
+   {
+    "text": "It's hard to watch. But it means they care.",
+    "hl": "care"
+   },
+   {
+    "text": "Don't rush to fix it. Sit with them for a minute.",
+    "hl": "minute"
+   },
+   {
+    "text": "Later, ask: what's one thing you'd do differently?",
+    "hl": "differently"
+   },
+   {
+    "text": "Losing well is a skill. Strong players learn it early.",
+    "hl": "skill"
+   }
+  ],
+  "close": "Every strong player has lost thousands of games.",
+  "caption_hook": "Tears after losing aren't a bad sign ♟️",
+  "caption_body": "They mean your child cares. The goal is turning that care into learning.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-videos",
+  "shape": "myth_truth",
+  "hook": "Myth: watching chess videos is studying chess.",
+  "hook_hl": "Myth",
+  "beats": [
+   {
+    "text": "Videos are inspiring. Kids feel they're learning.",
+    "hl": "feel"
+   },
+   {
+    "text": "The truth: watching is not training.",
+    "hl": "truth"
+   },
+   {
+    "text": "Kids improve by solving, playing slowly and fixing their own mistakes.",
+    "hl": "own"
+   },
+   {
+    "text": "Use videos as dessert, not the main course.",
+    "hl": "dessert"
+   }
+  ],
+  "close": "Training means doing, not watching.",
+  "caption_hook": "Is your child watching chess or training chess? 🎥",
+  "caption_body": "A simple rule: for every video, one slow game they review.",
+  "format": "kinetic"
+ },
+ {
+  "id": "k-age",
+  "shape": "quiet_truth",
+  "hook": "It's never too late for your child to get good at chess.",
+  "hook_hl": "late",
+  "beats": [
+   {
+    "text": "Older beginners often learn faster than little ones.",
+    "hl": "faster"
+   },
+   {
+    "text": "They focus longer and understand ideas, not just moves.",
+    "hl": "ideas"
+   },
+   {
+    "text": "Starting age matters far less than how they train.",
+    "hl": "train"
+   },
+   {
+    "text": "A plan, a coach and steady practice beat an early start.",
+    "hl": "plan"
+   }
+  ],
+  "close": "Starting late just means starting with focus.",
+  "caption_hook": "Think your child started chess too late? 🤔",
+  "caption_body": "Starting age matters less than you think. Structure matters more.",
+  "format": "kinetic"
+ },
+ {
+  "id": "c-quit",
+  "header": "A parent asked us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "my son wants to quit chess after a bad tournament. should I let him?"
+   },
+   {
+    "from": "coach",
+    "text": "I'd wait one week before deciding. Right after a loss, it's emotion talking."
+   },
+   {
+    "from": "parent",
+    "text": "he was really upset in the car"
+   },
+   {
+    "from": "coach",
+    "text": "Totally normal. Skip the analysis tonight. Food, rest, and tell him you're proud he played."
+   },
+   {
+    "from": "coach",
+    "text": "Then ask him in a week, when he's calm. That answer is the real one."
+   },
+   {
+    "from": "parent",
+    "text": "ok. that makes sense, thank you"
+   }
+  ],
+  "caption_hook": "Your child wants to quit after a bad tournament. Now what? 💬",
+  "caption_body": "Wait a week. Decisions made right after a loss are emotion, not information.",
+  "format": "chat"
+ },
+ {
+  "id": "c-stuck",
+  "header": "A parent asked us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "my daughter's rating hasn't moved in 6 months. she plays every day"
+   },
+   {
+    "from": "coach",
+    "text": "Playing every day is great. But more games usually means repeating the same mistakes faster."
+   },
+   {
+    "from": "parent",
+    "text": "so she should play less??"
+   },
+   {
+    "from": "coach",
+    "text": "Fewer, slower games, each with a short review. That's where the learning happens."
+   },
+   {
+    "from": "coach",
+    "text": "And someone should look at her losses to find the habit behind them."
+   },
+   {
+    "from": "parent",
+    "text": "nobody has ever looked at her games honestly"
+   }
+  ],
+  "caption_hook": "Plays every day but the rating won't move? 💬",
+  "caption_body": "Practice only helps when mistakes get fixed. That's the difference between playing and training.",
+  "format": "chat"
+ },
+ {
+  "id": "c-group",
+  "header": "Parents ask us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "is private or group better for chess? he's 10"
+   },
+   {
+    "from": "coach",
+    "text": "Both work. It depends on him. Groups of kids at the same level add friends and healthy competition."
+   },
+   {
+    "from": "coach",
+    "text": "Private lessons go deeper into his own games and his own habits."
+   },
+   {
+    "from": "parent",
+    "text": "he's a bit shy"
+   },
+   {
+    "from": "coach",
+    "text": "Then a small group can be great. Shy kids often open up when everyone is at their level."
+   },
+   {
+    "from": "parent",
+    "text": "didn't think of it that way"
+   }
+  ],
+  "caption_hook": "Group or private chess lessons? The honest answer 💬",
+  "caption_body": "There's no single right answer. Level, personality and goals decide.",
+  "format": "chat"
+ },
+ {
+  "id": "c-fast",
+  "header": "A parent asked us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "why does my kid keep losing games he's winning?"
+   },
+   {
+    "from": "coach",
+    "text": "Very common. When kids get ahead, they relax and stop checking what the opponent wants."
+   },
+   {
+    "from": "parent",
+    "text": "yes!! exactly that"
+   },
+   {
+    "from": "coach",
+    "text": "Winning a won game is its own skill. We train it on purpose: stay careful, keep it simple."
+   },
+   {
+    "from": "coach",
+    "text": "Tonight, ask him: when you're winning, what's your opponent's only hope?"
+   },
+   {
+    "from": "parent",
+    "text": "love that, trying it"
+   }
+  ],
+  "caption_hook": "Why kids lose games they were winning 💬",
+  "caption_body": "Getting ahead is one skill. Finishing the job is another one.",
+  "format": "chat"
+ },
+ {
+  "id": "c-nerves",
+  "header": "A parent asked us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "she plays great at home but freezes at tournaments"
+   },
+   {
+    "from": "coach",
+    "text": "That's nerves, and it's trainable. It usually comes from pressure about the result."
+   },
+   {
+    "from": "parent",
+    "text": "we do talk about rating a lot..."
+   },
+   {
+    "from": "coach",
+    "text": "Try goals about behaviour instead: think before every move, use her time, stay calm after mistakes."
+   },
+   {
+    "from": "coach",
+    "text": "And a simple routine before each game. Same snack, same warm-up, same words."
+   },
+   {
+    "from": "parent",
+    "text": "ok, no rating talk this weekend"
+   }
+  ],
+  "caption_hook": "Plays great at home, freezes at tournaments? 💬",
+  "caption_body": "Tournament nerves are normal and trainable. Start by changing what you celebrate.",
+  "format": "chat"
+ },
+ {
+  "id": "c-youtube",
+  "header": "Parents ask us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "can't he just learn chess from youtube? he watches a lot"
+   },
+   {
+    "from": "coach",
+    "text": "Videos are great for inspiration. But watching isn't training."
+   },
+   {
+    "from": "parent",
+    "text": "what's the difference really"
+   },
+   {
+    "from": "coach",
+    "text": "Training means solving, playing slowly and having someone fix his own mistakes."
+   },
+   {
+    "from": "coach",
+    "text": "A video can't see that he always moves too fast in the middle of the game."
+   },
+   {
+    "from": "parent",
+    "text": "ha. he does do that"
+   }
+  ],
+  "caption_hook": "Can kids really learn chess from YouTube? 💬",
+  "caption_body": "Videos inspire. Training changes habits. Your child needs both, in the right order.",
+  "format": "chat"
+ },
+ {
+  "id": "c-say",
+  "header": "A parent asked us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "what should I say after he loses? everything I say seems wrong"
+   },
+   {
+    "from": "coach",
+    "text": "Honestly, less is more. 'I'm proud of how you fought' is enough for tonight."
+   },
+   {
+    "from": "parent",
+    "text": "and after he wins?"
+   },
+   {
+    "from": "coach",
+    "text": "Same idea. Praise the thinking, not the win: 'You took your time on that move, I saw it.'"
+   },
+   {
+    "from": "coach",
+    "text": "Kids repeat what we celebrate."
+   },
+   {
+    "from": "parent",
+    "text": "writing that down"
+   }
+  ],
+  "caption_hook": "What to say after your child loses a chess game 💬",
+  "caption_body": "Fewer words, more warmth. Praise the thinking and the effort.",
+  "format": "chat"
+ },
+ {
+  "id": "c-how-much",
+  "header": "Parents ask us",
+  "messages": [
+   {
+    "from": "parent",
+    "text": "how much should a 9 year old practice chess?"
+   },
+   {
+    "from": "coach",
+    "text": "Short and regular beats long and rare. A little every day is better than hours on Sunday."
+   },
+   {
+    "from": "parent",
+    "text": "like how little?"
+   },
+   {
+    "from": "coach",
+    "text": "A few puzzles at the right level, a couple of times a week a slow game, then a quick review."
+   },
+   {
+    "from": "coach",
+    "text": "Plus lessons with a plan. That's a strong routine for most kids."
+   },
+   {
+    "from": "parent",
+    "text": "that's very doable actually"
+   }
+  ],
+  "caption_hook": "How much should a child practise chess? 💬",
+  "caption_body": "Consistency beats intensity. Build a routine your child can actually keep.",
+  "format": "chat"
+ },
+ {
+  "id": "ca-plateau",
+  "cover": {
+   "kicker": "For chess parents",
+   "title": "5 signs your child has hit a chess plateau",
+   "hl": [
+    "plateau"
+   ]
+  },
+  "slides": [
+   {
+    "title": "Same rating for months",
+    "body": "Up and down, but no real trend. Normal for a while, a signal if it lasts."
+   },
+   {
+    "title": "Same kind of losses",
+    "body": "Different opponents, same story. A missed threat, a rushed move, a lost winning position."
+   },
+   {
+    "title": "Lots of games, little change",
+    "body": "Playing more but not improving usually means mistakes repeat faster."
+   },
+   {
+    "title": "Less excitement",
+    "body": "Kids lose interest when they stop seeing progress. It's not laziness."
+   },
+   {
+    "title": "No one reviews their games",
+    "body": "Without an honest look at losses, the same habits stay."
+   }
+  ],
+  "final": "A plateau is a signal, not a verdict.",
+  "caption_hook": "Is your child stuck? Check these 5 signs 👇",
+  "caption_body": "Save this and look at the last few games together.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-mistakes",
+  "cover": {
+   "kicker": "For chess parents",
+   "title": "5 mistakes loving chess parents make",
+   "hl": [
+    "mistakes"
+   ]
+  },
+  "slides": [
+   {
+    "title": "Analysing in the car",
+    "body": "Right after a loss, kids need rest and warmth, not a game review."
+   },
+   {
+    "title": "Talking rating all the time",
+    "body": "It turns every game into a test. Talk about effort and decisions instead."
+   },
+   {
+    "title": "Comparing with other kids",
+    "body": "Every child develops at their own speed. Compare with their own past."
+   },
+   {
+    "title": "Too many tournaments too soon",
+    "body": "Without training in between, events become stress, not learning."
+   },
+   {
+    "title": "More games instead of better games",
+    "body": "Fewer, slower games with a review beat hours of fast play."
+   }
+  ],
+  "final": "Small changes at home, big changes at the board.",
+  "caption_hook": "We see these all the time, from the most loving parents 👇",
+  "caption_body": "Nobody does all of this right. Pick one to change this week.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-routine",
+  "cover": {
+   "kicker": "Save this",
+   "title": "What to do before every chess move",
+   "hl": [
+    "every"
+   ]
+  },
+  "slides": [
+   {
+    "title": "What does my opponent want?",
+    "body": "Their last move had a reason. Find it first."
+   },
+   {
+    "title": "Checks and captures",
+    "body": "Look at every check and capture, for both sides."
+   },
+   {
+    "title": "Is my piece safe there?",
+    "body": "Before letting go of the piece, look at the square it's going to."
+   },
+   {
+    "title": "Is there something better?",
+    "body": "The first good idea is rarely the best one. Take a second look."
+   },
+   {
+    "title": "Then move. Calmly.",
+    "body": "A routine makes kids slower at first, and much stronger after."
+   }
+  ],
+  "final": "Print it. Put it next to the board.",
+  "caption_hook": "A simple thinking routine for kids 👇",
+  "caption_body": "Ask your child to say these out loud for one week.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-tourney",
+  "cover": {
+   "kicker": "Tournament day",
+   "title": "The chess parent's tournament day checklist",
+   "hl": [
+    "checklist"
+   ]
+  },
+  "slides": [
+   {
+    "title": "Normal bedtime the night before",
+    "body": "Tired kids blunder more. Sleep is part of preparation."
+   },
+   {
+    "title": "Real breakfast, real snacks",
+    "body": "Water, fruit, something filling. Sugar crashes cost games."
+   },
+   {
+    "title": "No rating talk",
+    "body": "Set goals about behaviour: use your time, stay calm after mistakes."
+   },
+   {
+    "title": "Rest between rounds",
+    "body": "Eat, walk, relax. Deep analysis between rounds drains energy."
+   },
+   {
+    "title": "Same words after every game",
+    "body": "Win or lose: 'I'm proud of how you played.' Review tomorrow."
+   }
+  ],
+  "final": "Calm parents raise calmer competitors.",
+  "caption_hook": "Save this for your next tournament ♟️",
+  "caption_body": "Preparation off the board matters as much as on it.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-skills",
+  "cover": {
+   "kicker": "Beyond the board",
+   "title": "5 life skills chess quietly builds in kids",
+   "hl": [
+    "life"
+   ]
+  },
+  "slides": [
+   {
+    "title": "Patience",
+    "body": "Waiting for the right moment instead of acting on the first impulse."
+   },
+   {
+    "title": "Focus",
+    "body": "Staying with one problem for a long time, without distractions."
+   },
+   {
+    "title": "Handling losing",
+    "body": "Losing, learning and coming back. Every single week."
+   },
+   {
+    "title": "Planning ahead",
+    "body": "Thinking about consequences before making a decision."
+   },
+   {
+    "title": "Owning decisions",
+    "body": "No teammate to blame. Every move is theirs."
+   }
+  ],
+  "final": "The rating is a bonus. The habits are the prize.",
+  "caption_hook": "Why so many parents choose chess 👇",
+  "caption_body": "Tag a parent who thinks chess is just a game.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-coach",
+  "cover": {
+   "kicker": "Before you hire",
+   "title": "5 questions to ask any chess coach",
+   "hl": [
+    "questions"
+   ]
+  },
+  "slides": [
+   {
+    "title": "How do you assess my child?",
+    "body": "A good coach watches them play and finds what's holding them back first."
+   },
+   {
+    "title": "What's the plan?",
+    "body": "You should hear what they'll work on, and in what order."
+   },
+   {
+    "title": "How will I see progress?",
+    "body": "Regular, clear updates. Not just a rating."
+   },
+   {
+    "title": "What happens between lessons?",
+    "body": "Short, regular homework is where lessons stick."
+   },
+   {
+    "title": "What if motivation drops?",
+    "body": "It will at some point. Ask how they handle it."
+   }
+  ],
+  "final": "The right coach makes the plan visible.",
+  "caption_hook": "Hiring a chess coach? Ask these first 👇",
+  "caption_body": "Strong players aren't always good teachers. These questions tell the difference.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-myths",
+  "cover": {
+   "kicker": "Myth vs truth",
+   "title": "4 chess myths many parents believe",
+   "hl": [
+    "myths"
+   ]
+  },
+  "slides": [
+   {
+    "title": "More games = more progress",
+    "body": "Truth: fewer, slower games with a review teach far more."
+   },
+   {
+    "title": "Talent decides everything",
+    "body": "Truth: how kids train matters more than early talent."
+   },
+   {
+    "title": "Watching videos is studying",
+    "body": "Truth: kids improve by doing, not watching."
+   },
+   {
+    "title": "Openings come first",
+    "body": "Truth: for most kids, games are decided by mistakes and endgames."
+   }
+  ],
+  "final": "Training is different from playing.",
+  "caption_hook": "Which of these did you believe? 👇",
+  "caption_body": "Most parents believe at least one. Totally normal.",
+  "format": "carousel"
+ },
+ {
+  "id": "ca-week",
+  "cover": {
+   "kicker": "Save this",
+   "title": "A simple weekly chess routine for kids",
+   "hl": [
+    "routine"
+   ]
+  },
+  "slides": [
+   {
+    "title": "Lessons with a plan",
+    "body": "One or two a week, each building on the last."
+   },
+   {
+    "title": "A few puzzles a day",
+    "body": "At the right level, solved slowly and honestly."
+   },
+   {
+    "title": "Slow games, not just fast ones",
+    "body": "A couple a week, with time to think properly."
+   },
+   {
+    "title": "A short review",
+    "body": "After each slow game: one thing that went well, one to fix."
+   },
+   {
+    "title": "Rest days",
+    "body": "Kids learn better when chess stays fun."
+   }
+  ],
+  "final": "Short and regular beats long and rare.",
+  "caption_hook": "The weekly routine we recommend to parents 👇",
+  "caption_body": "Save it and adjust it to your family's schedule.",
+  "format": "carousel"
+ }
+]

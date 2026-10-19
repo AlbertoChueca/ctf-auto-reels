@@ -37,13 +37,13 @@ def ig_safe(video_path):
     """Our reels are already rendered light (720x1280, ~2.5 Mbps, AAC 48 kHz, no edit lists, faststart).
     Anything bigger than 40 MB (old renders, other tools) is re-encoded to that spec first."""
     import subprocess
-    if os.path.getsize(video_path) <= 40e6:
+    if os.path.getsize(video_path) <= 60e6:
         return video_path
     out = video_path.replace(".mp4", "_ig.mp4")
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video_path, "-vf", "scale=720:1280",
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", video_path, "-vf", "scale=1080:1920",
                     "-c:v", "libx264", "-profile:v", "high", "-pix_fmt", "yuv420p", "-r", "25", "-preset", "veryfast",
-                    "-crf", "23", "-maxrate", "2500k", "-bufsize", "5000k", "-g", "50",
-                    "-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2",
+                    "-crf", "21", "-maxrate", "6000k", "-bufsize", "10000k", "-g", "50",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
                     "-movflags", "+faststart", "-use_editlist", "0", out], check=True)
     print(f"IG-ready file: {os.path.getsize(out) / 1e6:.1f} MB (was {os.path.getsize(video_path) / 1e6:.1f} MB)", flush=True)
     return out
