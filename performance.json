@@ -424,5 +424,24 @@
 "media_id": "18097366331135473",
 "comments_count": 2,
 "like_count": 1
+},
+"17995733163019460": {
+"date": "2026-10-21",
+"slot": "story",
+"story": "Can your child find the winning move?",
+"hook": "Can your child find the winning move? Answer in the comments \ud83d\udc47",
+"level": null,
+"mode": null,
+"engine": "lichess",
+"review_score": null,
+"permalink": "https://www.instagram.com/reel/DexOT_0jKZR/",
+"arms": null,
+"pillar": null,
+"cta": "keyword",
+"agent": null,
+"headline": "Can your child find the winning move?",
+"media_id": "17995733163019460",
+"comments_count": 0,
+"like_count": 2
 }
 }

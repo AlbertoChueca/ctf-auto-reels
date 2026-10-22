@@ -318,5 +318,17 @@
 "date": "2026-10-18",
 "agent": "analyst",
 "anchor_key": 45
+},
+{
+"pillar": "remix",
+"format": "broll",
+"shape": "story",
+"title": "Beating the Late-Game Energy Crash",
+"headline": "The late-game energy crash",
+"hook": "That tournament afternoon slump is rarely a lack of talent.",
+"date": "2026-10-22",
+"agent": null,
+"remix_of": "18056870680668148",
+"anchor_key": 51
 }
 ]
