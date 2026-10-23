@@ -443,5 +443,29 @@
 "media_id": "17995733163019460",
 "comments_count": 0,
 "like_count": 2
+},
+"18018062309958716": {
+"date": "2026-10-22",
+"slot": "story",
+"story": "Beating the Late-Game Energy Crash",
+"hook": "That tournament afternoon slump is rarely a lack of talent.",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 9.2,
+"permalink": "https://www.instagram.com/reel/Dezy9QXj2GA/",
+"arms": {
+"hook_style": "parent_moment: open on a moment every chess parent recognises (the silent car ride, tears after a loss)",
+"theme": "progress you can see: what a rating means and the 6-level path",
+"cta": "keyword",
+"shape": "story"
+},
+"pillar": "remix",
+"cta": "keyword",
+"agent": null,
+"headline": "The late-game energy crash",
+"media_id": "18018062309958716",
+"comments_count": 0,
+"like_count": 2
 }
 }
