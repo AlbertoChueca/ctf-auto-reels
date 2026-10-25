@@ -1,6 +1,6 @@
 # ChessTalentsFactory autopilot - what is winning
 
-_Updated 2026-10-24 · 0 reels with results (3+ days old) · average score 0.00_
+_Updated 2026-10-25 · 1 reels with results (3+ days old) · average score 1.10_
 
 
 Still collecting data: options are being tested evenly for now.
@@ -10,7 +10,7 @@ Still collecting data: options are being tested evenly for now.
 
 | option | reels | avg score |
 |---|---|---|
-| parent_moment | 0 | - |
+| parent_moment | 1 | 1.10 |
 | myth | 0 | - |
 | what_strong_kids_do | 0 | - |
 | student_story | 0 | - |
@@ -23,10 +23,10 @@ Still collecting data: options are being tested evenly for now.
 
 | option | reels | avg score |
 |---|---|---|
+| progress you can see | 1 | 1.10 |
 | losing well | 0 | - |
 | screen time | 0 | - |
 | tournament nerves | 0 | - |
-| progress you can see | 0 | - |
 | choosing the right coach | 0 | - |
 | consistency | 0 | - |
 | life skills | 0 | - |
@@ -37,7 +37,7 @@ Still collecting data: options are being tested evenly for now.
 
 | option | reels | avg score |
 |---|---|---|
-| keyword | 0 | - |
+| keyword | 1 | 1.10 |
 | vsl | 0 | - |
 | call | 0 | - |
 | comment | 0 | - |
@@ -46,7 +46,7 @@ Still collecting data: options are being tested evenly for now.
 
 | option | reels | avg score |
 |---|---|---|
-| story | 0 | - |
+| story | 1 | 1.10 |
 | listicle | 0 | - |
 | myth_fact | 0 | - |
 | pov | 0 | - |
