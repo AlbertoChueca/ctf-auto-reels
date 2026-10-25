@@ -241,8 +241,8 @@
 "origin": "original",
 "likes": 26,
 "comments": 1,
-"views": 1678,
-"reach": 588,
+"views": 1681,
+"reach": 591,
 "shares": 1,
 "saved": 5,
 "analysis": {
@@ -279,10 +279,35 @@
 "origin": "original",
 "likes": 11,
 "comments": 0,
-"views": 973,
-"reach": 102,
+"views": 974,
+"reach": 103,
 "shares": 0,
-"saved": 2
+"saved": 2,
+"analysis": {
+"topic": "Student success story: Jwalanthi Ram's 800-point rating jump to 2000",
+"hook": "Coach says 'I would like to share with you one incredible story in the High-Performance Chess Academy'",
+"key_points": [
+"Jwalanthi Ram started at the academy with a 1200 rating",
+"She improved by 800 rating points to reach a 2000 rating",
+"She achieved rapid progress within a few months of hard work",
+"She placed 3rd in the Pan American Girls Championship",
+"Call to action to message on Instagram to join the academy"
+],
+"why_it_works": "Showing a real student's USCF rating graph skyrocketing by 800 points paired with an international championship medal provides indisputable social proof for parents.",
+"pillar": "success",
+"reusable_idea": "Highlight a student's rapid rating milestone alongside their official rating chart and major tournament podium to demonstrate proven coaching results.",
+"student_success": {
+"present": true,
+"facts": [
+"Started with a 1200 rating",
+"Reached a 2000 rating (improved by 800 points)",
+"Progressed rapidly in only a few months",
+"Finished 3rd in the Pan American Championship (Pan American Girls Championship)"
+],
+"student_name": "Jwalanthi Ram"
+},
+"quality": 8
+}
 },
 "18071187169490012": {
 "id": "18071187169490012",
@@ -292,10 +317,29 @@
 "origin": "original",
 "likes": 14,
 "comments": 1,
-"views": 761,
-"reach": 103,
+"views": 762,
+"reach": 104,
 "shares": 0,
-"saved": 0
+"saved": 0,
+"analysis": {
+"topic": "Transitioning from school chess clubs to high-performance training",
+"hook": "A coach behind a chessboard states that many children start chess in school and progress quickly, followed by clips of a child playing.",
+"key_points": [
+"Children often start chess in school clubs and make fast early progress",
+"Eventually, they reach a plateau where continuing to progress becomes complicated",
+"School chess alone is insufficient for kids who want to compete at a higher level",
+"A high-performance academy provides the advanced training needed to break through that plateau"
+],
+"why_it_works": "It targets the exact moment parents realize their child has outgrown basic school clubs and needs dedicated coaching to keep advancing.",
+"pillar": "pain",
+"reusable_idea": "School chess clubs are great for getting started, but dedicated high-performance coaching is necessary once a child hits a competitive plateau.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 7
+}
 },
 "17923895582823216": {
 "id": "17923895582823216",
@@ -308,7 +352,27 @@
 "views": 605,
 "reach": 60,
 "shares": 0,
-"saved": 1
+"saved": 1,
+"analysis": {
+"topic": "When to analyze chess games vs study fundamentals",
+"hook": "Analyse games is very important. It's one of the main tasks that we must practice as chess players.",
+"key_points": [
+"Game analysis is more useful at advanced levels than at beginner stages",
+"Beginners have too many basic weaknesses to benefit deeply from deep game review",
+"Early focus should be on core concepts like pawn structures and bishop pairs",
+"Studying fundamentals yields faster improvement than dissecting beginner games",
+"Deep game analysis becomes the #1 tool once reaching higher ratings"
+],
+"why_it_works": "It challenges the common myth that beginners should analyze every game, giving parents a clearer, less overwhelming study roadmap.",
+"pillar": "method",
+"reusable_idea": "Don't waste beginner study time over-analyzing messy games; build core positional concepts and fundamentals first.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 7
+}
 },
 "17895217748965503": {
 "id": "17895217748965503",
@@ -321,7 +385,26 @@
 "views": 1658,
 "reach": 51,
 "shares": 0,
-"saved": 0
+"saved": 0,
+"analysis": {
+"topic": "Using the Berlin Defense to improve endgame technique",
+"hook": "Coach asks 'What do we recommend against the Spanish opening?' while demonstrating moves on a chessboard",
+"key_points": [
+"Recommends the Berlin Defense against the Spanish Opening (Ruy Lopez)",
+"Main line Berlin leads directly into an early endgame",
+"Practicing these games forces students to master endgame technique",
+"Endgame practice accelerates progress across all areas of chess"
+],
+"why_it_works": "It reframes opening preparation not just as memorization, but as a deliberate training tool to master critical endgame skills.",
+"pillar": "method",
+"reusable_idea": "Choose chess openings that lead directly to endgames so students get frequent, real-game practice in endgame technique.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 5
+}
 },
 "18324343576176710": {
 "id": "18324343576176710",
@@ -358,7 +441,7 @@
 "likes": 21,
 "comments": 1,
 "views": 800,
-"reach": 54,
+"reach": 55,
 "shares": 0,
 "saved": 1
 },
@@ -370,9 +453,141 @@
 "origin": "original",
 "likes": 76,
 "comments": 6,
-"views": 4089,
-"reach": 1221,
+"views": 4098,
+"reach": 1225,
 "shares": 1,
 "saved": 2
+},
+"18192082975410571": {
+"id": "18192082975410571",
+"permalink": "https://www.instagram.com/reel/De4zkk2x6rR/",
+"date": "2026-10-24",
+"caption": "The hardest car ride every chess parent eventually faces. 🚗\n\nDon't debate them on the ride home, and give rating talk a break. Once the sting fades, most kids are ready to get back to work.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesslessons #chesstraining #chesstournament",
+"origin": "auto",
+"likes": 1,
+"comments": 2,
+"views": 138,
+"reach": 123,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Handling a child wanting to quit chess after a tough tournament loss",
+"hook": "POV: Your kid says 'I quit' on the drive home.",
+"key_points": [
+"They don't hate chess, they hate how losing feels today",
+"Never make a big decision on tournament Sunday",
+"Quitting right after a loss is emotion; quitting after a calm week is information",
+"Take seven days off from rating talk and game analysis",
+"A clear training plan prevents temporary emotions from derailing progress"
+],
+"why_it_works": "It taps directly into a dreaded, highly emotional scenario every competitive chess parent experiences and provides comforting, structured rules to handle it.",
+"pillar": "pain",
+"reusable_idea": "Never accept a child's decision to quit right after a loss; implement a mandatory one-week break from rating talk to let emotions settle before evaluating.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 9
+}
+},
+"18018062309958716": {
+"id": "18018062309958716",
+"permalink": "https://www.instagram.com/reel/Dezy9QXj2GA/",
+"date": "2026-10-22",
+"caption": "Does your child crash in round 3? It’s rarely a blunder. ♟️\nWhat happens outside the board directly affects your child's games. Here is how structured training and healthy competition habits build lasting focus.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chessimprovement #chess #chesslessons #chessforkids",
+"origin": "auto",
+"likes": 2,
+"comments": 0,
+"views": 139,
+"reach": 112,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Preventing tournament fatigue and late-game energy crashes in kids",
+"hook": "Text 'The late-game energy crash' with voiceover describing a child losing focus 3 hours into a weekend tournament",
+"key_points": [
+"Late-round blunders are often mental fatigue from lack of fuel, not chess mistakes",
+"Pre-game nutrition and habits outside the board directly dictate sustained energy",
+"Structured training across a 6-level learning path guides players systematically toward master level",
+"Aligning nutrition, focus, and a clear plan eliminates guesswork and builds lasting confidence"
+],
+"why_it_works": "It reframes a heartbreaking, common parent frustration—late-tournament collapses—from a lack of talent into an actionable problem of endurance and nutrition.",
+"pillar": "method",
+"reusable_idea": "Late-tournament blunders are endurance crashes rather than chess mistakes, requiring proper physical fueling habits paired with structured training.",
+"student_success": {
+"present": true,
+"facts": [
+"Students have earned official titles including FIDE Master, National Master, and International Master"
+],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"17995733163019460": {
+"id": "17995733163019460",
+"permalink": "https://www.instagram.com/reel/DexOT_0jKZR/",
+"date": "2026-10-21",
+"caption": "Can your child find the winning move? Answer in the comments 👇\n\nPause the video, let your child try, then check the answer at the end. Write their move in the comments.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesstournament #chess #chesstraining",
+"origin": "auto",
+"likes": 2,
+"comments": 0,
+"views": 151,
+"reach": 126,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Checkmate in 1 chess puzzle challenge for kids",
+"hook": "Challenge for chess kids: Can your child find the winning move?",
+"key_points": [
+"White to move: checkmate in 1 puzzle challenge",
+"Countdown giving parents time to pause and let their child solve it",
+"Reveals the checkmate solution using the rook",
+"Emphasizes that chess patterns are trained, not born",
+"Call to action: comment 'PLAN' for a free training video"
+],
+"why_it_works": "It creates immediate engagement by challenging parents to test their child's skill on the spot before offering training to improve pattern recognition.",
+"pillar": "puzzle",
+"reusable_idea": "Hook parents with an interactive puzzle challenge for their child, then bridge the result to a call to action by explaining that pattern recognition is a trained skill.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 7
+}
+},
+"18097366331135473": {
+"id": "18097366331135473",
+"permalink": "https://www.instagram.com/reel/Deuo0RZAgE8/",
+"date": "2026-10-20",
+"caption": "Why cheap chess coaching often costs more in the long run ♟️\n\nPlaying casual games each week will not fix recurring tournament mistakes. Look for coaches who work from a structured plan and track progress.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#learnchess #chess #chessacademy",
+"origin": "auto",
+"likes": 1,
+"comments": 2,
+"views": 177,
+"reach": 149,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Why cheap chess coaching without a structured plan fails kids",
+"hook": "Text message animation: 'found coaches online for half the price. is there really a difference?'",
+"key_points": [
+"Great players don't automatically know how kids learn",
+"Casual games during lessons fail to fix recurring tournament errors",
+"Unstructured coaching leads to painful, repeated tournament losses",
+"Parents should ask prospective coaches for a written 3-month plan"
+],
+"why_it_works": "It addresses a real financial hesitation while highlighting the emotional pain of a child repeatedly losing at tournaments due to lack of structured teaching.",
+"pillar": "faq",
+"reusable_idea": "Show parents that cheap coaching without a written syllabus results in repeated tournament mistakes and wasted time.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
 }
 }

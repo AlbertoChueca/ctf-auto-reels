@@ -215,5 +215,37 @@
    "2",
    "2400"
   ]
+ },
+ {
+  "id": "ig-18018062309958716",
+  "approved": true,
+  "source": "instagram",
+  "name": "",
+  "url": "https://www.instagram.com/reel/Dezy9QXj2GA/",
+  "text": "Students have earned official titles including FIDE Master, National Master, and International Master",
+  "facts": [
+   "Students have earned official titles including FIDE Master, National Master, and International Master"
+  ],
+  "numbers": []
+ },
+ {
+  "id": "ig-17948562557821873",
+  "approved": true,
+  "source": "instagram",
+  "name": "",
+  "url": "https://www.instagram.com/reel/C-GJdMJN0KW/",
+  "text": "Started with a 1200 rating; Reached a 2000 rating (improved by 800 points); Progressed rapidly in only a few months; Finished 3rd in the Pan American Championship (Pan American Girls Championship)",
+  "facts": [
+   "Started with a 1200 rating",
+   "Reached a 2000 rating (improved by 800 points)",
+   "Progressed rapidly in only a few months",
+   "Finished 3rd in the Pan American Championship (Pan American Girls Championship)"
+  ],
+  "numbers": [
+   "1200",
+   "2000",
+   "3",
+   "800"
+  ]
  }
 ]
