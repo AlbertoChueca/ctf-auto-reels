@@ -505,5 +505,24 @@
 "media_id": "18192082975410571",
 "comments_count": 2,
 "like_count": 1
+},
+"17929461900182669": {
+"date": "2026-10-25",
+"slot": "story",
+"story": "Show this to your child. Can they find it?",
+"hook": "Can your child find the winning move? Answer in the comments \ud83d\udc47",
+"level": null,
+"mode": null,
+"engine": "lichess",
+"review_score": null,
+"permalink": "https://www.instagram.com/reel/De7ZR3ZvYrV/",
+"arms": null,
+"pillar": null,
+"cta": "keyword",
+"agent": null,
+"headline": "Show this to your child. Can they find it?",
+"media_id": "17929461900182669",
+"comments_count": 2,
+"like_count": 0
 }
 }
