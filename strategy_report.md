@@ -1,6 +1,6 @@
 # ChessTalentsFactory autopilot - what is winning
 
-_Updated 2026-10-26 · 1 reels with results (3+ days old) · average score 1.10_
+_Updated 2026-10-27 · 1 reels with results (3+ days old) · average score 1.10_
 
 
 Still collecting data: options are being tested evenly for now.
