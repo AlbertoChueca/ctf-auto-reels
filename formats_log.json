@@ -67,5 +67,13 @@
 "title": "Show this to your child. Can they find it?",
 "music": "synth-3",
 "date": "2026-10-28"
+},
+{
+"format": "carousel",
+"topic": "what-to-expect-month",
+"evergreen": null,
+"title": "What really happens in month one with a coach",
+"music": "synth-1",
+"date": "2026-10-30"
 }
 ]

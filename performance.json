@@ -581,5 +581,29 @@
 "media_id": "18121179217948752",
 "comments_count": 0,
 "like_count": 0
+},
+"18125427589926316": {
+"date": "2026-10-29",
+"slot": "story",
+"story": "Does an 800-Point Jump Take Years?",
+"hook": "Does your child really need years to jump 800 rating points? \u265f\ufe0f",
+"level": null,
+"mode": null,
+"engine": "broll",
+"review_score": 8.3,
+"permalink": "https://www.instagram.com/reel/DfF73dKgDtZ/",
+"arms": {
+"hook_style": "parent_question: open with a question parents ask before hiring a coach, then the honest answer",
+"theme": "progress you can see: what a rating means and the 6-level path",
+"cta": "keyword",
+"shape": "myth_fact"
+},
+"pillar": "remix",
+"cta": "keyword",
+"agent": null,
+"headline": "Does real progress take years?",
+"media_id": "18125427589926316",
+"comments_count": 0,
+"like_count": 0
 }
 }
