@@ -241,8 +241,8 @@
 "origin": "original",
 "likes": 26,
 "comments": 1,
-"views": 1681,
-"reach": 591,
+"views": 1684,
+"reach": 592,
 "shares": 1,
 "saved": 5,
 "analysis": {
@@ -418,7 +418,27 @@
 "views": 581,
 "reach": 45,
 "shares": 0,
-"saved": 0
+"saved": 0,
+"analysis": {
+"topic": "The power of structured learning in chess",
+"hook": "Coach sitting in front of a chessboard saying, 'Hey, let's explore the power of structured learning in chess.'",
+"key_points": [
+"Passion without structure leads to slow and frustrating progress",
+"A step-by-step curriculum targets tactics, strategy, and endgames",
+"Tactics improve calculation and quick thinking for competitive play",
+"Game analysis and endgame knowledge build strong decision-making foundations",
+"Personalized feedback from coaches highlights strengths and areas to improve"
+],
+"why_it_works": "It addresses parental frustration with slow progress and clearly explains how a systematic curriculum accelerates a child's skill development.",
+"pillar": "method",
+"reusable_idea": "Natural passion isn't enough to improve at chess without a structured, step-by-step training system and personalized feedback.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 6
+}
 },
 "18025066757253805": {
 "id": "18025066757253805",
@@ -429,9 +449,28 @@
 "likes": 14,
 "comments": 1,
 "views": 618,
-"reach": 36,
+"reach": 37,
 "shares": 0,
-"saved": 0
+"saved": 0,
+"analysis": {
+"topic": "Structured chess training methodology for kids",
+"hook": "Coach sitting behind a chessboard saying: 'Today, I want to share how we help children enhance their chess skills rapidly and effectively.'",
+"key_points": [
+"Kids with potential need structured guidance to excel",
+"Targeted training and personalized feedback address unique needs",
+"Focuses on critical thinking, problem-solving, and strategic planning",
+"Interactive online classes keep children engaged and motivated"
+],
+"why_it_works": "It speaks directly to parents seeking a structured, engaging way to turn their child's raw interest into real skills.",
+"pillar": "method",
+"reusable_idea": "Showcase your academy's training pillars (personalized feedback, critical thinking, interactive lessons) to explain why structured coaching works faster than self-study.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 5
+}
 },
 "17884661877016143": {
 "id": "17884661877016143",
@@ -441,10 +480,29 @@
 "origin": "original",
 "likes": 21,
 "comments": 1,
-"views": 800,
-"reach": 55,
+"views": 801,
+"reach": 56,
 "shares": 0,
-"saved": 1
+"saved": 1,
+"analysis": {
+"topic": "When to study openings vs. fundamentals",
+"hook": "One of the most typical questions that we receive is: what is the best opening to play?",
+"key_points": [
+"All chess openings are playable depending on your skill level",
+"Focusing on opening repertoires as a beginner is a mistake",
+"Beginners should focus on fundamentals: middlegames and endgames",
+"Deep opening preparation is only necessary at an advanced level (around 1800 rating)"
+],
+"why_it_works": "It addresses a widespread beginner misconception and provides a clear rating benchmark for when opening study actually matters.",
+"pillar": "faq",
+"reusable_idea": "Stop letting beginner chess players memorize openings; prioritize middlegames and endgames until they reach around 1800 rating.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
 },
 "18020097623116741": {
 "id": "18020097623116741",
@@ -454,8 +512,8 @@
 "origin": "original",
 "likes": 76,
 "comments": 6,
-"views": 4098,
-"reach": 1225,
+"views": 4101,
+"reach": 1227,
 "shares": 1,
 "saved": 2
 },
@@ -467,8 +525,8 @@
 "origin": "auto",
 "likes": 1,
 "comments": 2,
-"views": 138,
-"reach": 123,
+"views": 148,
+"reach": 132,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -500,8 +558,8 @@
 "origin": "auto",
 "likes": 2,
 "comments": 0,
-"views": 139,
-"reach": 112,
+"views": 148,
+"reach": 118,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -534,8 +592,8 @@
 "origin": "auto",
 "likes": 2,
 "comments": 0,
-"views": 151,
-"reach": 126,
+"views": 157,
+"reach": 131,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -567,8 +625,8 @@
 "origin": "auto",
 "likes": 1,
 "comments": 2,
-"views": 177,
-"reach": 149,
+"views": 190,
+"reach": 154,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -589,6 +647,173 @@
 "student_name": ""
 },
 "quality": 8
+}
+},
+"18190881043365134": {
+"id": "18190881043365134",
+"permalink": "https://www.instagram.com/reel/DfK86wtPYy2/",
+"date": "2026-10-31",
+"caption": "An app won't explain why your child keeps losing. 📱\n\nSolving puzzles keeps kids busy, but it doesn't spot their repeating mistakes. A structured routine teaches them how to think through tough positions at the board.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesstraining #uschess #chesstactics",
+"origin": "auto",
+"likes": 2,
+"comments": 2,
+"views": 142,
+"reach": 105,
+"shares": 0,
+"saved": 1,
+"analysis": {
+"topic": "Why daily chess apps don't lead to tournament wins",
+"hook": "Nobody tells chess parents this about daily chess apps:",
+"key_points": [
+"Kids solve dozens of daily app puzzles with green checkmarks, but struggle in real tournaments",
+"Apps only test what a child spots, not how they actually think through a position",
+"Screens cannot diagnose or explain repeating quiet mistakes",
+"Puzzles offer quick practice, but structured guidance fixes thinking habits"
+],
+"why_it_works": "It directly addresses a common frustration where parents see high activity on apps but zero progress in tournament results.",
+"pillar": "pain",
+"reusable_idea": "Solving puzzles on apps creates an illusion of progress because apps test pattern recognition rather than teaching the deep thinking process required in real games.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"18125427589926316": {
+"id": "18125427589926316",
+"permalink": "https://www.instagram.com/reel/DfF73dKgDtZ/",
+"date": "2026-10-29",
+"caption": "Is your child playing endless chess tournaments without real rating progress? ♟️\nMany parents believe chess progress requires thousands of exhausting weekend games. Structured training and learning how to recover from defeats make all the difference. Send us a message to start with a personalized diagnosis.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#kidschess #chessparents #chesscoach",
+"origin": "auto",
+"likes": 0,
+"comments": 0,
+"views": 83,
+"reach": 54,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Debunking the need for endless tournaments to achieve major rating progress",
+"hook": "Parents ask us: does jumping 800 rating points take years of endless tournaments?",
+"key_points": [
+"Non-stop tournament play leads to exhaustion without true understanding",
+"A CTF student climbed from 1200 to 2000 rating in just months",
+"Method focuses on quick computer analysis after defeats and letting losses go immediately",
+"Emotional calm helped her take 3rd place at the Pan American Championship",
+"Real chess progress requires a structured roadmap rather than random play"
+],
+"why_it_works": "It addresses parental fatigue with endless weekend tournaments while offering hope through a proven roadmap and a concrete international tournament success story.",
+"pillar": "success",
+"reusable_idea": "Kids do not need years of exhausting weekend tournaments to jump hundreds of rating points; real breakthroughs come from a structured roadmap and emotional recovery after losses.",
+"student_success": {
+"present": true,
+"facts": [
+"Climbed from 1200 to 2000 rating (jumped 800 rating points / two full stages)",
+"Achieved this jump in just months",
+"Placed 3rd at the Pan American Championship"
+],
+"student_name": ""
+},
+"quality": 9
+}
+},
+"18121179217948752": {
+"id": "18121179217948752",
+"permalink": "https://www.instagram.com/reel/DfDV1SoTZpL/",
+"date": "2026-10-28",
+"caption": "One move wins. Can your child spot it? ♟️\n\nPause the video, let your child try, then check the answer at the end. Write their move in the comments.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesstraining #learnchess #chessforkids",
+"origin": "auto",
+"likes": 0,
+"comments": 0,
+"views": 146,
+"reach": 124,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Interactive checkmate-in-2 chess challenge for kids",
+"hook": "Text overlay: 'Challenge for chess kids. Show this to your child. Can they find it?' with an active chess board.",
+"key_points": [
+"Presents a 'White to move · Checkmate in 2' tactical challenge",
+"Prompts parents to pause the video and let their child try",
+"Runs a visual countdown timer before revealing the moves",
+"Demonstrates the checkmate solution on the board",
+"Calls to action with comment 'PLAN' to receive a free training video"
+],
+"why_it_works": "Engaging parents with a direct challenge to test their child's skills creates immediate interactive participation and high comment-to-lead conversion.",
+"pillar": "puzzle",
+"reusable_idea": "Share a quick chess puzzle aimed at kids with a pause-and-solve timer, then invite parents to comment a keyword for a customized training resource.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 7
+}
+},
+"17976887181154019": {
+"id": "17976887181154019",
+"permalink": "https://www.instagram.com/reel/DfAum-ivl-z/",
+"date": "2026-10-27",
+"caption": "Why so many kids lose interest in chess when playing alone ♟️\n\nSchool friends rarely understand tournament pressure, but peers at the same level do. Small group training gives children friends who keep them in the game.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesstournament #chesskids #chessimprovement #chessparents",
+"origin": "auto",
+"likes": 0,
+"comments": 0,
+"views": 140,
+"reach": 109,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Overcoming loneliness in competitive chess through peer group training",
+"hook": "A text message appears: 'none of his school friends play chess. he feels pretty alone.'",
+"key_points": [
+"School peers often don't understand tournament chess or pressure",
+"Practicing in isolation makes kids feel lonely between tournament rounds",
+"Small group training connects kids with peers at their exact level",
+"Chess peers review games together, share losses, and motivate each other"
+],
+"why_it_works": "It taps into the emotional heartbreak parents feel seeing their child isolated at tournaments and offers peer-group training as an immediate solution.",
+"pillar": "pain",
+"reusable_idea": "Kids lose interest in chess when practicing in isolation, but training with peers of equal skill keeps them engaged and supported.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"17929461900182669": {
+"id": "17929461900182669",
+"permalink": "https://www.instagram.com/reel/De7ZR3ZvYrV/",
+"date": "2026-10-25",
+"caption": "Can your child find the winning move? Answer in the comments 👇\n\nPause the video, let your child try, then check the answer at the end. Write their move in the comments.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#kidschess #chesstraining #chessforkids",
+"origin": "auto",
+"likes": 0,
+"comments": 2,
+"views": 151,
+"reach": 132,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Tactical chess puzzle for kids: Black to move checkmate in 2",
+"hook": "Show this to your child. Can they find it?",
+"key_points": [
+"Presents a 'Black to move · Checkmate in 2' chess tactic",
+"Countdown prompts parents to pause and let their child solve it",
+"Reveals the 2-move checkmating combination",
+"Notes that solving puzzles daily helps kids spot tactics in real games",
+"Offers a free parent training video via the comment keyword 'PLAN'"
+],
+"why_it_works": "It directly involves the parent and child with an interactive challenge, demonstrating immediate educational value before pitching a free resource.",
+"pillar": "puzzle",
+"reusable_idea": "Engage parents by presenting a quick, solvable puzzle for their child to test their skills and inviting comments with their child's answer.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 7
 }
 }
 }
