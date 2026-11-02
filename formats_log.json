@@ -90,5 +90,13 @@
 "title": "Can your child find the winning move?",
 "music": "synth-4",
 "date": "2026-11-01"
+},
+{
+"format": "carousel",
+"topic": "between-rounds",
+"evergreen": null,
+"title": "5 things to do between tournament rounds",
+"music": "synth-1",
+"date": "2026-11-02"
 }
 ]

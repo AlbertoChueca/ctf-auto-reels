@@ -643,5 +643,24 @@
 "media_id": "18190881043365134",
 "comments_count": 2,
 "like_count": 2
+},
+"18187932340412583": {
+"date": "2026-11-01",
+"slot": "story",
+"story": "Can your child find the winning move?",
+"hook": "Show this to your child. Did they find it? \ud83d\udc47",
+"level": null,
+"mode": null,
+"engine": "lichess",
+"review_score": null,
+"permalink": "https://www.instagram.com/reel/DfNlm2SqOd7/",
+"arms": null,
+"pillar": null,
+"cta": "keyword",
+"agent": null,
+"headline": "Can your child find the winning move?",
+"media_id": "18187932340412583",
+"comments_count": 0,
+"like_count": 0
 }
 }
