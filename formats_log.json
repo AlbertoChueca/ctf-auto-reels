@@ -98,5 +98,13 @@
 "title": "5 things to do between tournament rounds",
 "music": "synth-1",
 "date": "2026-11-02"
+},
+{
+"format": "chat",
+"topic": "draws",
+"evergreen": null,
+"title": "Tournament text",
+"music": "synth-3",
+"date": "2026-11-03"
 }
 ]
