@@ -106,5 +106,12 @@
 "title": "Tournament text",
 "music": "synth-3",
 "date": "2026-11-03"
+},
+{
+"format": "challenge",
+"puzzle": "3kLmn",
+"title": "Can your child find the winning move?",
+"music": "synth-2",
+"date": "2026-11-04"
 }
 ]
