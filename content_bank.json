@@ -241,8 +241,8 @@
 "origin": "original",
 "likes": 26,
 "comments": 1,
-"views": 1684,
-"reach": 592,
+"views": 1686,
+"reach": 569,
 "shares": 1,
 "saved": 5,
 "analysis": {
@@ -279,7 +279,7 @@
 "origin": "original",
 "likes": 11,
 "comments": 0,
-"views": 974,
+"views": 975,
 "reach": 103,
 "shares": 0,
 "saved": 2,
@@ -318,7 +318,7 @@
 "origin": "original",
 "likes": 14,
 "comments": 1,
-"views": 762,
+"views": 763,
 "reach": 104,
 "shares": 0,
 "saved": 0,
@@ -350,8 +350,8 @@
 "origin": "original",
 "likes": 12,
 "comments": 1,
-"views": 605,
-"reach": 60,
+"views": 606,
+"reach": 59,
 "shares": 0,
 "saved": 1,
 "analysis": {
@@ -416,7 +416,7 @@
 "likes": 16,
 "comments": 0,
 "views": 581,
-"reach": 45,
+"reach": 44,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -514,9 +514,33 @@
 "likes": 76,
 "comments": 6,
 "views": 4101,
-"reach": 1227,
+"reach": 1145,
 "shares": 1,
-"saved": 2
+"saved": 2,
+"analysis": {
+"topic": "Academy introduction and student track record",
+"hook": "Hi, I'm Alberto Chueca, International Master and founder of the High-Performance Chess Academy.",
+"key_points": [
+"Over 14 years of experience guiding young players to success",
+"Students have won national and international championships",
+"Methodology helped students gain 700 rating points in 13 months",
+"Students usually see noticeable progress in 3-4 months",
+"Personalized, interactive online sessions make learning fun and engaging"
+],
+"why_it_works": "It establishes immediate authority through credentials and backs it up with real rating progression charts.",
+"pillar": "success",
+"reusable_idea": "Build trust with parents by combining founder credentials with visual rating graphs showing rapid student growth.",
+"student_success": {
+"present": true,
+"facts": [
+"National and international championships won",
+"Improved by 700 rating points in 13 months",
+"Students feel big changes in 3-4 months"
+],
+"student_name": "Jwalanthi Ram, Pranav Sathish"
+},
+"quality": 7
+}
 },
 "18192082975410571": {
 "id": "18192082975410571",
@@ -526,8 +550,8 @@
 "origin": "auto",
 "likes": 1,
 "comments": 2,
-"views": 148,
-"reach": 132,
+"views": 153,
+"reach": 135,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -559,8 +583,8 @@
 "origin": "auto",
 "likes": 2,
 "comments": 0,
-"views": 148,
-"reach": 118,
+"views": 150,
+"reach": 119,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -593,8 +617,8 @@
 "origin": "auto",
 "likes": 2,
 "comments": 0,
-"views": 157,
-"reach": 131,
+"views": 162,
+"reach": 132,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -626,8 +650,8 @@
 "origin": "auto",
 "likes": 1,
 "comments": 2,
-"views": 190,
-"reach": 154,
+"views": 192,
+"reach": 156,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -658,8 +682,8 @@
 "origin": "auto",
 "likes": 2,
 "comments": 2,
-"views": 142,
-"reach": 105,
+"views": 159,
+"reach": 117,
 "shares": 0,
 "saved": 1,
 "analysis": {
@@ -690,8 +714,8 @@
 "origin": "auto",
 "likes": 0,
 "comments": 0,
-"views": 83,
-"reach": 54,
+"views": 97,
+"reach": 62,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -727,8 +751,8 @@
 "origin": "auto",
 "likes": 0,
 "comments": 0,
-"views": 146,
-"reach": 124,
+"views": 150,
+"reach": 127,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -760,8 +784,8 @@
 "origin": "auto",
 "likes": 0,
 "comments": 0,
-"views": 140,
-"reach": 109,
+"views": 149,
+"reach": 115,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -792,8 +816,8 @@
 "origin": "auto",
 "likes": 0,
 "comments": 2,
-"views": 151,
-"reach": 132,
+"views": 155,
+"reach": 136,
 "shares": 0,
 "saved": 0,
 "analysis": {
@@ -815,6 +839,170 @@
 "student_name": ""
 },
 "quality": 7
+}
+},
+"18650226469050812": {
+"id": "18650226469050812",
+"permalink": "https://www.instagram.com/reel/Dfc_-jnygnW/",
+"date": "2026-11-07",
+"caption": "How do you know if your child has the right coach? ♟️\n\nPlaying strength does not automatically translate into clear guidance for a young player. Look for a written weekly plan and a coach who keeps you informed.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#kidschess #chesslessons #chessforkids #scholasticchess",
+"origin": "auto",
+"likes": 2,
+"comments": 0,
+"views": 127,
+"reach": 107,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Why a strong chess player isn't always a good coach for kids",
+"hook": "Text overlay: 'MYTH VS TRUTH: A strong chess player isn't always a great coach.'",
+"key_points": [
+"Parents assume stronger playing strength means better coaching",
+"Playing well and teaching kids require completely different skills",
+"Improvised weekly lessons cause kids to plateau",
+"Good coaches track progress, explain simply, and keep parents informed",
+"Effective training requires a structured roadmap"
+],
+"why_it_works": "It challenges a common blind spot for non-chess parents who assume high player rating automatically equals great teaching ability.",
+"pillar": "pain",
+"reusable_idea": "A coach's playing strength matters far less than having a structured weekly plan, clear communication, and tracked progress.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"17868427926676588": {
+"id": "17868427926676588",
+"permalink": "https://www.instagram.com/reel/DfYDiAuCq3Y/",
+"date": "2026-11-05",
+"caption": "Stop letting your child memorize chess openings before reaching 1800 ♟️\nMemorizing move orders won't help young players through a grueling weekend tournament. At ChessTalentsFactory, our International Masters guide students along a structured Learning Path where deep opening preparation waits until around an 1800 rating.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#scholasticchess #chesstactics #learnchess",
+"origin": "auto",
+"likes": 3,
+"comments": 0,
+"views": 150,
+"reach": 113,
+"shares": 1,
+"saved": 1,
+"analysis": {
+"topic": "Why kids shouldn't memorize chess openings before 1800",
+"hook": "POV: your child spends hours memorizing opening moves online, then runs out of steam the moment a tournament weekend begins.",
+"key_points": [
+"Memorizing openings early is like learning calculus before basic addition",
+"Deep opening preparation should wait until reaching an 1800 rating",
+"Before 1800, games are won on tactical vision and clean endgames",
+"Weekend tournaments require physical stamina and focus, not rote memory",
+"A structured roadmap builds real playing confidence"
+],
+"why_it_works": "It directly challenges a widespread training mistake using a relatable school analogy (calculus before addition) and provides a concrete rating milestone.",
+"pillar": "pain",
+"reusable_idea": "Young chess players should avoid memorizing opening lines until reaching 1800, focusing instead on tactics, endgames, and stamina.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"18101323592375149": {
+"id": "18101323592375149",
+"permalink": "https://www.instagram.com/reel/DfVdYbZyJhl/",
+"date": "2026-11-04",
+"caption": "Show this to your child. Did they find it? 👇\n\nPause the video, let your child try, then check the answer at the end. Write their move in the comments.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesscoach #chesslessons #chesstournament #learnchess #kidschess",
+"origin": "auto",
+"likes": 0,
+"comments": 0,
+"views": 151,
+"reach": 119,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Interactive checkmate-in-one puzzle challenge for chess kids",
+"hook": "Challenge for chess kids: Can your child find the winning move?",
+"key_points": [
+"White to move, checkmate in 1 puzzle challenge",
+"Countdown urging parents to pause the video and let their child try",
+"Reveals the checkmate answer",
+"Emphasizes that pattern recognition is trained, not born",
+"Call to action to comment 'PLAN' for a free parent training video"
+],
+"why_it_works": "It directly involves the parent and child through an interactive challenge that tests tactical vision while reinforcing that chess skill is learned through structured training.",
+"pillar": "puzzle",
+"reusable_idea": "Present a bite-sized chess tactical puzzle tailored for kids to test their skills and connect missed answers to the need for systematic pattern training.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"18208771120335732": {
+"id": "18208771120335732",
+"permalink": "https://www.instagram.com/reel/DfS3wemNapf/",
+"date": "2026-11-03",
+"caption": "When your child gets ahead but still ends with a draw ♟️\n\nConverting a winning position is a distinct skill built through endgame practice, not more opening memorization. At ChessTalentsFactory, we help young players learn how to close out their advantages cleanly.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chess #chessforkids #chessparenting #chesstraining",
+"origin": "auto",
+"likes": 0,
+"comments": 0,
+"views": 163,
+"reach": 138,
+"shares": 0,
+"saved": 0,
+"analysis": {
+"topic": "Converting winning positions in chess endgames",
+"hook": "Simulated text conversation with a coach: 'another draw today. he was up two pieces and let it slip.'",
+"key_points": [
+"Getting ahead and closing out games are two completely different skills",
+"Endgame practice, not opening memorization, teaches kids to convert advantages",
+"Cut opening study time in half",
+"Spend 20 minutes daily practicing endgames with few pieces on the board"
+],
+"why_it_works": "It taps into a deeply relatable and frustrating pain point for chess parents through an authentic text message exchange format.",
+"pillar": "pain",
+"reusable_idea": "Closing out a won game requires endgame technique rather than more opening memorization.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
+}
+},
+"18187932340412583": {
+"id": "18187932340412583",
+"permalink": "https://www.instagram.com/reel/DfNlm2SqOd7/",
+"date": "2026-11-01",
+"caption": "Show this to your child. Did they find it? 👇\n\nPause the video, let your child try, then check the answer at the end. Write their move in the comments.\n\nParents: comment \"PLAN\" and we'll send you our free training video by DM.\nChessTalentsFactory: online chess academy for kids. Small groups and private lessons with International Masters.\n\n#chesstournament #chesslessons #kidschess",
+"origin": "auto",
+"likes": 0,
+"comments": 0,
+"views": 148,
+"reach": 128,
+"shares": 1,
+"saved": 0,
+"analysis": {
+"topic": "Interactive tactical chess puzzle for kids",
+"hook": "Can your child find the winning move? White to move • Checkmate in 2",
+"key_points": [
+"Interactive puzzle challenge prompting parents to pause the video for their child",
+"Animated countdown timer to encourage participation and retention",
+"Solution revealed: tactical checkmate in 2 moves",
+"Reminder that tactical pattern recognition is trained, not born",
+"Call to action to comment 'PLAN' to receive a free training video"
+],
+"why_it_works": "It hooks parents by creating an interactive challenge for their child and reassures them that chess vision is a skill developed through proper training.",
+"pillar": "puzzle",
+"reusable_idea": "Share a quick interactive puzzle for kids to try, reveal the tactical pattern, and pitch coaching by emphasizing that chess patterns are trained rather than innate talent.",
+"student_success": {
+"present": false,
+"facts": [],
+"student_name": ""
+},
+"quality": 8
 }
 }
 }
