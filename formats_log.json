@@ -220,5 +220,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "results",
+"topic": "results",
+"evergreen": null,
+"title": "From 1700 to 2050",
+"music": "synth-4",
+"cta": "keyword",
+"evidence": null,
+"case": "imran-champsi",
+"date": "2026-11-17"
 }
 ]
