@@ -38,6 +38,8 @@ def _extra(media_id, token):
 
 def _metrics(media_id, token):
     r = requests.get(f"{GRAPH}/{media_id}/insights", params={"metric": ",".join(METRICS), "access_token": token}, timeout=30)
+    if r.status_code >= 400 and ('"code":190' in r.text.replace(" ", "") or "access token" in r.text.lower()):
+        raise RuntimeError("the Instagram token is not valid any more (renew the IG_TOKEN secret)")
     if r.status_code == 200:
         return {d["name"]: (d.get("values") or [{}])[0].get("value") for d in r.json().get("data", [])}
     err = r.text
@@ -90,10 +92,16 @@ def update(days=45):
                 m = r.json() if r.status_code == 200 else {}
                 m.pop("id", None)
         except Exception as err:
-            print("insights error", mid, str(err)[:150], flush=True); continue
-        perf[mid] = {**{k: e.get(k) for k in ("date", "slot", "story", "hook", "level", "mode", "engine",
-                                              "review_score", "permalink", "arms", "pillar", "cta", "agent",
-                                              "headline", "media_id")}, **m}
+            print("insights error", mid, str(err)[:150], flush=True)
+            if "token is not valid" in str(err):
+                return "insights: skipped, " + str(err)
+            continue
+        old = perf.get(mid) or {}
+        keep = {k: v for k, v in old.items() if k in METRICS + EXTRA + ["like_count", "comments_count"] or k.startswith("profile_activity_")}
+        perf[mid] = {**{k: e.get(k) for k in ("date", "slot", "story", "hook", "level", "mode", "engine", "format", "topic",
+                                              "review_score", "permalink", "arms", "pillar", "cta", "agent", "evidence",
+                                              "headline", "media_id", "published_as", "duration")},
+                     **keep, **{k: v for k, v in (m or {}).items() if v is not None}}   # a failed call never erases numbers
         n += 1
     json.dump(perf, open(PERF, "w"), indent=0)
     return (f"insights: updated {n} reels"

@@ -2,13 +2,22 @@ name: Daily reels
 
 on:
   schedule:
-    - cron: "0 16 * * *"   # ONE post a day -> 12:00 New York (13:00 PY). Format calendar in run_daily.py
+    - cron: "37 16 * * *"   # ONE post a day, around noon in New York. Off the hour on purpose: GitHub delays :00 jobs by hours
   workflow_dispatch:
     inputs:
       format:
-        description: "Post type (auto = weekly calendar: Mon carousel, Tue chat, Wed challenge, Thu voice, Fri carousel, Sat kinetic, Sun challenge)"
+        description: "Post type (auto = calendar: animated explainers Mon/Tue/Thu/Fri/Sun, carousels Wed/Sat)"
         type: choice
-        options: [auto, carousel, chat, kinetic, challenge, voice]
+        options: [auto, animated, carousel, chat, kinetic, challenge, voice]
+        default: auto
+      topic:
+        description: "Optional: make an animated reel about exactly this (e.g. 'my kid cries when he loses to younger kids')"
+        type: string
+        default: ""
+      ending:
+        description: "Ending of the animated reel (auto = 2 of 3 days 'send it to a parent', 1 of 3 'comment PLAN')"
+        type: choice
+        options: [auto, share, keyword]
         default: auto
       pillar:
         description: "Only for format voice: topic family (auto = calendar)"
@@ -101,6 +110,11 @@ jobs:
           FB_REELS: ${{ vars.FB_REELS || 'on' }}
           FORMAT_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.format || 'auto' }}
           STUDIO: ${{ vars.STUDIO || 'off' }}
+          TOPIC_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.topic || '' }}
+          ANIM_CTA: ${{ github.event_name == 'workflow_dispatch' && inputs.ending || vars.ANIM_CTA || 'auto' }}
+          VOICE_TEMPO: ${{ vars.VOICE_TEMPO || '1.07' }}
+          FIRST_COMMENT: ${{ vars.FIRST_COMMENT || 'on' }}
+          ANIM_CRITIC: ${{ vars.ANIM_CRITIC || 'on' }}
           STUDENT_NAMES: ${{ vars.STUDENT_NAMES || 'none' }}
           DM_KEYWORD: ${{ vars.DM_KEYWORD || 'PLAN' }}
           REEL_FORMAT: ${{ vars.REEL_FORMAT }}

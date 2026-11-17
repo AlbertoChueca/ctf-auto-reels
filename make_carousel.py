@@ -7,7 +7,7 @@ same slides into a reel (slideshow) so the slot is never lost.
 
 python make_carousel.py   -> renders out/test_carousel/ (evergreen content) + out/test_carousel_reel.mp4
 """
-import json, os, random, sys
+import json, os, random, subprocess, sys
 import numpy as np
 from PIL import Image, ImageDraw
 
@@ -129,8 +129,23 @@ def slides(sc, seed):
     return out
 
 
+_ENC = ["-c:v", "libx264", "-preset", "veryfast", "-profile:v", "high", "-crf", "18", "-pix_fmt", "yuv420p", "-r", str(F.FPS), "-g", str(F.FPS * 2)]
+
+
+def _hold(png, seconds, out, wav=None):
+    """A still held for `seconds` (decoded once, looped by the filter): renders in a fraction of a second."""
+    tmp = out.replace(".mp4", ".part.mp4")
+    cmd = ["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(F.FPS), "-i", png] + (["-i", wav] if wav else []) + [
+        "-vf", f"format=yuv420p,loop=-1:1,trim=duration={seconds:.2f}"] + _ENC
+    if wav:
+        cmd += ["-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart"]
+    subprocess.run(cmd + [tmp], check=True)
+    os.replace(tmp, out)
+    return out
+
+
 def slide_videos(imgs, seed, folder):
-    """Each slide -> a 5 s MP4 (slow push-in + its own slice of one continuous music bed)."""
+    """Each slide -> a 5 s MP4 (its own slice of one continuous music bed)."""
     os.makedirs(folder, exist_ok=True)
     total = SLIDE_S * len(imgs)
     bed, track = F.music(total, seed, energy=0.5)
@@ -140,45 +155,40 @@ def slide_videos(imgs, seed, folder):
         seg = bed[int(i * SLIDE_S * F.SR): int((i + 1) * SLIDE_S * F.SR)].copy()
         r = int(0.03 * F.SR); seg[:r] *= np.linspace(0, 1, r); seg[-r:] *= np.linspace(1, 0, r)
         wav = F.write_wav(seg, os.path.join(folder, f"s{i}.wav"))
-        big = im.resize((int(CW * 1.04), int(CH * 1.04)), Image.LANCZOS)
-        def frames(big=big):
-            nfr = int(SLIDE_S * F.FPS)
-            for fi in range(nfr):
-                k = F.ease_in_out(fi / nfr); s = 1.04 - 0.04 * k
-                w, h = int(CW * s), int(CH * s)
-                x, y = (big.width - w) // 2, (big.height - h) // 2
-                yield big.crop((x, y, x + w, y + h)).resize((CW, CH), Image.BILINEAR)
-        p = os.path.join(folder, f"slide_{i + 1}.mp4")
-        F.encode(frames(), wav, p, CW, CH)
-        os.remove(wav)
-        paths.append(p)
+        png = os.path.join(folder, f"s{i}.png"); im.convert("RGB").save(png)
+        paths.append(_hold(png, SLIDE_S, os.path.join(folder, f"slide_{i + 1}.mp4"), wav))
+        os.remove(wav); os.remove(png)
     return paths, track
 
 
 def slideshow_reel(imgs, seed, out):
-    """Fallback: the same slides as one vertical reel (each slide centred on the cinematic background)."""
+    """The same slides as one vertical reel (for the Story, Facebook and as a fallback): each slide centred on
+    the cinematic background, held, joined without re-encoding."""
     per = 3.6
-    total = per * len(imgs) + 0.4
-    def frames():
-        for fi in range(int(total * F.FPS)):
-            t = fi / F.FPS
-            i = min(len(imgs) - 1, int(t / per)); lt = t - i * per
-            fr = Image.new("RGBA", (F.W, F.H)); F.draw_bg(fr, seed, t, total)
-            fr.alpha_composite(Image.new("RGBA", (F.W, F.H), (0, 0, 0, 120)))
-            cur = imgs[i]
-            a = F.clamp(lt / 0.3)
-            if i > 0 and lt < 0.3:
-                F.paste(fr, imgs[i - 1], F.W / 2, F.H / 2 - 40, 1.0, 1 - a)
-            F.paste(fr, cur, F.W / 2, F.H / 2 - 40 + (1 - F.ease_out(lt / 0.4)) * 30, 1.0, a)
-            F.progress(fr, t, total)
-            yield fr
+    folder = out.replace(".mp4", "_parts"); os.makedirs(folder, exist_ok=True)
+    parts = []
+    for i, im in enumerate(imgs):
+        fr = Image.new("RGBA", (F.W, F.H)); F.draw_bg(fr, seed, i * per, per * len(imgs))
+        fr.alpha_composite(Image.new("RGBA", (F.W, F.H), (0, 0, 0, 120)))
+        F.paste(fr, im, F.W / 2, F.H / 2 - 40)
+        F.progress(fr, (i + 1) * per, per * len(imgs))
+        png = os.path.join(folder, f"r{i}.png"); fr.convert("RGB").save(png)
+        parts.append(_hold(png, per, os.path.join(folder, f"r{i}.mp4"))); os.remove(png)
+    total = per * len(imgs)
     bed, _ = F.music(total, seed, energy=0.5)
     n = int(total * F.SR); mix = bed[:n].copy()
     for i in range(1, len(imgs)):
         a = int(i * per * F.SR); x = F.soft_tick(1400, 0.05); mix[a:a + len(x)] += x[:max(0, n - a)]
     wav = F.write_wav(F.master(mix, target_db=-15.0), out.replace(".mp4", "_a.wav"))
-    F.encode(frames(), wav, out)
-    os.remove(wav)
+    lst = os.path.join(folder, "list.txt")
+    open(lst, "w").write("".join(f"file '{os.path.abspath(p)}'\n" for p in parts))
+    tmp = out.replace(".mp4", ".part.mp4")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lst, "-i", wav, "-map", "0:v", "-map", "1:a",
+                    "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart", tmp], check=True)
+    os.replace(tmp, out)
+    for p in parts + [lst, wav]:
+        os.remove(p)
+    os.rmdir(folder)
     return out
 
 

@@ -1,0 +1,29 @@
+{
+ "_note": "Estudios reales que los reels pueden citar (y SOLO estos). Cada uno se dice de forma cualitativa y la cita aparece pequeña en pantalla. Pon \"approved\": false en el que no quieras usar, o añade los tuyos con la misma forma.",
+ "facts": [
+  {"id": "charness2005", "approved": true,
+   "finding": "In a study of chess players, the strongest predictor of chess skill was the amount of serious study done alone, more than the amount of tournament play.",
+   "source_text": "Charness et al., Applied Cognitive Psychology, 2005",
+   "viz": {"block": "bars", "params": {"a_label": "Tournament play", "b_label": "Serious study alone", "a": 0.5, "b": 0.95, "tone": "good", "big": "Study wins"}}},
+  {"id": "chase_simon1973", "approved": true,
+   "finding": "Shown a real game position for five seconds, chess masters rebuilt almost all of it from memory while beginners placed only a few pieces. With randomly scrambled pieces the masters' advantage almost disappeared: they remember patterns, not single pieces.",
+   "source_text": "Chase & Simon, Cognitive Psychology, 1973",
+   "viz": {"block": "bars", "params": {"a_label": "Beginners", "b_label": "Masters", "a": 0.22, "b": 0.92, "tone": "good", "big": "Pieces remembered"}}},
+  {"id": "mueller_dweck1998", "approved": true,
+   "finding": "Fifth graders praised for being smart later avoided harder problems and did worse after a setback; children praised for their effort chose harder problems and kept trying.",
+   "source_text": "Mueller & Dweck, J. Pers. Soc. Psychol., 1998",
+   "viz": {"block": "bars", "params": {"a_label": "Praised for being smart", "b_label": "Praised for effort", "a": 0.3, "b": 0.9, "tone": "good", "big": "Chose harder tasks"}}},
+  {"id": "roediger_karpicke2006", "approved": true,
+   "finding": "Students who tested themselves on material remembered much more of it a week later than students who simply studied it again, even though re-studying felt more effective.",
+   "source_text": "Roediger & Karpicke, Psychological Science, 2006",
+   "viz": {"block": "bars", "params": {"a_label": "Studying it again", "b_label": "Testing yourself", "a": 0.42, "b": 0.9, "tone": "good", "big": "Remembered a week later"}}},
+  {"id": "cepeda2006", "approved": true,
+   "finding": "A review of hundreds of learning experiments found that the same amount of practice is remembered far longer when it is spread over several sessions instead of done all at once.",
+   "source_text": "Cepeda et al., Psychological Bulletin, 2006",
+   "viz": {"block": "bars", "params": {"a_label": "All at once", "b_label": "Spread out", "a": 0.4, "b": 0.9, "tone": "good", "big": "Remembered longer"}}},
+  {"id": "gobet_campitelli2007", "approved": true,
+   "finding": "Among chess players who reached master level, the amount of practice it took varied enormously: some got there in about three thousand hours, others needed more than twenty thousand.",
+   "source_text": "Gobet & Campitelli, Developmental Psychology, 2007",
+   "viz": {"block": "bars", "params": {"a_label": "Fastest to master", "b_label": "Slowest to master", "a": 0.15, "b": 1.0, "tone": "bad", "big": "3,000 vs 20,000+ hours"}}}
+ ]
+}

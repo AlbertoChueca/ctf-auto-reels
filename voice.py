@@ -348,7 +348,10 @@ def _gemini_line(text, style, key, pace):
     natural length; otherwise the best acceptable one is kept. Fails only if every take is clearly wrong."""
     # Google's documented short style form ("Say warmly: ..."). Anything spoken that is not the script is cut
     # (_strip_extras) or the take is rejected (_leaked); the last attempt is the bare script.
-    prompts = [f"Say {_style(style)}: {text}", f"Say {_style(style)}: {text}", text]
+    # Current Gemini TTS models read a style instruction aloud, so by default only the bare script is sent.
+    # VOICE_STYLE_PROMPT=on tries the styled form first, and only when speech recognition can cut/reject it.
+    styled = os.environ.get("VOICE_STYLE_PROMPT", "off") == "on" and _asr(np.zeros(SR // 2, np.float32)) is not None
+    prompts = [f"Say {_style(style)}: {text}", text, text] if styled else [text, text, text]
     takes = []
     for pr in prompts:
         try:
@@ -415,7 +418,7 @@ def _gemini_many(texts, styles, key, one_take, pace):
         try:
             script = "\n\n".join(texts)
             mood = _style(", ".join(dict.fromkeys(x for x in styles if x)) or "warm, calm")
-            take = _trim(_strip_extras(_trim(_gemini_call(f"Say {mood}, with a short pause between paragraphs:\n\n{script}", key)), script))
+            take = _trim(_strip_extras(_trim(_gemini_call(script, key)), script))   # bare script: nothing to read aloud
             prompt = script
             if _leaked(take, prompt):
                 raise RuntimeError("one take contains extra spoken words")

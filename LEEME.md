@@ -1,45 +1,57 @@
 # ChessTalentsFactory – Reels orgánicos automáticos
 
-Publica sola **1 publicación al día** (12:00 Nueva York) en Instagram + Story, **Facebook Reels**, YouTube Shorts y
-TikTok, pensada para **padres que no juegan al ajedrez**. Objetivo: que se paren, guarden, comenten "PLAN" y entren
-en el embudo. Tu tiempo continuo: cero.
+Publica sola **1 publicación al día** (hacia las 12:00 de Nueva York) en Instagram + Story, **Facebook Reels**,
+YouTube Shorts y TikTok, pensada para **padres que no juegan al ajedrez**. Objetivo: que se paren, lo envíen a otro
+padre, comenten "PLAN" y entren en el embudo. Tu tiempo continuo: cero.
 
-## Qué se publica (versión 3, octubre 2026)
+## Qué se publica (versión 4, noviembre 2026)
 
-Menos cantidad, más calidad y formatos variados. La mayoría **sin narrador**: nada suena a IA.
+| Día | Formato |
+|---|---|
+| Lunes, martes, jueves, viernes y domingo | **Explicativo animado** (`make_animated.py`) |
+| Miércoles y sábado | **Carrusel** de 7 diapositivas (`make_carousel.py`) |
 
-| Día | Formato | Qué es |
-|---|---|---|
-| Lunes | **Carrusel** (`make_carousel.py`) | 7 diapositivas de consejo: "5 señales…", "Qué decir cuando…". El formato que más se guarda |
-| Martes | **Chat** (`make_textreel.py chat`) | Conversación de mensajes entre un padre y nuestro coach, con "escribiendo…" |
-| Miércoles | **Reto** (`make_challenge.py`) | "¿Encuentra tu hijo la jugada?" Puzzle real, cuenta atrás, solución animada |
-| Jueves | **Voz** (`make_broll.py`) | El reel narrado, con voz expresiva verificada palabra a palabra |
-| Viernes | **Carrusel** | Otro tema del banco de preguntas |
-| Sábado | **Texto** (`make_textreel.py kinetic`) | Frases grandes que entran palabra a palabra: POV, mito vs verdad, "nadie te dice…" |
-| Domingo | **Reto** | Otro puzzle, a otro nivel |
+### El explicativo animado (formato principal)
+Figuras de neón que **enseñan lo que dice la voz**: el niño en el torneo, el coche de vuelta a casa, el tablero
+con la jugada, el cerebro, gráficas, relojes… Subtítulos palabra a palabra con la palabra clave en un recuadro y
+un rótulo grande por escena. Todo se dibuja en código (`anim_kit.py`, `anim_blocks.py`): sin stock, sin imágenes
+de IA, sin cámara.
 
-- **Banco de preguntas de padres** (`parent_topics.json`, 95 temas en lenguaje de padre: el coche después de
-  perder, lágrimas, pantallas, colegio, cuánto entrenar…). Cada publicación usa el tema menos usado. Edítalo
-  libremente: añade las preguntas que oyes en tus llamadas.
-- **Sin jerga**: se rechaza cualquier texto con términos que un padre no entiende (claves, T-T-P, "metodología",
-  notación…). Square 65 ya no es titular.
-- **Fondo cinematográfico**: un tablero real con posiciones de partidas clásicas, desenfocado, con luz cálida.
-  Todo en código, nada de stock aleatorio ni imágenes de IA.
-- **Música**: una base cálida tipo lo-fi/piano generada en código y masterizada. **Mejora fácil:** sube 10-20
-  pistas sin copyright a `assets/music/` (YouTube Audio Library o Pixabay Music, gratis) y se usarán ellas,
-  rotando la menos usada.
-- **Retos**: puzzles de la base pública de Lichess (CC0, se descarga y se guarda en caché la primera vez) a nivel
-  infantil; si no se puede descargar, usa 20 puzzles propios verificados por ordenador. Nunca repite un puzzle.
-- **Reserva siempre lista**: si la IA falla, cada formato tiene contenido ya escrito (`evergreen_faceless.json`,
-  8 por formato). Si un carrusel no se puede publicar, se publica el mismo contenido como reel.
-- **CTA único** en todo: comentar `PLAN` (el bot responde por DM con el enlace al formulario).
-- **Estudio de creadores desactivado** (`STUDIO=off`) hasta que haya datos reales de visualizaciones; con un solo
-  estilo coherente se aprende más rápido.
+- **Estructura que retiene**: gancho en segunda persona → el problema real → el arreglo equivocado (tachado) →
+  por qué pasa → (estudio real) → qué hacer esta noche → frase para recordar → final.
+- **18 bloques de escena** (`hall`, `home`, `car`, `talk`, `coach`, `ladder`, `board`, `tiles`, `line`, `bars`,
+  `week`, `versus`, `brain`, `clock`, `iceberg`, `big`, `share`, `plan`), cada uno con varios modos. La IA elige
+  el que ilustra cada frase; el código valida que existan y que no se repitan seguidos.
+- **Estudios reales** (`evidence_bank.json`): 6 investigaciones conocidas (práctica deliberada, efecto de
+  espaciado, elogio del esfuerzo…). El guion solo puede citar las de ese archivo y la cita sale en pantalla.
+  Si menciona "un estudio" sin usar una aprobada, se rechaza. Pon `"approved": false` para quitar alguna.
+- **Una sola toma de voz** (ritmo natural). El reconocimiento de voz da el instante de cada palabra: las escenas
+  cortan y los subtítulos se iluminan justo con la voz, y se elimina cualquier palabra que no esté en el guion.
+- **Dos finales que se alternan**: 2 de cada 3 días "envíaselo a otro padre" (los envíos son lo que más alcance
+  da), 1 de cada 3 "comenta PLAN" (leads). El caption siempre lleva PLAN.
+- **Portada**: se elige el fotograma donde el gancho está completo (no un fotograma al azar).
+- **Primer comentario automático**: una pregunta para que los padres respondan ("¿Cuántas partidas al día juega
+  tu hijo?").
+- **Reserva**: 8 guiones escritos a mano (`evergreen_animated.json`) por si la IA falla.
+- **Rápido**: cada escena se renderiza en un proceso distinto, directo a ffmpeg. Un reel de 35 s sale en menos de
+  1 minuto de render (antes 2-3 min).
 
-Para probar un formato: *Actions → Daily reels → Run workflow* → `format` + `dry_run`. Las diapositivas y vídeos
-quedan en *Artifacts*.
+### Cómo pedir un reel sobre un tema concreto
+*Actions → Daily reels → Run workflow* → escribe el tema en `topic` (en inglés o español, p. ej. *"my kid cries
+when he loses to younger kids"*) → elige `dry_run` para verlo antes en *Artifacts*, o desmárcalo para publicarlo.
 
-## Formato voz: vídeo real (`make_broll.py`, solo los jueves)
+### Otras piezas
+- **Banco de preguntas de padres** (`parent_topics.json`): cada publicación usa el tema menos usado.
+- **Sin jerga** y sin cifras de resultados no aprobadas: se rechaza el guion.
+- **Música**: base generada en código y masterizada. Si subes pistas sin copyright a `assets/music/`, usa esas.
+- **Aprende de los resultados**: con el permiso de estadísticas, el guionista recibe los ganchos que más se
+  comparten y guardan en tu cuenta, y el informe del lunes compara formatos y finales.
+- **Si el token de Instagram deja de valer**, el proceso se para al principio (sin gastar IA ni minutos) y el
+  resumen de la ejecución explica cómo renovarlo.
+- Formatos anteriores (`chat`, `kinetic`, `challenge`, `voice`): fuera del calendario, disponibles a mano en
+  `format`.
+
+## Formato voz: vídeo real (`make_broll.py`, fuera del calendario)
 
 Escenas reales de familias, niños estudiando, coche camino del torneo, manos moviendo piezas, trofeos… sacadas de
 **Pixabay** (y Pexels si tienes clave; gratis, licencia comercial, sin atribución). Encima: voz, titulares animados en

@@ -1,16 +1,16 @@
-"""One publishing slot for ChessTalentsFactory: ONE post a day, rotating formats made for parents.
+"""One publishing slot for ChessTalentsFactory: ONE post a day.
 
 python run_daily.py story [--dry-run]
 
 Weekly calendar (New York date), override with FORMAT_OVERRIDE:
-  Mon carousel  Tue chat  Wed challenge  Thu voice  Fri carousel  Sat kinetic  Sun challenge
-  carousel   7-slide advice carousel (make_carousel)         - most saved/shared format
-  chat       text conversation parent <-> coach (make_textreel) - no narrator
-  kinetic    big confident text lines + music (make_textreel)   - no narrator
-  challenge  "can your child find the winning move?" (make_challenge) - families answer in the comments
-  voice      the narrated real-footage reel (make_broll), with a verified expressive voice
-Every engine has an offline fallback (pre-written scripts / built-in puzzles), so a post always goes out.
-Every post: Instagram (carousel or reel) + Story, Facebook Reel, YouTube/TikTok when configured.
+  Mon animated  Tue animated  Wed carousel  Thu animated  Fri animated  Sat carousel  Sun animated
+  animated   neon-figure explainer with narration (make_animated) - the main format
+  carousel   7-slide advice carousel (make_carousel)              - the most saved format
+  chat / kinetic / challenge / voice   older formats, still available by hand (FORMAT_OVERRIDE)
+TOPIC_OVERRIDE = free text: make today's animated reel about exactly that.
+Every engine has an offline fallback (pre-written scripts), so a post always goes out.
+Every post: Instagram (reel with its cover frame, or carousel) + first comment + Story, Facebook Reel,
+YouTube/TikTok when configured.
 """
 import datetime, json, os, random, sys, traceback
 import brand, guard
@@ -45,12 +45,23 @@ if pillar == "proof" and not (guard.has("avg_gain") or guard.has("fide_titles"))
 if pillar == "success" and not guard.cases():
     pillar = "pain"
 
-CALENDAR = {0: "carousel", 1: "chat", 2: "challenge", 3: "voice", 4: "carousel", 5: "kinetic", 6: "challenge"}
-FORMATS = ("carousel", "chat", "kinetic", "challenge", "voice")
+CALENDAR = {0: "animated", 1: "animated", 2: "carousel", 3: "animated", 4: "animated", 5: "carousel", 6: "animated"}
+FORMATS = ("animated", "carousel", "chat", "kinetic", "challenge", "voice")
 fmt = os.environ.get("FORMAT_OVERRIDE", "auto")
 if fmt not in FORMATS:
-    fmt = CALENDAR[wd]
+    fmt = "animated" if (os.environ.get("TOPIC_OVERRIDE") or "").strip() else CALENDAR[wd]
 print("format:", fmt, flush=True)
+
+if not dry and os.environ.get("IG_TOKEN"):      # check the token BEFORE spending minutes and AI calls on a reel
+    try:
+        import publish_ig
+        print("Instagram token OK: @" + str(publish_ig.whoami(os.environ["IG_TOKEN"]).get("username")), flush=True)
+    except publish_ig.TokenError as e:
+        if os.environ.get("GITHUB_STEP_SUMMARY"):
+            open(os.environ["GITHUB_STEP_SUMMARY"], "a").write(f"## ❌ Nothing was published: the Instagram token must be renewed\n\n{e}\n")
+        raise SystemExit(f"NOT PUBLISHED. {e}")
+    except Exception as e:
+        print("token check skipped:", str(e)[:200], flush=True)
 
 why = guard.paused()
 if why and not dry and os.environ.get("FORCE_PUBLISH") != "true":
@@ -118,9 +129,9 @@ if fmt == "voice":
             print(f"[{eng}] failed:\n{traceback.format_exc()[-1500:]}", flush=True)
     if meta is None:                                   # narrated reel impossible today -> a text reel instead
         fmt = "kinetic"
-if fmt in ("carousel", "chat", "kinetic", "challenge") and meta is None:
+if fmt in ("animated", "carousel", "chat", "kinetic", "challenge") and meta is None:
     tries = [(fmt, True), (fmt, False)] if fmt != "challenge" else [(fmt, True)]
-    tries += [("kinetic", False)]                      # last resort: pre-written text reel, no AI, no download
+    tries += [("animated", False)] if fmt != "animated" else [("kinetic", False)]   # last resort: pre-written, no AI
     for f_, use_ai in tries:
         try:
             if f_ == "carousel":
@@ -131,6 +142,9 @@ if fmt in ("carousel", "chat", "kinetic", "challenge") and meta is None:
             elif f_ == "challenge":
                 import make_challenge
                 meta = make_challenge.build(seed, out)
+            elif f_ == "animated":
+                import make_animated
+                meta = make_animated.build(seed, out, use_ai=use_ai)
             else:
                 import make_textreel
                 meta = make_textreel.build(seed, out, style=f_, use_ai=use_ai)
@@ -159,7 +173,10 @@ if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
         f.write(f"## {fmt} · {'✅ AI copy' if engine in ('broll', 'ai', 'lichess') else '⚠️ fallback content'} · engine `{engine}`\n\n"
                 + (f"- Topic: `{meta.get('topic')}` · music: `{meta.get('music')}`\n" if fmt != "voice" else "")
-                + f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used if fmt == 'voice' else 'none (music only)'}`\n"
+                + (f"- Animated: {meta.get('duration')}s · scenes: {', '.join(meta.get('blocks') or [])} · research: "
+                   f"`{meta.get('evidence')}` · narration: `{meta.get('voice_engine')}` · hooks tried: "
+                   f"{' | '.join(meta.get('hook_options') or []) or '-'}\n" if fmt == "animated" else "")
+                + f"- Slot: `{slot}` · CTA: `{meta.get('cta')}` · voice: `{voice_used if fmt in ('voice', 'animated') else 'none (music only)'}`\n"
                 + (f"- Creator: **{studio.CREATORS[meta['agent']]['name']}** · {studio_msg}\n" if meta.get("agent") else f"- {studio_msg}\n")
                 + (f"- Title: {meta.get('story')}\n" if meta.get("story") else "")
                 + (f"- Format: **real footage** · shape `{meta.get('shape')}` · grade `{meta.get('grade')}` · clips: "
@@ -196,8 +213,16 @@ if slides:
         print("Carousel failed, publishing the same slides as a reel:", str(e)[:300], flush=True)
         errors.append(f"carousel publish: {str(e)[:200]}")
 if media is None:
-    media = publish_reel(out, caption, location_id=loc and loc["id"]); meta["published_as"] = "reel"
+    media = publish_reel(out, caption, location_id=loc and loc["id"], thumb_offset_ms=meta.get("thumb_offset_ms"))
+    meta["published_as"] = "reel"
 meta.update(location=loc and loc["name"], permalink=media.get("permalink"), media_id=media.get("id"), engine=engine)
+
+if meta.get("comment_prompt") and os.environ.get("FIRST_COMMENT", "on") != "off":   # a question that invites answers
+    try:
+        from publish_ig import comment as _comment
+        _comment(media["id"], meta["comment_prompt"]); meta["first_comment"] = "ok"
+    except Exception as e:
+        print("First comment failed:", str(e)[:200]); meta["first_comment"] = f"error: {str(e)[:120]}"
 
 try:  # also share it as a Story (never blocks the reel)
     publish_story(out); meta["story_share"] = "ok"
@@ -226,7 +251,8 @@ if brake:
     guard.pause(brake)
     print("BRAKE:", brake)
 meta["format"] = fmt
-log({k: meta.get(k) for k in ("engine", "format", "published_as", "topic", "puzzle", "music", "shape", "footage", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
+log({k: meta.get(k) for k in ("engine", "format", "published_as", "topic", "puzzle", "music", "evidence", "voice_engine",
+                              "duration", "first_comment", "hook_options", "shape", "footage", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
                               "case", "remix_of", "director", "agent", "key",
                               "anchor_key", "brand_check")})

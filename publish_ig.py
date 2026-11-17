@@ -12,6 +12,17 @@ GRAPH = f"https://graph.facebook.com/{API}"
 RUPLOAD = f"https://rupload.facebook.com/ig-api-upload/{API}"
 
 
+class TokenError(RuntimeError):
+    """The Instagram token is no longer valid (password change, security reset, expired). A human must renew it."""
+
+
+TOKEN_HELP = ("The Instagram token (secret IG_TOKEN) is not valid any more. Create a new PAGE token (Graph API Explorer -> "
+              "user token with instagram_basic, instagram_content_publish, instagram_manage_comments, "
+              "instagram_manage_messages, instagram_manage_insights, pages_show_list, pages_read_engagement, "
+              "pages_manage_posts -> Extend in the Access Token Debugger -> me/accounts -> copy the page's access_token) "
+              "and paste it in Settings > Secrets and variables > Actions > IG_TOKEN.")
+
+
 def _check(r):
     if r.status_code >= 400:
         raise RuntimeError(f"{r.status_code}: {r.text}")
@@ -20,8 +31,10 @@ def _check(r):
 
 def whoami(token):
     """Returns {"user_id": <IG business account id>, "username": ..., "page_id": ...}."""
-    me = _check(requests.get(f"{GRAPH}/me", params={
-        "fields": "id,name,instagram_business_account{id,username}", "access_token": token}))
+    r = requests.get(f"{GRAPH}/me", params={"fields": "id,name,instagram_business_account{id,username}", "access_token": token})
+    if r.status_code >= 400 and ('"code":190' in r.text.replace(" ", "") or "access token" in r.text.lower()):
+        raise TokenError(TOKEN_HELP + " Instagram said: " + r.text[:300])
+    me = _check(r)
     ig = me.get("instagram_business_account")
     if not ig:  # a user token was given instead of a Page token: look through the user's Pages
         pages = _check(requests.get(f"{GRAPH}/me/accounts", params={
@@ -67,10 +80,13 @@ def _container_upload_wait(uid, token, video_path, fields, label, tries=3):
     for attempt in range(tries):
         try:
             r = requests.post(f"{GRAPH}/{uid}/media", data={**fields, "upload_type": "resumable", "access_token": token})
-            if r.status_code >= 400 and fields.get("location_id"):
-                print(f"Location rejected ({r.text[:200]}); continuing without location", flush=True)
-                fields = {k: v for k, v in fields.items() if k != "location_id"}
-                r = requests.post(f"{GRAPH}/{uid}/media", data={**fields, "upload_type": "resumable", "access_token": token})
+            for opt in ("location_id", "thumb_offset"):          # optional extras must never block a post
+                if r.status_code >= 400 and fields.get(opt) and "access token" not in r.text.lower():
+                    print(f"{opt} rejected ({r.text[:200]}); continuing without it", flush=True)
+                    fields = {k: v for k, v in fields.items() if k != opt}
+                    r = requests.post(f"{GRAPH}/{uid}/media", data={**fields, "upload_type": "resumable", "access_token": token})
+            if r.status_code >= 400 and "access token" in r.text.lower():
+                raise TokenError(r.text[:400])
             cid = _check(r)["id"]
             _rupload(cid, token, data, chunked=attempt > 0)
             for _ in range(90):
@@ -83,6 +99,8 @@ def _container_upload_wait(uid, token, video_path, fields, label, tries=3):
                     raise RuntimeError(f"{label} processing failed: {st}")
                 time.sleep(10)
             raise RuntimeError(f"Timed out waiting for {label}")
+        except TokenError:
+            raise                                             # retrying cannot fix an invalid token
         except Exception as e:
             last = e
             print(f"{label} attempt {attempt + 1}/{tries} failed: {str(e)[:300]}", flush=True)
@@ -90,7 +108,13 @@ def _container_upload_wait(uid, token, video_path, fields, label, tries=3):
     raise last
 
 
-def publish_reel(video_path, caption, token=None, location_id=None):
+def comment(media_id, text, token=None):
+    """First comment under our own post (a question that invites answers). Needs instagram_manage_comments."""
+    token = token or os.environ["IG_TOKEN"]
+    return _check(requests.post(f"{GRAPH}/{media_id}/comments", data={"message": text[:300], "access_token": token}, timeout=60))
+
+
+def publish_reel(video_path, caption, token=None, location_id=None, thumb_offset_ms=None):
     token = token or os.environ["IG_TOKEN"]
     me = whoami(token)
     uid = me["user_id"]
@@ -99,6 +123,8 @@ def publish_reel(video_path, caption, token=None, location_id=None):
     fields = {"media_type": "REELS", "caption": caption, "share_to_feed": "true"}
     if location_id:
         fields["location_id"] = str(location_id)
+    if thumb_offset_ms:                                    # cover = the frame where the hook is fully on screen
+        fields["thumb_offset"] = str(int(thumb_offset_ms))
     cid = _container_upload_wait(uid, token, video_path, fields, "reel")
     p = _check(requests.post(f"{GRAPH}/{uid}/media_publish", data={"creation_id": cid, "access_token": token}))
     media = _check(requests.get(f"{GRAPH}/{p['id']}", params={"fields": "id,permalink", "access_token": token}))

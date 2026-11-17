@@ -1,0 +1,855 @@
+[
+ {
+  "id": "a-20-games",
+  "title": "Twenty games a day",
+  "evidence": "charness2005",
+  "scenes": [
+   {
+    "say": "Your child plays twenty games a day... and the rating hasn't moved in months.",
+    "block": "home",
+    "params": {
+     "mode": "blitz"
+    },
+    "label": "20 games a day",
+    "tone": "bad",
+    "highlight": [
+     "twenty"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Here's what nobody tells you. Almost every one of those games repeats the same mistake.",
+    "block": "tiles",
+    "params": {
+     "n": 20,
+     "k": 20,
+     "icon": "game",
+     "tone": "bad"
+    },
+    "label": "Same mistake",
+    "tone": "bad",
+    "highlight": [
+     "same"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Fast games don't fix a habit. They put it on autopilot.",
+    "block": "brain",
+    "params": {
+     "mode": "autopilot",
+     "loop": "see it, play it"
+    },
+    "label": "Autopilot",
+    "tone": "bad",
+    "highlight": [
+     "autopilot"
+    ],
+    "strike": false
+   },
+   {
+    "say": "So more games feels like practice, but the line stays flat.",
+    "block": "line",
+    "params": {
+     "mode": "flat"
+    },
+    "label": "More games",
+    "tone": "bad",
+    "highlight": [
+     "flat"
+    ],
+    "strike": true
+   },
+   {
+    "say": "A study of chess players found the best predictor of skill wasn't tournament play. It was serious study, alone.",
+    "block": "bars",
+    "params": {},
+    "label": "What predicts skill",
+    "tone": "brand",
+    "highlight": [
+     "study"
+    ],
+    "strike": false
+   },
+   {
+    "say": "What works: one slow game, then ten minutes with a coach finding the one mistake that cost it.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "The real mistake"
+    },
+    "label": "One game. One review.",
+    "tone": "good",
+    "highlight": [
+     "one"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Your child doesn't need more games. They need better ones.",
+    "block": "line",
+    "params": {
+     "mode": "flat_then_rise"
+    },
+    "label": "Better, not more",
+    "tone": "good",
+    "highlight": [
+     "better"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "20 games a day and the rating won't move? Here's why 👇",
+  "caption_body": "More games usually means the same mistake, faster. One slow game with an honest review teaches more than twenty fast ones.",
+  "comment_prompt": "How many games a day does your child play? Be honest."
+ },
+ {
+  "id": "a-car-ride",
+  "title": "The ride home",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Your child just lost the last round. The car is silent.",
+    "block": "car",
+    "params": {
+     "mode": "silent"
+    },
+    "label": "The ride home",
+    "tone": "bad",
+    "highlight": [
+     "silent"
+    ],
+    "strike": false
+   },
+   {
+    "say": "You want to help, so you ask what went wrong.",
+    "block": "car",
+    "params": {
+     "mode": "question",
+     "say": "What happened?!"
+    },
+    "label": "Wrong moment",
+    "tone": "bad",
+    "highlight": [
+     "wrong"
+    ],
+    "strike": false
+   },
+   {
+    "say": "But right after a loss, their head is flooded. Nothing you explain will stick.",
+    "block": "brain",
+    "params": {
+     "mode": "overload"
+    },
+    "label": "Flooded",
+    "tone": "bad",
+    "highlight": [
+     "flooded"
+    ],
+    "strike": false
+   },
+   {
+    "say": "What does stick is the feeling: I lost, and I let them down.",
+    "block": "hall",
+    "params": {
+     "mode": "lose"
+    },
+    "label": "I let them down",
+    "tone": "bad",
+    "highlight": [
+     "feeling"
+    ],
+    "strike": false
+   },
+   {
+    "say": "So tonight, say one thing only. I'm proud of how you fought.",
+    "block": "talk",
+    "params": {
+     "tone": "good",
+     "say": "I'm proud of how you fought."
+    },
+    "label": "Say this",
+    "tone": "good",
+    "highlight": [
+     "proud"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Tomorrow, when everyone is calm, the game gets reviewed with the coach. One thing to fix.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "One thing to fix"
+    },
+    "label": "Review tomorrow",
+    "tone": "good",
+    "highlight": [
+     "Tomorrow"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Kids who feel safe after losing are the ones who keep improving.",
+    "block": "ladder",
+    "params": {
+     "mode": "climb"
+    },
+    "label": "Safe to lose",
+    "tone": "good",
+    "highlight": [
+     "safe"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "The car ride after a loss matters more than you think 🚗",
+  "caption_body": "Save the analysis for tomorrow. Tonight your only job is to be on their side.",
+  "comment_prompt": "What do you usually say in the car after a tough loss?"
+ },
+ {
+  "id": "a-too-fast",
+  "title": "One second per move",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Your child sees a move... and plays it in one second.",
+    "block": "hall",
+    "params": {
+     "mode": "rush"
+    },
+    "label": "One second",
+    "tone": "bad",
+    "highlight": [
+     "second"
+    ],
+    "strike": false
+   },
+   {
+    "say": "The queen lands on a square where it can simply be taken. Game over.",
+    "block": "board",
+    "params": {
+     "mode": "blunder"
+    },
+    "label": "Blunder",
+    "tone": "bad",
+    "highlight": [
+     "taken"
+    ],
+    "strike": false
+   },
+   {
+    "say": "It isn't talent. And it isn't focus.",
+    "block": "big",
+    "params": {
+     "icon": "question",
+     "tone": "bad"
+    },
+    "label": "Not talent",
+    "tone": "bad",
+    "highlight": [
+     "talent"
+    ],
+    "strike": true
+   },
+   {
+    "say": "It's a habit. See a move, play the move. Nothing in between.",
+    "block": "brain",
+    "params": {
+     "mode": "autopilot",
+     "loop": "see it, play it"
+    },
+    "label": "See it. Play it.",
+    "tone": "bad",
+    "highlight": [
+     "habit"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Strong kids add one question before every move: what does my opponent want?",
+    "block": "board",
+    "params": {
+     "mode": "pause",
+     "ask": "What does my opponent want?"
+    },
+    "label": "One question",
+    "tone": "good",
+    "highlight": [
+     "question"
+    ],
+    "strike": false
+   },
+   {
+    "say": "It takes three seconds. And it saves more games than any opening.",
+    "block": "clock",
+    "params": {
+     "mode": "think",
+     "text": "3 SEC"
+    },
+    "label": "Three seconds",
+    "tone": "good",
+    "highlight": [
+     "three"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Have them say it out loud, every game, for one week.",
+    "block": "week",
+    "params": {
+     "mode": "daily"
+    },
+    "label": "One week",
+    "tone": "good",
+    "highlight": [
+     "week"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Your child doesn't need to think faster. They need one pause.",
+    "block": "hall",
+    "params": {
+     "mode": "focus"
+    },
+    "label": "One pause",
+    "tone": "good",
+    "highlight": [
+     "pause"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Does your child move before you can blink? ⏱️",
+  "caption_body": "Playing too fast is a habit, not a talent problem. One question before every move changes it.",
+  "comment_prompt": "Does your child play too fast or too slow?"
+ },
+ {
+  "id": "a-praise",
+  "title": "You're so smart",
+  "evidence": "mueller_dweck1998",
+  "scenes": [
+   {
+    "say": "Your child wins a game, and you say it without thinking: you're so smart!",
+    "block": "talk",
+    "params": {
+     "tone": "bad",
+     "say": "You're so smart!"
+    },
+    "label": "You're so smart",
+    "tone": "bad",
+    "highlight": [
+     "smart"
+    ],
+    "strike": false
+   },
+   {
+    "say": "It feels like love. But here's what a child hears.",
+    "block": "big",
+    "params": {
+     "icon": "heart",
+     "tone": "bad"
+    },
+    "label": "What they hear",
+    "tone": "bad",
+    "highlight": [
+     "hears"
+    ],
+    "strike": false
+   },
+   {
+    "say": "If winning means I'm smart... then losing means I'm not.",
+    "block": "hall",
+    "params": {
+     "mode": "lose"
+    },
+    "label": "And if I lose?",
+    "tone": "bad",
+    "highlight": [
+     "losing"
+    ],
+    "strike": false
+   },
+   {
+    "say": "In a famous study, children praised for being smart started avoiding hard problems. Children praised for effort chose harder ones.",
+    "block": "bars",
+    "params": {},
+    "label": "The praise study",
+    "tone": "brand",
+    "highlight": [
+     "effort"
+    ],
+    "strike": false
+   },
+   {
+    "say": "In chess, that's the kid who is afraid to play stronger opponents.",
+    "block": "hall",
+    "params": {
+     "mode": "freeze"
+    },
+    "label": "Afraid to lose",
+    "tone": "bad",
+    "highlight": [
+     "afraid"
+    ],
+    "strike": false
+   },
+   {
+    "say": "So praise what they control. I loved how long you thought on that move.",
+    "block": "talk",
+    "params": {
+     "tone": "good",
+     "say": "I loved how long you thought."
+    },
+    "label": "Praise the thinking",
+    "tone": "good",
+    "highlight": [
+     "control"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Kids repeat what we celebrate.",
+    "block": "ladder",
+    "params": {
+     "mode": "climb"
+    },
+    "label": "They repeat it",
+    "tone": "good",
+    "highlight": [
+     "celebrate"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "The compliment that quietly makes kids afraid to lose 💬",
+  "caption_body": "Praise the thinking and the effort, not the talent. Kids repeat what we celebrate.",
+  "comment_prompt": "What's the first thing you say after your child wins?"
+ },
+ {
+  "id": "a-sunday-binge",
+  "title": "The Sunday binge",
+  "evidence": "cepeda2006",
+  "scenes": [
+   {
+    "say": "Three hours of chess on Sunday. And nothing for the rest of the week.",
+    "block": "week",
+    "params": {
+     "mode": "binge"
+    },
+    "label": "Sunday binge",
+    "tone": "bad",
+    "highlight": [
+     "Sunday"
+    ],
+    "strike": false
+   },
+   {
+    "say": "By hour two, your child's head is full, and very little of it sticks.",
+    "block": "brain",
+    "params": {
+     "mode": "overload"
+    },
+    "label": "Full",
+    "tone": "bad",
+    "highlight": [
+     "full"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Decades of learning research agree: the same practice, spread out, is remembered far longer.",
+    "block": "bars",
+    "params": {},
+    "label": "The spacing effect",
+    "tone": "brand",
+    "highlight": [
+     "spread"
+    ],
+    "strike": false
+   },
+   {
+    "say": "So split it. Fifteen minutes a day beats three hours on Sunday.",
+    "block": "week",
+    "params": {
+     "mode": "compare"
+    },
+    "label": "15 min a day",
+    "tone": "good",
+    "highlight": [
+     "Fifteen"
+    ],
+    "strike": false
+   },
+   {
+    "say": "A few puzzles at their level, solved slowly. No guessing.",
+    "block": "home",
+    "params": {
+     "mode": "puzzle"
+    },
+    "label": "Slow and honest",
+    "tone": "good",
+    "highlight": [
+     "slowly"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Seven small sessions. Seven chances to remember.",
+    "block": "tiles",
+    "params": {
+     "n": 7,
+     "k": 7,
+     "icon": "day",
+     "tone": "good"
+    },
+    "label": "Every day",
+    "tone": "good",
+    "highlight": [
+     "Seven"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Your child doesn't need longer sessions. They need more of them.",
+    "block": "line",
+    "params": {
+     "mode": "rise"
+    },
+    "label": "Shorter. More often.",
+    "tone": "good",
+    "highlight": [
+     "more"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "3 hours on Sunday or 15 minutes a day? The research is clear 👇",
+  "caption_body": "Same total time, very different results. Short daily practice is remembered far longer than one long session.",
+  "comment_prompt": "When does your child practise: every day or weekends?"
+ },
+ {
+  "id": "a-plateau",
+  "title": "Six months flat",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Same rating for six months. Your child trains, plays, tries... and nothing.",
+    "block": "line",
+    "params": {
+     "mode": "flat"
+    },
+    "label": "6 months flat",
+    "tone": "bad",
+    "highlight": [
+     "nothing"
+    ],
+    "strike": false
+   },
+   {
+    "say": "And you start to wonder: is this their limit?",
+    "block": "ladder",
+    "params": {
+     "mode": "stuck"
+    },
+    "label": "Their limit?",
+    "tone": "bad",
+    "highlight": [
+     "limit"
+    ],
+    "strike": false
+   },
+   {
+    "say": "But look at their last losses. Most of them are lost in exactly the same way.",
+    "block": "tiles",
+    "params": {
+     "n": 12,
+     "k": 9,
+     "icon": "game",
+     "tone": "bad"
+    },
+    "label": "The same way",
+    "tone": "bad",
+    "highlight": [
+     "same"
+    ],
+    "strike": false
+   },
+   {
+    "say": "The rating is only what you see. Underneath, there are two or three habits.",
+    "block": "iceberg",
+    "params": {
+     "top": "Rating",
+     "below": [
+      "Rushed moves",
+      "No plan",
+      "No review"
+     ]
+    },
+    "label": "Under the rating",
+    "tone": "brand",
+    "highlight": [
+     "habits"
+    ],
+    "strike": false
+   },
+   {
+    "say": "A good coach finds the one that costs the most, and fixes that one first.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "Habit number one"
+    },
+    "label": "One at a time",
+    "tone": "good",
+    "highlight": [
+     "first"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Fix one habit, and the line that was flat starts to move.",
+    "block": "line",
+    "params": {
+     "mode": "flat_then_rise"
+    },
+    "label": "Then it moves",
+    "tone": "good",
+    "highlight": [
+     "move"
+    ],
+    "strike": false
+   },
+   {
+    "say": "A plateau isn't a limit. It's a signal.",
+    "block": "big",
+    "params": {
+     "icon": "trophy",
+     "tone": "gold"
+    },
+    "label": "It's a signal",
+    "tone": "gold",
+    "highlight": [
+     "signal"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Stuck at the same rating for months? Read this 👇",
+  "caption_body": "A plateau usually means the same two or three habits keep repeating. Find the one that costs the most and start there.",
+  "comment_prompt": "How long has your child been at the same rating?"
+ },
+ {
+  "id": "a-videos",
+  "title": "Watching isn't training",
+  "evidence": "roediger_karpicke2006",
+  "scenes": [
+   {
+    "say": "Your child watches chess videos for hours. And it really looks like studying.",
+    "block": "home",
+    "params": {
+     "mode": "video"
+    },
+    "label": "Looks like studying",
+    "tone": "bad",
+    "highlight": [
+     "looks"
+    ],
+    "strike": false
+   },
+   {
+    "say": "But a classic study found we remember what we pull out of our own head, far more than what we just go over again.",
+    "block": "bars",
+    "params": {},
+    "label": "The testing effect",
+    "tone": "brand",
+    "highlight": [
+     "remember"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Watching feels easy. Solving feels hard. And the hard one is the one that sticks.",
+    "block": "versus",
+    "params": {
+     "left_title": "Watching",
+     "left": [
+      "Feels easy",
+      "No mistakes show",
+      "Gone in days"
+     ],
+     "right_title": "Solving",
+     "right": [
+      "Feels hard",
+      "Mistakes show up",
+      "It sticks"
+     ]
+    },
+    "label": "",
+    "tone": "brand",
+    "highlight": [
+     "sticks"
+    ],
+    "strike": false
+   },
+   {
+    "say": "So for every video: one position they solve alone. No hints.",
+    "block": "home",
+    "params": {
+     "mode": "puzzle"
+    },
+    "label": "One video, one puzzle",
+    "tone": "good",
+    "highlight": [
+     "alone"
+    ],
+    "strike": false
+   },
+   {
+    "say": "And someone who looks at their own games, not a grandmaster's.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "Their own mistake"
+    },
+    "label": "Their own games",
+    "tone": "good",
+    "highlight": [
+     "own"
+    ],
+    "strike": false
+   },
+   {
+    "say": "That's when patterns move in... and stay.",
+    "block": "brain",
+    "params": {
+     "mode": "patterns"
+    },
+    "label": "Patterns",
+    "tone": "good",
+    "highlight": [
+     "patterns"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Videos are dessert. Training is the meal.",
+    "block": "big",
+    "params": {
+     "icon": "star",
+     "tone": "gold"
+    },
+    "label": "Dessert vs meal",
+    "tone": "gold",
+    "highlight": [
+     "meal"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Is your child watching chess or training chess? 🎥",
+  "caption_body": "Videos inspire, but kids improve by solving and by fixing their own mistakes. A simple rule: one video, one puzzle.",
+  "comment_prompt": "How much chess does your child watch vs solve?"
+ },
+ {
+  "id": "a-talent",
+  "title": "Is my child talented?",
+  "evidence": "gobet_campitelli2007",
+  "scenes": [
+   {
+    "say": "Every chess parent secretly asks the same thing: is my child talented?",
+    "block": "big",
+    "params": {
+     "icon": "question",
+     "tone": "brand"
+    },
+    "label": "Talented?",
+    "tone": "brand",
+    "highlight": [
+     "talented"
+    ],
+    "strike": false
+   },
+   {
+    "say": "In every club there are a few kids who learn fast at the start.",
+    "block": "tiles",
+    "params": {
+     "n": 25,
+     "k": 3,
+     "icon": "kid",
+     "tone": "good"
+    },
+    "label": "The fast starters",
+    "tone": "brand",
+    "highlight": [
+     "fast"
+    ],
+    "strike": false
+   },
+   {
+    "say": "But among players who became masters, some got there in about three thousand hours of practice. Others needed more than twenty thousand.",
+    "block": "bars",
+    "params": {},
+    "label": "Same title",
+    "tone": "brand",
+    "highlight": [
+     "masters"
+    ],
+    "strike": false
+   },
+   {
+    "say": "So a fast start doesn't decide it. And a slow start doesn't either.",
+    "block": "ladder",
+    "params": {
+     "mode": "climb"
+    },
+    "label": "Not decided yet",
+    "tone": "good",
+    "highlight": [
+     "decide"
+    ],
+    "strike": false
+   },
+   {
+    "say": "What you can't see matters more: how they train, who guides them, and whether they love it.",
+    "block": "iceberg",
+    "params": {
+     "top": "Talent",
+     "below": [
+      "How they train",
+      "Who guides them",
+      "Do they love it"
+     ]
+    },
+    "label": "What decides it",
+    "tone": "brand",
+    "highlight": [
+     "train"
+    ],
+    "strike": false
+   },
+   {
+    "say": "And those three things, you can actually do something about.",
+    "block": "coach",
+    "params": {
+     "mode": "plan",
+     "steps": [
+      "Train with a plan",
+      "Review every loss",
+      "Keep it fun"
+     ]
+    },
+    "label": "You control this",
+    "tone": "good",
+    "highlight": [
+     "three"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "\"Is my child talented at chess?\" The honest answer 👇",
+  "caption_body": "Talent is real, but it decides far less than parents think. How a child trains, and with whom, matters more.",
+  "comment_prompt": "At what age did your child start playing chess?"
+ }
+]
