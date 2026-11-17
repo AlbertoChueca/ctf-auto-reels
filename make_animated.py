@@ -499,6 +499,14 @@ def build(seed, out, use_ai=True, evergreen_id=None, cta=None):
     scenes = sc["scenes"] + [{"say": CTA_SAY[cta], "block": "share" if cta == "share" else "plan", "params": {},
                               "label": CTA_LABEL[cta], "tone": "brand", "highlight": ["parent"] if cta == "share" else [brand.KEYWORD.lower()]}]
     texts = [s["say"] for s in scenes]
+    for i, s in enumerate(scenes):                     # the script in the run log (and in the GitHub summary)
+        print(f"  scene {i + 1} [{s['block']}/{(s.get('params') or {}).get('mode', '-')}] {s.get('label', '')!r}: {s['say']}", flush=True)
+    summ = os.environ.get("GITHUB_STEP_SUMMARY")
+    if summ:
+        with open(summ, "a") as f:
+            f.write(f"### Guion: {sc['title']}\n\n| # | Escena | Rótulo | Voz |\n|---|---|---|---|\n" + "".join(
+                f"| {i + 1} | {s['block']} {(s.get('params') or {}).get('mode', '')} | {s.get('label', '')} | {s['say']} |\n"
+                for i, s in enumerate(scenes)) + "\n")
     voice_a, words, starts, engine = narrate(texts)
     total = LEAD + len(voice_a) / SR + 1.7
     k = 0
