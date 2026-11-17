@@ -232,5 +232,17 @@
 "evidence": null,
 "case": "imran-champsi",
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "results",
+"topic": "results",
+"evergreen": null,
+"title": "From 1500 to 2100",
+"music": "synth-4",
+"cta": "keyword",
+"evidence": null,
+"case": "vishva-nanugonda",
+"date": "2026-11-17"
 }
 ]
