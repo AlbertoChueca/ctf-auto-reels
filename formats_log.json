@@ -316,5 +316,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "problem",
+"topic": "puzzles-daily",
+"evergreen": null,
+"title": "Do daily puzzles help?",
+"music": "synth-4",
+"cta": "share",
+"evidence": null,
+"case": null,
+"date": "2026-11-17"
 }
 ]
