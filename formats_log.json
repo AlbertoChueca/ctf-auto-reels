@@ -304,5 +304,17 @@
 "evidence": "kornell_bjork2008",
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "myth",
+"topic": "openings",
+"evergreen": null,
+"title": "The Opening Myth",
+"music": "synth-4",
+"cta": "keyword",
+"evidence": null,
+"case": null,
+"date": "2026-11-17"
 }
 ]
