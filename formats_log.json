@@ -268,5 +268,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "science",
+"topic": null,
+"evergreen": null,
+"title": "Watching isn't learning",
+"music": "synth-4",
+"cta": "keyword",
+"evidence": "roediger_karpicke2006",
+"case": null,
+"date": "2026-11-17"
 }
 ]
