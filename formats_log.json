@@ -256,5 +256,17 @@
 "evidence": "degroot1965",
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "howto",
+"topic": "computer-analysis",
+"evergreen": null,
+"title": "Computer review trap",
+"music": "synth-4",
+"cta": "share",
+"evidence": null,
+"case": null,
+"date": "2026-11-17"
 }
 ]
