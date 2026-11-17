@@ -1,44 +1,83 @@
 # ChessTalentsFactory – Reels orgánicos automáticos
 
-Publica sola **1 publicación al día** (hacia las 12:00 de Nueva York) en Instagram + Story, **Facebook Reels**,
-YouTube Shorts y TikTok, pensada para **padres que no juegan al ajedrez**. Objetivo: que se paren, lo envíen a otro
-padre, comenten "PLAN" y entren en el embudo. Tu tiempo continuo: cero.
+Publica sola **2 reels al día** (hacia las 12:00 y las 20:00 de Nueva York) en Instagram + Story, **Facebook
+Reels**, **TikTok** y YouTube Shorts, pensados para **padres que no juegan al ajedrez**. Objetivo: que se paren, lo
+envíen a otro padre, comenten "PLAN" y entren en el embudo. Tu tiempo continuo: cero.
 
-## Qué se publica (versión 4, noviembre 2026)
+## Qué se publica (versión 5, noviembre 2026)
 
-| Día | Formato |
-|---|---|
-| Lunes, martes, jueves, viernes y domingo | **Explicativo animado** (`make_animated.py`) |
-| Miércoles y sábado | **Carrusel** de 7 diapositivas (`make_carousel.py`) |
+Todo son **explicativos animados** (`make_animated.py`): figuras de neón que enseñan lo que dice la voz. Hay
+**7 tipos** de reel; 11 de los 14 semanales son educativos (≈80 %) y 3 hablan de la Academia (≈20 %).
 
-### El explicativo animado (formato principal)
-Figuras de neón que **enseñan lo que dice la voz**: el niño en el torneo, el coche de vuelta a casa, el tablero
-con la jugada, el cerebro, gráficas, relojes… Subtítulos palabra a palabra con la palabra clave en un recuadro y
-un rótulo grande por escena. Todo se dibuja en código (`anim_kit.py`, `anim_blocks.py`): sin stock, sin imágenes
-de IA, sin cámara.
+| Tipo | De qué va | Bloque |
+|---|---|---|
+| `problem` | Una situación que duele → qué pasa de verdad → qué hacer esta noche | Educativo |
+| `myth` | Una creencia de muchos padres → la verdad → qué hacer en su lugar | Educativo |
+| `science` | Un estudio real contado fácil → qué significa para un niño que juega | Educativo |
+| `howto` | "Qué hacer cuando…" en 3 pasos numerados | Educativo |
+| `question` | Una pregunta real de padres → respuesta honesta | Educativo |
+| `method` | **Cómo entrenamos**: diagnóstico, clase de 90 min en 3 partes, grupos de 2-6 del mismo nivel, 6 niveles, informe trimestral | Academia |
+| `results` | **Resultados probados**: el progreso real de un alumno + cifras aprobadas (250+ alumnos, 30+ campeones nacionales…) | Academia |
 
-- **Estructura que retiene**: gancho en segunda persona → el problema real → el arreglo equivocado (tachado) →
-  por qué pasa → (estudio real) → qué hacer esta noche → frase para recordar → final.
-- **18 bloques de escena** (`hall`, `home`, `car`, `talk`, `coach`, `ladder`, `board`, `tiles`, `line`, `bars`,
-  `week`, `versus`, `brain`, `clock`, `iceberg`, `big`, `share`, `plan`), cada uno con varios modos. La IA elige
-  el que ilustra cada frase; el código valida que existan y que no se repitan seguidos.
-- **Estudios reales** (`evidence_bank.json`): 6 investigaciones conocidas (práctica deliberada, efecto de
-  espaciado, elogio del esfuerzo…). El guion solo puede citar las de ese archivo y la cita sale en pantalla.
-  Si menciona "un estudio" sin usar una aprobada, se rechaza. Pon `"approved": false` para quitar alguna.
-- **Una sola toma de voz** (ritmo natural). El reconocimiento de voz da el instante de cada palabra: las escenas
-  cortan y los subtítulos se iluminan justo con la voz, y se elimina cualquier palabra que no esté en el guion.
-- **Dos finales que se alternan**: 2 de cada 3 días "envíaselo a otro padre" (los envíos son lo que más alcance
-  da), 1 de cada 3 "comenta PLAN" (leads). El caption siempre lleva PLAN.
-- **Portada**: se elige el fotograma donde el gancho está completo (no un fotograma al azar).
-- **Primer comentario automático**: una pregunta para que los padres respondan ("¿Cuántas partidas al día juega
-  tu hijo?").
-- **Reserva**: 8 guiones escritos a mano (`evergreen_animated.json`) por si la IA falla.
-- **Rápido**: cada escena se renderiza en un proceso distinto, directo a ffmpeg. Un reel de 35 s sale en menos de
-  1 minuto de render (antes 2-3 min).
+| Día | Mediodía | Tarde-noche |
+|---|---|---|
+| Lunes | problem | **method** |
+| Martes | myth | howto |
+| Miércoles | science | problem |
+| Jueves | question | **results** |
+| Viernes | problem | myth |
+| Sábado | howto | science |
+| Domingo | question | **method / results** (semanas alternas) |
+
+### Cómo está hecho cada reel
+Subtítulos palabra a palabra con la palabra clave en un recuadro y un rótulo grande por escena. Todo se dibuja en
+código (`anim_kit.py`, `anim_blocks.py`): sin stock, sin imágenes de IA, sin cámara.
+
+- **26 bloques de escena**: los de siempre (`hall`, `home`, `car`, `talk`, `coach`, `ladder`, `board`, `tiles`,
+  `line`, `bars`, `week`, `versus`, `brain`, `clock`, `iceberg`, `big`) y los nuevos: `ask` (un padre pregunta),
+  `levels` (los 6 niveles), `phases` (la clase en 3 partes), `report` (informe trimestral), `group` (clase en
+  directo en grupo pequeño), `stat` (una cifra aprobada, contando hacia arriba), `case` (el rating real de un
+  alumno subiendo) y los finales `share`, `plan` y `link`.
+- **Reels de la Academia, honestos por construcción**:
+  - Solo pueden decir cifras de `claims.json` (aprobadas) y del caso real del día en `cases.json`. Una cifra
+    inventada, mezclar datos de dos alumnos o un "300 puntos en 3 meses" sin aprobar → guion rechazado.
+  - El alumno es siempre "one of our students" (sin nombre, edad ni país). Nunca se nombra a un entrenador ni un
+    libro. Sin precios ni garantías; siempre aparece "cada niño es distinto".
+  - Los números de la gráfica del alumno y de las cifras los pone el código, no la IA.
+  - Los casos rotan (hoy: 1100→1800+ en 13 meses, 1100→1900+ en 2 años y título mundial, 1500→2100+, 1700→2050+).
+- **Reels educativos**: no venden. Si el guion menciona la Academia, se rechaza.
+- **Estudios reales** (`evidence_bank.json`): 12 investigaciones conocidas. `science` cita una obligatoriamente
+  (la menos usada), `myth` puede citar una. La cita sale en pantalla y solo se admiten los números del estudio.
+- **Una sola toma de voz** (ritmo natural), sincronizada palabra a palabra.
+- **Finales**: los de la Academia terminan en "comenta PLAN" (lead). Los educativos alternan: 2 "envíaselo a otro
+  padre" (alcance) y 1 "comenta PLAN".
+- **Versión para TikTok, YouTube y Facebook**: allí no existe el bot de "PLAN", así que cuando el reel termina
+  en "comenta PLAN" se monta **un segundo corte** con el final "nuestro vídeo gratis está enlazado en el perfil"
+  (reutiliza todas las escenas; solo se renderiza el final) y un caption sin la frase del DM.
+- **Portada**, **primer comentario automático** y **reserva** de 15 guiones escritos a mano
+  (`evergreen_animated.json`, de los 7 tipos) por si la IA falla.
+
+### TikTok (y YouTube Shorts)
+Se publica a través de **Zernio** (zernio.com). Una sola vez:
+1. En Zernio, conecta el **TikTok de la Academia** (y el YouTube si quieres). Si usas la misma cuenta de Zernio que
+   StreakChess no pasa nada: ver punto 3.
+2. Copia la API key de Zernio en GitHub → *Settings → Secrets and variables → Actions → Secrets* →
+   `ZERNIO_API_KEY`.
+3. El sistema **nunca adivina la cuenta**: publica solo en la que se llame como la Academia (contiene "talent",
+   "ctf" o "factory"). Si tu TikTok se llama de otra forma, o hay varias, pon su nombre en la variable
+   `ZERNIO_TT_ACCOUNT` (y `ZERNIO_YT_ACCOUNT` para YouTube). Si no lo tiene claro, no publica y lo dice en el
+   resumen de la ejecución.
+4. En el perfil de TikTok pon el enlace a la web (el final del vídeo dice "enlace en el perfil").
+5. Comprueba: *Actions → Daily reels → Run workflow* con `dry_run` marcado. El resumen dice en qué cuenta de
+   TikTok y YouTube se publicaría.
+
+Variables: `TIKTOK=off` / `YOUTUBE=off` para apagar una red; `TIKTOK_AI_LABEL=off` para no marcar el vídeo como
+hecho con IA (por defecto se marca: la voz y el guion son de IA).
 
 ### Cómo pedir un reel sobre un tema concreto
 *Actions → Daily reels → Run workflow* → escribe el tema en `topic` (en inglés o español, p. ej. *"my kid cries
-when he loses to younger kids"*) → elige `dry_run` para verlo antes en *Artifacts*, o desmárcalo para publicarlo.
+when he loses to younger kids"*) y/o elige el tipo en `kind` → `dry_run` marcado para verlo antes en *Artifacts*,
+o desmárcalo para publicarlo.
 
 ### Otras piezas
 - **Banco de preguntas de padres** (`parent_topics.json`): cada publicación usa el tema menos usado.
@@ -48,8 +87,8 @@ when he loses to younger kids"*) → elige `dry_run` para verlo antes en *Artifa
   comparten y guardan en tu cuenta, y el informe del lunes compara formatos y finales.
 - **Si el token de Instagram deja de valer**, el proceso se para al principio (sin gastar IA ni minutos) y el
   resumen de la ejecución explica cómo renovarlo.
-- Formatos anteriores (`chat`, `kinetic`, `challenge`, `voice`): fuera del calendario, disponibles a mano en
-  `format`.
+- Formatos anteriores (`carousel`, `chat`, `kinetic`, `challenge`, `voice`): fuera del calendario, disponibles a
+  mano en `format`.
 
 ## Formato voz: vídeo real (`make_broll.py`, fuera del calendario)
 
@@ -173,7 +212,7 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
      pixabay.com/api/docs y copia la clave que aparece en el apartado "Parameters" (key).
      `PEXELS_API_KEY` es opcional (Pexels tiene pausada la emisión de claves nuevas).
    - Alternativa sin claves: carpeta `stock_library/` con 12+ clips propios o de licencia libre (ver su LEEME).
-   - `ZERNIO_API_KEY` (opcional, YouTube/TikTok; necesitas un perfil distinto al de StreakChess).
+   - `ZERNIO_API_KEY` (TikTok y YouTube Shorts; ver el apartado *TikTok* de arriba).
    - `AC_API_KEY` (opcional, para contar leads orgánicos de ActiveCampaign en el informe).
 3. **Datos aprobados**: `claims.json` ya trae aprobadas las cifras de tu web (250+ alumnos, 30+ campeones
    nacionales, 15+ países, títulos). `cases.json` trae los casos de Pranav y Vyom de tu web y se amplía solo cada
@@ -190,6 +229,9 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
 | `KEYWORD_DMS` | `true` | `false` desactiva los DMs de palabra clave. |
 | `CTA_URL` / `BOOK_URL` | web / admission-process | Enlaces de VSL y de reserva. |
 | `FB_REELS` | `on` | `off` desactiva Facebook Reels. |
+| `ZERNIO_TT_ACCOUNT` / `ZERNIO_YT_ACCOUNT` | — | Nombre de la cuenta de TikTok / YouTube de la Academia en Zernio (solo si hay varias o se llama distinto). |
+| `TIKTOK` / `YOUTUBE` | `on` | `off` apaga esa red. |
+| `ALT_ENDING` | `on` | `off` = no montar el segundo corte para TikTok/YouTube/Facebook. |
 | `GEMINI_VOICE` | `Charon` | Voz (escucha opciones con *Voice samples*). |
 | `NARRATOR` | `academy` | `coach` = primera persona como entrenador principal. |
 | `LEAD_WEIGHT` | `1.0` | Peso de visitas al perfil/follows en la recompensa. |
@@ -202,7 +244,7 @@ Cada reel lo diseña uno de 5 creadores con personalidad, especialidad y estilo 
 mismo nombre cuando quieras. Ya no se usan personajes ilustrados.
 
 ## Workflows
-- *Daily reels*: 2 al día (13:00 y 22:00 hora de Paraguay).
+- *Daily reels*: 2 al día (hacia las 13:40 y las 21:40 hora de Paraguay).
 - *Comment bot*: cada 2 horas, respuestas públicas + DM de palabra clave.
 - *Content bank*: domingos, lee los éxitos de tu web y analiza tus reels publicados.
 - *Weekly report*: lunes 10:00 Paraguay, llega como Issue a tu email.

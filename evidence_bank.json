@@ -1,29 +1,209 @@
 {
  "_note": "Estudios reales que los reels pueden citar (y SOLO estos). Cada uno se dice de forma cualitativa y la cita aparece pequeña en pantalla. Pon \"approved\": false en el que no quieras usar, o añade los tuyos con la misma forma.",
  "facts": [
-  {"id": "charness2005", "approved": true,
+  {
+   "id": "charness2005",
+   "approved": true,
    "finding": "In a study of chess players, the strongest predictor of chess skill was the amount of serious study done alone, more than the amount of tournament play.",
    "source_text": "Charness et al., Applied Cognitive Psychology, 2005",
-   "viz": {"block": "bars", "params": {"a_label": "Tournament play", "b_label": "Serious study alone", "a": 0.5, "b": 0.95, "tone": "good", "big": "Study wins"}}},
-  {"id": "chase_simon1973", "approved": true,
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Tournament play",
+     "b_label": "Serious study alone",
+     "a": 0.5,
+     "b": 0.95,
+     "tone": "good",
+     "big": "Study wins"
+    }
+   }
+  },
+  {
+   "id": "chase_simon1973",
+   "approved": true,
    "finding": "Shown a real game position for five seconds, chess masters rebuilt almost all of it from memory while beginners placed only a few pieces. With randomly scrambled pieces the masters' advantage almost disappeared: they remember patterns, not single pieces.",
    "source_text": "Chase & Simon, Cognitive Psychology, 1973",
-   "viz": {"block": "bars", "params": {"a_label": "Beginners", "b_label": "Masters", "a": 0.22, "b": 0.92, "tone": "good", "big": "Pieces remembered"}}},
-  {"id": "mueller_dweck1998", "approved": true,
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Beginners",
+     "b_label": "Masters",
+     "a": 0.22,
+     "b": 0.92,
+     "tone": "good",
+     "big": "Pieces remembered"
+    }
+   }
+  },
+  {
+   "id": "mueller_dweck1998",
+   "approved": true,
    "finding": "Fifth graders praised for being smart later avoided harder problems and did worse after a setback; children praised for their effort chose harder problems and kept trying.",
    "source_text": "Mueller & Dweck, J. Pers. Soc. Psychol., 1998",
-   "viz": {"block": "bars", "params": {"a_label": "Praised for being smart", "b_label": "Praised for effort", "a": 0.3, "b": 0.9, "tone": "good", "big": "Chose harder tasks"}}},
-  {"id": "roediger_karpicke2006", "approved": true,
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Praised for being smart",
+     "b_label": "Praised for effort",
+     "a": 0.3,
+     "b": 0.9,
+     "tone": "good",
+     "big": "Chose harder tasks"
+    }
+   }
+  },
+  {
+   "id": "roediger_karpicke2006",
+   "approved": true,
    "finding": "Students who tested themselves on material remembered much more of it a week later than students who simply studied it again, even though re-studying felt more effective.",
    "source_text": "Roediger & Karpicke, Psychological Science, 2006",
-   "viz": {"block": "bars", "params": {"a_label": "Studying it again", "b_label": "Testing yourself", "a": 0.42, "b": 0.9, "tone": "good", "big": "Remembered a week later"}}},
-  {"id": "cepeda2006", "approved": true,
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Studying it again",
+     "b_label": "Testing yourself",
+     "a": 0.42,
+     "b": 0.9,
+     "tone": "good",
+     "big": "Remembered a week later"
+    }
+   }
+  },
+  {
+   "id": "cepeda2006",
+   "approved": true,
    "finding": "A review of hundreds of learning experiments found that the same amount of practice is remembered far longer when it is spread over several sessions instead of done all at once.",
    "source_text": "Cepeda et al., Psychological Bulletin, 2006",
-   "viz": {"block": "bars", "params": {"a_label": "All at once", "b_label": "Spread out", "a": 0.4, "b": 0.9, "tone": "good", "big": "Remembered longer"}}},
-  {"id": "gobet_campitelli2007", "approved": true,
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "All at once",
+     "b_label": "Spread out",
+     "a": 0.4,
+     "b": 0.9,
+     "tone": "good",
+     "big": "Remembered longer"
+    }
+   }
+  },
+  {
+   "id": "gobet_campitelli2007",
+   "approved": true,
    "finding": "Among chess players who reached master level, the amount of practice it took varied enormously: some got there in about three thousand hours, others needed more than twenty thousand.",
    "source_text": "Gobet & Campitelli, Developmental Psychology, 2007",
-   "viz": {"block": "bars", "params": {"a_label": "Fastest to master", "b_label": "Slowest to master", "a": 0.15, "b": 1.0, "tone": "bad", "big": "3,000 vs 20,000+ hours"}}}
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Fastest to master",
+     "b_label": "Slowest to master",
+     "a": 0.15,
+     "b": 1.0,
+     "tone": "bad",
+     "big": "3,000 vs 20,000+ hours"
+    }
+   }
+  },
+  {
+   "id": "ericsson1993",
+   "approved": true,
+   "finding": "In a study of violin students at a music academy, the best players had spent far more hours practising alone than the less accomplished ones, and they rated practice alone as the activity that mattered most for improving.",
+   "source_text": "Ericsson, Krampe & Tesch-Römer, Psychological Review, 1993",
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Good players",
+     "b_label": "The best players",
+     "a": 0.55,
+     "b": 0.95,
+     "tone": "good",
+     "big": "Hours of practice alone"
+    }
+   }
+  },
+  {
+   "id": "kornell_bjork2008",
+   "approved": true,
+   "finding": "People learned to recognise painters' styles better when paintings by different artists were mixed together than when they were grouped by artist, even though most of them believed grouping had worked better.",
+   "source_text": "Kornell & Bjork, Psychological Science, 2008",
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "One type at a time",
+     "b_label": "Mixed together",
+     "a": 0.45,
+     "b": 0.9,
+     "tone": "good",
+     "big": "Mixed wins"
+    }
+   }
+  },
+  {
+   "id": "rohrer_taylor2007",
+   "approved": true,
+   "finding": "Students who practised different kinds of maths problems mixed together scored far higher on a test a week later than students who practised one kind at a time, although practising one kind at a time felt easier.",
+   "source_text": "Rohrer & Taylor, Instructional Science, 2007",
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "One kind at a time",
+     "b_label": "Mixed practice",
+     "a": 0.3,
+     "b": 0.9,
+     "tone": "good",
+     "big": "Score a week later"
+    }
+   }
+  },
+  {
+   "id": "duckworth2011",
+   "approved": true,
+   "finding": "Among finalists of the National Spelling Bee, the hours spent studying words alone predicted how far they got better than being quizzed by others or reading for pleasure, and the children rated that solitary study as the hardest and least enjoyable activity.",
+   "source_text": "Duckworth et al., Social Psychological and Personality Science, 2011",
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Being quizzed by others",
+     "b_label": "Studying alone",
+     "a": 0.45,
+     "b": 0.92,
+     "tone": "good",
+     "big": "What predicted results"
+    }
+   }
+  },
+  {
+   "id": "bilalic2007",
+   "approved": true,
+   "finding": "In a study of young chess players, the amount of practice predicted chess skill better than intelligence did.",
+   "source_text": "Bilalić, McLeod & Gobet, Intelligence, 2007",
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Intelligence",
+     "b_label": "Practice",
+     "a": 0.4,
+     "b": 0.92,
+     "tone": "good",
+     "big": "What predicted skill"
+    }
+   }
+  },
+  {
+   "id": "degroot1965",
+   "approved": true,
+   "finding": "When grandmasters and strong club players thought aloud about the same position, the grandmasters did not calculate more moves or look further ahead: they simply considered better moves from the start.",
+   "source_text": "de Groot, Thought and Choice in Chess, 1965",
+   "viz": {
+    "block": "bars",
+    "params": {
+     "a_label": "Club players",
+     "b_label": "Grandmasters",
+     "a": 0.8,
+     "b": 0.82,
+     "tone": "good",
+     "big": "Moves calculated: similar"
+    }
+   }
+  }
  ]
 }

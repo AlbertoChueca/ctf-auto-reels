@@ -631,14 +631,18 @@ JARGON = re.compile(r"\b(t-?t-?p|square\s*65|meta-?chess|key\s*#?\d+|bottleneck|
 SAN = re.compile(r"\b([KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](=[QRBN])?[+#]?)\b")
 
 
-def check_text(texts, allow_san=False):
-    """Honesty + plain-language checks for every on-screen/caption string. Raises ValueError."""
+def check_text(texts, allow_san=False, allow_terms=()):
+    """Honesty + plain-language checks for every on-screen/caption string. Raises ValueError.
+    allow_terms: words of the jargon list that this kind of reel may use (e.g. "fide" in a real student's titles)."""
     import guard
     blob = " ".join(str(x) for x in texts)
     ok, bad = guard.claims_ok(re.sub(r"\b(?:age|aged|at|ages)\s+\d+\b", " ", blob))
     if not ok:
         raise ValueError(f"numbers that are not approved claims: {bad}")
-    m = JARGON.search(blob)
+    jb = blob
+    for term in allow_terms:
+        jb = re.sub(rf"\b{re.escape(term)}\b", " ", jb, flags=re.I)
+    m = JARGON.search(jb)
     if m:
         raise ValueError(f"jargon a non-chess parent won't understand: '{m.group(0)}'")
     if not allow_san:

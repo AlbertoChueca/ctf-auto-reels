@@ -101,7 +101,8 @@
   ],
   "caption_hook": "20 games a day and the rating won't move? Here's why 👇",
   "caption_body": "More games usually means the same mistake, faster. One slow game with an honest review teaches more than twenty fast ones.",
-  "comment_prompt": "How many games a day does your child play? Be honest."
+  "comment_prompt": "How many games a day does your child play? Be honest.",
+  "kind": "problem"
  },
  {
   "id": "a-car-ride",
@@ -205,7 +206,8 @@
   ],
   "caption_hook": "The car ride after a loss matters more than you think 🚗",
   "caption_body": "Save the analysis for tomorrow. Tonight your only job is to be on their side.",
-  "comment_prompt": "What do you usually say in the car after a tough loss?"
+  "comment_prompt": "What do you usually say in the car after a tough loss?",
+  "kind": "problem"
  },
  {
   "id": "a-too-fast",
@@ -323,7 +325,8 @@
   ],
   "caption_hook": "Does your child move before you can blink? ⏱️",
   "caption_body": "Playing too fast is a habit, not a talent problem. One question before every move changes it.",
-  "comment_prompt": "Does your child play too fast or too slow?"
+  "comment_prompt": "Does your child play too fast or too slow?",
+  "kind": "problem"
  },
  {
   "id": "a-praise",
@@ -425,7 +428,8 @@
   ],
   "caption_hook": "The compliment that quietly makes kids afraid to lose 💬",
   "caption_body": "Praise the thinking and the effort, not the talent. Kids repeat what we celebrate.",
-  "comment_prompt": "What's the first thing you say after your child wins?"
+  "comment_prompt": "What's the first thing you say after your child wins?",
+  "kind": "myth"
  },
  {
   "id": "a-sunday-binge",
@@ -527,7 +531,8 @@
   ],
   "caption_hook": "3 hours on Sunday or 15 minutes a day? The research is clear 👇",
   "caption_body": "Same total time, very different results. Short daily practice is remembered far longer than one long session.",
-  "comment_prompt": "When does your child practise: every day or weekends?"
+  "comment_prompt": "When does your child practise: every day or weekends?",
+  "kind": "science"
  },
  {
   "id": "a-plateau",
@@ -638,7 +643,8 @@
   ],
   "caption_hook": "Stuck at the same rating for months? Read this 👇",
   "caption_body": "A plateau usually means the same two or three habits keep repeating. Find the one that costs the most and start there.",
-  "comment_prompt": "How long has your child been at the same rating?"
+  "comment_prompt": "How long has your child been at the same rating?",
+  "kind": "myth"
  },
  {
   "id": "a-videos",
@@ -750,7 +756,8 @@
   ],
   "caption_hook": "Is your child watching chess or training chess? 🎥",
   "caption_body": "Videos inspire, but kids improve by solving and by fixing their own mistakes. A simple rule: one video, one puzzle.",
-  "comment_prompt": "How much chess does your child watch vs solve?"
+  "comment_prompt": "How much chess does your child watch vs solve?",
+  "kind": "science"
  },
  {
   "id": "a-talent",
@@ -759,10 +766,9 @@
   "scenes": [
    {
     "say": "Every chess parent secretly asks the same thing: is my child talented?",
-    "block": "big",
+    "block": "ask",
     "params": {
-     "icon": "question",
-     "tone": "brand"
+     "question": "Is my child talented at chess?"
     },
     "label": "Talented?",
     "tone": "brand",
@@ -850,6 +856,773 @@
   ],
   "caption_hook": "\"Is my child talented at chess?\" The honest answer 👇",
   "caption_body": "Talent is real, but it decides far less than parents think. How a child trains, and with whom, matters more.",
-  "comment_prompt": "At what age did your child start playing chess?"
+  "comment_prompt": "At what age did your child start playing chess?",
+  "kind": "question"
+ },
+ {
+  "id": "h-tournament-morning",
+  "kind": "howto",
+  "title": "Tournament morning",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "It's tournament morning. Your child is pale, quiet, and barely touches breakfast.",
+    "block": "hall",
+    "params": {
+     "mode": "freeze"
+    },
+    "label": "Tournament morning",
+    "tone": "bad",
+    "highlight": [
+     "quiet"
+    ],
+    "strike": false
+   },
+   {
+    "say": "You want to help, so you start giving advice. But last-minute advice only adds weight.",
+    "block": "talk",
+    "params": {
+     "tone": "bad",
+     "say": "Remember your openings!"
+    },
+    "label": "Last-minute tips",
+    "tone": "bad",
+    "highlight": [
+     "advice"
+    ],
+    "strike": true
+   },
+   {
+    "say": "Step one. Arrive early. Ten calm minutes in the hall beat any last-minute lesson.",
+    "block": "clock",
+    "params": {
+     "mode": "think",
+     "text": "Early"
+    },
+    "label": "Step 1 Early",
+    "tone": "good",
+    "highlight": [
+     "early"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Step two. Give them one job, not ten. Before every move, ask what the opponent wants.",
+    "block": "board",
+    "params": {
+     "mode": "pause",
+     "ask": "What does my opponent want?"
+    },
+    "label": "Step 2 One job",
+    "tone": "good",
+    "highlight": [
+     "one"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Step three. One sentence before they walk in: I love watching you play.",
+    "block": "talk",
+    "params": {
+     "tone": "good",
+     "say": "I love watching you play."
+    },
+    "label": "Step 3 One sentence",
+    "tone": "good",
+    "highlight": [
+     "love"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Kids who walk in calm think longer, and see more.",
+    "block": "hall",
+    "params": {
+     "mode": "focus"
+    },
+    "label": "Calm kids see more",
+    "tone": "good",
+    "highlight": [
+     "calm"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Your child doesn't need a pep talk. They need your calm.",
+    "block": "big",
+    "params": {
+     "icon": "heart",
+     "tone": "good"
+    },
+    "label": "Your calm first",
+    "tone": "good",
+    "highlight": [
+     "calm"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Tournament morning nerves? Do these 3 things 👇",
+  "caption_body": "Last-minute advice adds pressure. Arrive early, give them one job, and say one kind sentence before they walk in.",
+  "comment_prompt": "What do you say to your child right before a round?"
+ },
+ {
+  "id": "h-blunders",
+  "kind": "howto",
+  "title": "Giving pieces away",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Your child is winning... and then gives a piece away for free. Again.",
+    "block": "board",
+    "params": {
+     "mode": "blunder"
+    },
+    "label": "Another piece gone",
+    "tone": "bad",
+    "highlight": [
+     "free"
+    ],
+    "strike": false
+   },
+   {
+    "say": "You say: be careful. But careful isn't something a child knows how to do.",
+    "block": "talk",
+    "params": {
+     "tone": "bad",
+     "say": "Be more careful!"
+    },
+    "label": "Be careful",
+    "tone": "bad",
+    "highlight": [
+     "careful"
+    ],
+    "strike": true
+   },
+   {
+    "say": "Step one. Hands under the table until the move is chosen.",
+    "block": "hall",
+    "params": {
+     "mode": "focus"
+    },
+    "label": "Step 1 Hands",
+    "tone": "good",
+    "highlight": [
+     "hands"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Step two. Before every move, one check: is anything of mine attacked?",
+    "block": "board",
+    "params": {
+     "mode": "pause",
+     "ask": "Is anything of mine attacked?"
+    },
+    "label": "Step 2 One check",
+    "tone": "good",
+    "highlight": [
+     "check"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Step three. At home, a few easy puzzles a day, solved slowly, never guessed.",
+    "block": "home",
+    "params": {
+     "mode": "puzzle"
+    },
+    "label": "Step 3 Slow puzzles",
+    "tone": "good",
+    "highlight": [
+     "slowly"
+    ],
+    "strike": false
+   },
+   {
+    "say": "After a few weeks, the free gifts get rare, and the games last longer.",
+    "block": "line",
+    "params": {
+     "mode": "flat_then_rise"
+    },
+    "label": "Fewer gifts",
+    "tone": "good",
+    "highlight": [
+     "rare"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Careful isn't a personality. It's a routine.",
+    "block": "big",
+    "params": {
+     "icon": "check",
+     "tone": "good"
+    },
+    "label": "A routine",
+    "tone": "good",
+    "highlight": [
+     "routine"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "\"Be careful\" doesn't stop blunders. This does 👇",
+  "caption_body": "Children can't act on \"be careful\". Give them a routine instead: hands still, one check before every move, slow puzzles at home.",
+  "comment_prompt": "Does your child lose pieces when they are winning?"
+ },
+ {
+  "id": "q-hours",
+  "kind": "question",
+  "title": "How many hours a week?",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Parents ask us this every week: how many hours should my child train?",
+    "block": "ask",
+    "params": {
+     "question": "How many hours should my child train?"
+    },
+    "label": "How many hours?",
+    "tone": "brand",
+    "highlight": [
+     "hours"
+    ],
+    "strike": false
+   },
+   {
+    "say": "The honest answer: less than you think, if it happens most days.",
+    "block": "week",
+    "params": {
+     "mode": "daily"
+    },
+    "label": "Less than you think",
+    "tone": "good",
+    "highlight": [
+     "less"
+    ],
+    "strike": false
+   },
+   {
+    "say": "A child learns while their attention is fresh. After that, they're just sitting there.",
+    "block": "brain",
+    "params": {
+     "mode": "patterns"
+    },
+    "label": "Fresh attention",
+    "tone": "good",
+    "highlight": [
+     "fresh"
+    ],
+    "strike": false
+   },
+   {
+    "say": "And hours of fast games don't count. That's playing, not training.",
+    "block": "home",
+    "params": {
+     "mode": "blitz"
+    },
+    "label": "Playing isn't training",
+    "tone": "bad",
+    "highlight": [
+     "playing"
+    ],
+    "strike": true
+   },
+   {
+    "say": "Here's a simple test. After a session, ask what they learned. One clear answer means it worked.",
+    "block": "talk",
+    "params": {
+     "tone": "good",
+     "say": "What did you learn today?"
+    },
+    "label": "One test",
+    "tone": "good",
+    "highlight": [
+     "test"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Don't count the hours. Look at what's inside them.",
+    "block": "line",
+    "params": {
+     "mode": "rise"
+    },
+    "label": "What's inside the hour",
+    "tone": "good",
+    "highlight": [
+     "inside"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "How many hours should a chess kid train? ⏱️",
+  "caption_body": "Fewer than most parents think. Short, focused sessions most days beat one long one, and fast games are play, not training.",
+  "comment_prompt": "How many hours a week does your child train?"
+ },
+ {
+  "id": "m-plan",
+  "kind": "method",
+  "title": "A lesson with a plan",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Your child has a chess lesson every week. But ask what they're working on, and nobody knows.",
+    "block": "home",
+    "params": {
+     "mode": "lesson"
+    },
+    "label": "Working on what?",
+    "tone": "bad",
+    "highlight": [
+     "nobody"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Most lessons are improvised. A new topic every week, and nothing connects.",
+    "block": "tiles",
+    "params": {
+     "n": 8,
+     "k": 8,
+     "icon": "day",
+     "tone": "bad"
+    },
+    "label": "Improvised",
+    "tone": "bad",
+    "highlight": [
+     "improvised"
+    ],
+    "strike": false
+   },
+   {
+    "say": "At Chess Talents Factory, we start by finding what is really holding your child back.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "The real weakness"
+    },
+    "label": "First, we look",
+    "tone": "good",
+    "highlight": [
+     "finding"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Then every class has three parts: warm-up exercises, one clear idea, and practice games where that idea must appear.",
+    "block": "phases",
+    "params": {},
+    "label": "Every class",
+    "tone": "brand",
+    "highlight": [
+     "three"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Your child moves along a path of six levels, so you always know what comes next.",
+    "block": "levels",
+    "params": {
+     "a": 2,
+     "b": 3
+    },
+    "label": "Six levels",
+    "tone": "brand",
+    "highlight": [
+     "levels"
+    ],
+    "strike": false
+   },
+   {
+    "say": "And every three months you get a report: strengths, what to improve, and the next steps.",
+    "block": "report",
+    "params": {
+     "strengths": [
+      "Spots patterns fast"
+     ],
+     "improve": [
+      "Rushes when winning"
+     ],
+     "next": [
+      "Slow, careful endings"
+     ]
+    },
+    "label": "Every 3 months",
+    "tone": "good",
+    "highlight": [
+     "report"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Talent matters. A plan matters more.",
+    "block": "ladder",
+    "params": {
+     "mode": "climb"
+    },
+    "label": "A plan",
+    "tone": "gold",
+    "highlight": [
+     "plan"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Do you know what your child is working on in chess? 👇",
+  "caption_body": "At ChessTalentsFactory every class follows a plan: we find what holds your child back, teach one idea at a time, and report progress every quarter.",
+  "comment_prompt": "Do you know what your child's lessons are working on this month?"
+ },
+ {
+  "id": "m-small-groups",
+  "kind": "method",
+  "title": "Why small groups",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "Your child sits in a big online class, camera off, waiting for it to end.",
+    "block": "home",
+    "params": {
+     "mode": "lesson"
+    },
+    "label": "Lost in the group",
+    "tone": "bad",
+    "highlight": [
+     "waiting"
+    ],
+    "strike": false
+   },
+   {
+    "say": "In a big group of mixed levels, the lesson is too easy for some and too hard for others.",
+    "block": "tiles",
+    "params": {
+     "n": 12,
+     "k": 12,
+     "icon": "kid",
+     "tone": "bad"
+    },
+    "label": "Mixed levels",
+    "tone": "bad",
+    "highlight": [
+     "mixed"
+    ],
+    "strike": false
+   },
+   {
+    "say": "At Chess Talents Factory, groups are small: two to six kids of the same level.",
+    "block": "group",
+    "params": {
+     "n": 4
+    },
+    "label": "Small groups",
+    "tone": "good",
+    "highlight": [
+     "small"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Each group trains with an International Master who knows how to explain to a child.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "Explains the why"
+    },
+    "label": "International Masters",
+    "tone": "gold",
+    "highlight": [
+     "Master"
+    ],
+    "strike": false
+   },
+   {
+    "say": "You always know where your child is on a path of six levels, and what comes next.",
+    "block": "levels",
+    "params": {
+     "a": 2,
+     "b": 4
+    },
+    "label": "Six levels",
+    "tone": "brand",
+    "highlight": [
+     "levels"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Between classes, short assignments keep the idea alive until the next one.",
+    "block": "week",
+    "params": {
+     "mode": "daily"
+    },
+    "label": "Between classes",
+    "tone": "brand",
+    "highlight": [
+     "assignments"
+    ],
+    "strike": false
+   },
+   {
+    "say": "A small group isn't a detail. It's where your child gets seen.",
+    "block": "big",
+    "params": {
+     "icon": "star",
+     "tone": "gold"
+    },
+    "label": "Seen",
+    "tone": "gold",
+    "highlight": [
+     "seen"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Is your child lost in a big online chess class? 👇",
+  "caption_body": "At ChessTalentsFactory groups have 2 to 6 kids of the same level, with an International Master, a clear path of levels and short assignments between classes.",
+  "comment_prompt": "How many kids are in your child's chess class?"
+ },
+ {
+  "id": "r-13-months",
+  "kind": "results",
+  "case": "pranav-sathish",
+  "title": "From 1100 to 1800",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "One of our students came to us with a rating of 1100.",
+    "block": "hall",
+    "params": {
+     "mode": "focus"
+    },
+    "label": "Started at 1100",
+    "tone": "brand",
+    "highlight": [
+     "1100."
+    ],
+    "strike": false
+   },
+   {
+    "say": "At that level we see the same pattern in many kids: lots of games, and no plan.",
+    "block": "home",
+    "params": {
+     "mode": "blitz"
+    },
+    "label": "Games, no plan",
+    "tone": "bad",
+    "highlight": [
+     "plan."
+    ],
+    "strike": false
+   },
+   {
+    "say": "So the training got a structure. Every class: warm-up exercises, one clear idea, practice games.",
+    "block": "phases",
+    "params": {},
+    "label": "A structure",
+    "tone": "good",
+    "highlight": [
+     "structure."
+    ],
+    "strike": false
+   },
+   {
+    "say": "Thirteen months later: from 1100 to over 1800. Later came the National Master title.",
+    "block": "case",
+    "params": {
+     "milestones": [
+      "National Master title",
+      "Crossing 2300 FIDE rating"
+     ]
+    },
+    "label": "13 months",
+    "tone": "gold",
+    "highlight": [
+     "1800."
+    ],
+    "strike": false
+   },
+   {
+    "say": "And it's not one story. More than 30 of our students have become national champions.",
+    "block": "stat",
+    "params": {
+     "claim": "national_champions"
+    },
+    "label": "Not one story",
+    "tone": "gold",
+    "highlight": [
+     "30"
+    ],
+    "strike": false
+   },
+   {
+    "say": "More than 250 students have trained with us.",
+    "block": "stat",
+    "params": {
+     "claim": "students_trained"
+    },
+    "label": "250+ students",
+    "tone": "gold",
+    "highlight": [
+     "250"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Every child is different. What repeats is the method.",
+    "block": "ladder",
+    "params": {
+     "mode": "climb"
+    },
+    "label": "The method repeats",
+    "tone": "brand",
+    "highlight": [
+     "method."
+    ],
+    "strike": false
+   },
+   {
+    "say": "If your child is stuck, it's rarely talent. It's usually the plan.",
+    "block": "coach",
+    "params": {
+     "mode": "plan",
+     "steps": [
+      "Find the weakness",
+      "One idea a week",
+      "Measure progress"
+     ]
+    },
+    "label": "It's the plan",
+    "tone": "good",
+    "highlight": [
+     "plan."
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "From 1100 to over 1800 in 13 months. A real student 👇",
+  "caption_body": "No shortcut: a structured class, one idea at a time and a clear plan. Every child is different; what repeats is the method.",
+  "comment_prompt": "What is your child's rating today, and where was it a year ago?"
+ },
+ {
+  "id": "r-world-title",
+  "kind": "results",
+  "case": "omya-vidyarthi",
+  "title": "From 1100 to a world title",
+  "evidence": null,
+  "scenes": [
+   {
+    "say": "One of our students started at 1100. Nobody was talking about world titles.",
+    "block": "hall",
+    "params": {
+     "mode": "focus"
+    },
+    "label": "Rating: 1100",
+    "tone": "brand",
+    "highlight": [
+     "1100."
+    ],
+    "strike": false
+   },
+   {
+    "say": "Most kids at that level train a little of everything, and improve a little at nothing.",
+    "block": "brain",
+    "params": {
+     "mode": "overload"
+    },
+    "label": "A bit of everything",
+    "tone": "bad",
+    "highlight": [
+     "everything,"
+    ],
+    "strike": false
+   },
+   {
+    "say": "With us, the work was different: one concept at a time, until it shows up in real games.",
+    "block": "coach",
+    "params": {
+     "mode": "find",
+     "tag": "One concept"
+    },
+    "label": "One concept",
+    "tone": "good",
+    "highlight": [
+     "one"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Two years later: from 1100 to over 1900.",
+    "block": "case",
+    "params": {
+     "milestones": [
+      "World Champion U10",
+      "4 times Pan-American Champion"
+     ]
+    },
+    "label": "2 years",
+    "tone": "gold",
+    "highlight": [
+     "1900."
+    ],
+    "strike": false
+   },
+   {
+    "say": "And then the title: Under-10 World Champion, in girls' rapid chess.",
+    "block": "stat",
+    "params": {
+     "claim": "world_champion_student"
+    },
+    "label": "World Champion",
+    "tone": "gold",
+    "highlight": [
+     "Champion,"
+    ],
+    "strike": false
+   },
+   {
+    "say": "And it's not only one child. More than 30 of our students are national champions.",
+    "block": "stat",
+    "params": {
+     "claim": "national_champions"
+    },
+    "label": "30+ champions",
+    "tone": "gold",
+    "highlight": [
+     "30"
+    ],
+    "strike": false
+   },
+   {
+    "say": "Every child is different, and we never promise a title. What repeats is the method.",
+    "block": "ladder",
+    "params": {
+     "mode": "climb"
+    },
+    "label": "No promises",
+    "tone": "brand",
+    "highlight": [
+     "method."
+    ],
+    "strike": false
+   },
+   {
+    "say": "Level by level, with a plan the parents can see.",
+    "block": "levels",
+    "params": {
+     "a": 2,
+     "b": 5
+    },
+    "label": "Level by level",
+    "tone": "good",
+    "highlight": [
+     "plan"
+    ],
+    "strike": false
+   }
+  ],
+  "caption_hook": "Started at 1100. Two years later: World Champion U10 👇",
+  "caption_body": "One concept at a time, a class with structure and a plan parents can see. We never promise titles; what repeats is the method.",
+  "comment_prompt": "What would you like your child to achieve in chess in two years?"
  }
 ]

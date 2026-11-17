@@ -80,9 +80,10 @@ def build():
     fm = {}
     for r in last30:                                      # which FORMAT and which ENDING earn the most (per 1,000 people reached)
         if r.get("views"):
-            fm.setdefault((r.get("format") or r.get("engine") or "?", r.get("cta") or "-"), []).append(r)
+            fm.setdefault(((r.get("format") or r.get("engine") or "?") + (f" · {r['kind']}" if r.get("kind") else ""),
+                           r.get("cta") or "-"), []).append(r)
     if fm:
-        L += ["", "## Por formato y final (30 días)", "", "| Formato | Final | Reels | Views medias | Envíos /1.000 | Guardados /1.000 | Comentarios /1.000 |", "|---|---|---|---|---|---|---|"]
+        L += ["", "## Por tipo de reel y final (30 días)", "", "| Formato · tipo | Final | Reels | Views medias | Envíos /1.000 | Guardados /1.000 | Comentarios /1.000 |", "|---|---|---|---|---|---|---|"]
         for (f_, c_), rs in sorted(fm.items(), key=lambda kv: -tot(kv[1], "views") / len(kv[1])):
             reach = max(1, tot(rs, "reach") or tot(rs, "views"))
             L.append(f"| {f_} | {c_} | {len(rs)} | {tot(rs, 'views') // len(rs):,} | {1000 * tot(rs, 'shares') / reach:.1f} | "

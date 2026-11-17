@@ -1,12 +1,18 @@
 name: Daily reels
 
 on:
-  schedule:
-    - cron: "37 16 * * *"   # ONE post a day, around noon in New York. Off the hour on purpose: GitHub delays :00 jobs by hours
+  schedule:              # TWO posts a day. Off the hour on purpose: GitHub delays :00 jobs by hours
+    - cron: "37 16 * * *"   # midday slot: about 11:40 in New York (12:40 in summer)
+    - cron: "37 0 * * *"    # evening slot: about 19:40 in New York (20:40 in summer)
   workflow_dispatch:
     inputs:
+      kind:
+        description: "Kind of animated reel (auto = calendar). Education: problem, myth, science, howto, question. Academy: method, results"
+        type: choice
+        options: [auto, problem, myth, science, howto, question, method, results]
+        default: auto
       format:
-        description: "Post type (auto = calendar: animated explainers Mon/Tue/Thu/Fri/Sun, carousels Wed/Sat)"
+        description: "Post type (auto = animated explainer; the others are the older formats)"
         type: choice
         options: [auto, animated, carousel, chat, kinetic, challenge, voice]
         default: auto
@@ -15,7 +21,7 @@ on:
         type: string
         default: ""
       ending:
-        description: "Ending of the animated reel (auto = 2 of 3 days 'send it to a parent', 1 of 3 'comment PLAN')"
+        description: "Ending (auto = academy reels 'comment PLAN'; educational ones 2 of 3 'send it to a parent', 1 of 3 'comment PLAN')"
         type: choice
         options: [auto, share, keyword]
         default: auto
@@ -61,7 +67,10 @@ jobs:
       - name: Choose slot
         id: lvl
         run: |
-          echo "level=story" >> "$GITHUB_OUTPUT"
+          # story = midday slot, storytag = evening slot (by the schedule that fired; by the clock when run by hand)
+          if [ "${{ github.event.schedule }}" = "37 0 * * *" ]; then echo "level=storytag" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "schedule" ]; then echo "level=story" >> "$GITHUB_OUTPUT"
+          else h=$((10#$(date -u +%H))); if [ $h -ge 21 ] || [ $h -lt 9 ]; then echo "level=storytag" >> "$GITHUB_OUTPUT"; else echo "level=story" >> "$GITHUB_OUTPUT"; fi; fi
 
       - uses: actions/setup-python@v6
         with:
@@ -99,6 +108,14 @@ jobs:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ZERNIO_API_KEY: ${{ secrets.ZERNIO_API_KEY }}
+          # TikTok / YouTube through Zernio. If the Zernio account has more than one TikTok or YouTube account,
+          # say which one belongs to the academy (name or id): Settings > Variables.
+          ZERNIO_TT_ACCOUNT: ${{ vars.ZERNIO_TT_ACCOUNT }}
+          ZERNIO_YT_ACCOUNT: ${{ vars.ZERNIO_YT_ACCOUNT }}
+          ZERNIO_PROFILE: ${{ vars.ZERNIO_PROFILE }}
+          TIKTOK: ${{ vars.TIKTOK || 'on' }}
+          YOUTUBE: ${{ vars.YOUTUBE || 'on' }}
+          TIKTOK_AI_LABEL: ${{ vars.TIKTOK_AI_LABEL || 'on' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
           VOICE_ENGINE: gemini
@@ -109,6 +126,7 @@ jobs:
           FORCE_PUBLISH: ${{ github.event_name == 'workflow_dispatch' && inputs.force || false }}
           FB_REELS: ${{ vars.FB_REELS || 'on' }}
           FORMAT_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.format || 'auto' }}
+          KIND_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.kind || 'auto' }}
           STUDIO: ${{ vars.STUDIO || 'off' }}
           TOPIC_OVERRIDE: ${{ github.event_name == 'workflow_dispatch' && inputs.topic || '' }}
           ANIM_CTA: ${{ github.event_name == 'workflow_dispatch' && inputs.ending || vars.ANIM_CTA || 'auto' }}

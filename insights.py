@@ -100,7 +100,7 @@ def update(days=45):
         keep = {k: v for k, v in old.items() if k in METRICS + EXTRA + ["like_count", "comments_count"] or k.startswith("profile_activity_")}
         perf[mid] = {**{k: e.get(k) for k in ("date", "slot", "story", "hook", "level", "mode", "engine", "format", "topic",
                                               "review_score", "permalink", "arms", "pillar", "cta", "agent", "evidence",
-                                              "headline", "media_id", "published_as", "duration")},
+                                              "headline", "media_id", "published_as", "duration", "kind", "case")},
                      **keep, **{k: v for k, v in (m or {}).items() if v is not None}}   # a failed call never erases numbers
         n += 1
     json.dump(perf, open(PERF, "w"), indent=0)

@@ -836,9 +836,308 @@ def b_plan(k, t, d, p, sd):
     k.pop()
 
 
+# ======================================================================= the academy: method, proof, questions
+LEVELS = [("The Basics", "400-800"), ("The Strategist", "800-1200"), ("The Competitor", "1200-1500"),
+          ("The Expert", "1500-1800"), ("The Candidate Master", "1800-2200"), ("The Master & Beyond", "2200-2500+")]
+
+
+def b_stat(k, t, d, p, sd):
+    """One proven number of the academy, counted up. value ('250+', or words), label, icon: kid | trophy | star"""
+    val, lab, ic = str(p.get("value") or ""), str(p.get("label") or ""), p.get("icon", "star")
+    paint_bg(k, "stage", sd % 2); particles(k, t, sd, 14, GOLD)
+    _cam(k, t, d, 1.0, 1.05, 540, 1050)
+    for i in range(3):
+        ph = (t * 0.45 + i / 3) % 1
+        k.circle(540, 1000, 230 + ph * 300); k.neon(GOLD, 4, (1 - ph) * 0.45, 0.6)
+    m = __import__("re").match(r"^(\d[\d,]*)(.*)$", val)
+    if m:
+        target = int(m.group(1).replace(",", "")); e = ease_out(seg(t, 0.15, 1.15))
+        txt = f"{int(round(target * e)):,}" + (m.group(2) if e >= 1 else "")
+        k.big(txt, 540, 980, 250 if len(val) <= 4 else 190, GOLD, 1, 1 + 0.05 * (1 - seg(t, 1.15, 1.4)) * (t > 1.15))
+        if 1.15 < t < 1.7:
+            sparks(k, 540, 980, (t - 1.15) / 0.55, GOLD, 14, 240, 400)
+    else:
+        size = 150
+        lines = wrap(val.upper(), size, W - 140, F_BLACK)
+        while len(lines) > 2 and size > 80:
+            size -= 10; lines = wrap(val.upper(), size, W - 140, F_BLACK)
+        for i, l in enumerate(lines):
+            g = t - 0.15 - i * 0.2
+            if g > 0:
+                k.big(l, 540, 980 + (i - (len(lines) - 1) / 2) * size * 1.1, size, GOLD, clamp(g / 0.15), 0.75 + 0.25 * back(g / 0.3))
+    icon(k, {"kid": "pawn", "trophy": "trophy", "star": "star"}.get(ic, "star"), 540, 700 - 8 * math.sin(t * 2), 120, GOLD, clamp(t / 0.3))
+    if lab:
+        g = t - 0.6
+        if g > 0:
+            ls = wrap(lab.upper(), 54, W - 200, F_BLACK)
+            for i, l in enumerate(ls[:2]):
+                k.text(l, 540, 1215 + i * 68, 54, CREAM, F_BLACK, clamp(g / 0.25))
+    k.text("ChessTalentsFactory students", 540, 1400, 34, MUTED, F_UI2, clamp((t - 1.0) / 0.4))
+    k.pop()
+
+
+def b_levels(k, t, d, p, sd):
+    """Our Learning Path: 6 levels that light up; a marker climbs from level 'a' to level 'b' (1-6)."""
+    a_, b_ = int(clamp(p.get("a", 1), 1, 6)), int(clamp(p.get("b", 6), 1, 6))
+    if b_ < a_:
+        a_, b_ = b_, a_
+    paint_bg(k, "lab", sd % 2)
+    _cam(k, t, d, 1.0, 1.03, 540, 1050)
+    rh, x0, y0 = 128, 90, 1375
+    prog = a_ - 1 + (b_ - a_) * ease(seg(t, 0.6, max(1.4, d - 0.6))) if b_ > a_ else a_ - 1
+    for i, (nm, rg) in enumerate(LEVELS):
+        ai = clamp((t - i * 0.07) / 0.15)
+        if ai <= 0:
+            continue
+        y = y0 - i * rh; xo = x0 + i * 22; w = W - 2 * x0 - 5 * 22
+        on = i <= prog + 0.02 and i >= a_ - 1
+        col = TEAL if on else VIOLET
+        k.rrect(xo, y - 52, w, 104, 24)
+        if on:
+            k.fill(mix(BG1, TEAL, 0.28), 0.95 * ai, keep=True); k.neon(TEAL, 4.5, ai)
+        else:
+            k.fill((24, 22, 44), 0.9 * ai, keep=True); k.stroke(DIM, 3, ai)
+        k.circle(xo + 62, y, 34); k.fill(col if on else DIM, ai)
+        k.text(str(i + 1), xo + 62, y, 40, (16, 14, 28), F_BLACK, ai)
+        k.text(nm, xo + 118, y - 2, 42 if len(nm) < 17 else 36, CREAM if on else MUTED, F_UI, ai, 1, "l")
+        k.text(rg, xo + w - 26, y, 34, col if on else DIM, F_BLACK, ai, 1, "r")
+    i0 = int(min(prog, 5)); fr = prog - i0
+    my = y0 - prog * rh - math.sin(fr * math.pi) * 26
+    mx = x0 + prog * 22 - 22
+    mini_piece(k, mx, my + 46, 62, ORANGE, "pawn", clamp(t / 0.3))
+    k.glow_dot(mx, my, 80, ORANGE, 0.5)
+    k.text("RATING", W - x0 - 20, y0 - 5 * rh - 92, 28, MUTED, F_BLACK, clamp(t / 0.4), 1, "r")
+    k.pop()
+
+
+def b_phases(k, t, d, p, sd):
+    """How one of our classes works: three parts that light up in order (warm-up, one idea, practice games)."""
+    paint_bg(k, "lab", sd % 2); particles(k, t, sd, 8, TEAL)
+    _cam(k, t, d, 1.0, 1.03, 540, 1050)
+    parts = [("1", "WARM-UP", "exercises to switch the brain on", "bolt", ORANGE),
+             ("2", "ONE IDEA", "one clear concept per class", "star", TEAL),
+             ("3", "PRACTICE", "games where the idea must appear", "pawn", VIOLET)]
+    a = clamp(t / 0.2)
+    k.text("ONE CLASS · 90 MINUTES", 540, 640, 40, MUTED, F_BLACK, a)
+    bx, bw, by = 110, 860, 708
+    k.rrect(bx, by, bw, 18, 9); k.fill(DIM, 0.6 * a)
+    span = max(1.5, d - 0.8)
+    prog = clamp((t - 0.3) / span)
+    k.rrect(bx, by, bw * prog, 18, 9); k.fill(CREAM, 0.9 * a)
+    k.glow_dot(bx + bw * prog, by + 9, 50, CREAM, 0.8 * a)
+    for i, (n, ttl, sub, ic, col) in enumerate(parts):
+        ti = 0.3 + span * i / 3
+        on = t >= ti; cur = on and t < ti + span / 3
+        y = 800 + i * 222
+        g = t - ti
+        k.rrect(110, y, 860, 190, 30)
+        if on:
+            k.fill(mix(BG1, col, 0.26 if cur else 0.16), 0.95, keep=True); k.neon(col, 5 if cur else 3.5, 1.0 if cur else 0.7, 1.0 if cur else 0.4)
+        else:
+            k.fill((24, 22, 44), 0.9 * a, keep=True); k.stroke(DIM, 3, a)
+        k.big(n, 196, y + 95, 110, col if on else DIM, a, (0.8 + 0.2 * back(g / 0.3)) if on else 1)
+        k.text(ttl, 290, y + 68, 56, CREAM if on else MUTED, F_BLACK, a, 1, "l")
+        k.text(sub, 290, y + 130, 36, CREAM if on else DIM, F_UI2, a * (1 if on else 0.8), 1, "l")
+        if on:
+            icon(k, ic, 900, y + 95, 76 * (0.7 + 0.3 * back(g / 0.3)), col, 1, t)
+    k.pop()
+
+
+def b_report(k, t, d, p, sd):
+    """The progress report parents receive: strengths, what to improve, next steps (lists, max 2 short items each)."""
+    paint_bg(k, "lab", sd % 2)
+    _cam(k, t, d, 1.0, 1.03, 540, 1050)
+    secs = [("STRENGTHS", [str(x) for x in (p.get("strengths") or ["Spots tactics quickly", "Fights to the end"])][:2], TEAL, "check"),
+            ("TO IMPROVE", [str(x) for x in (p.get("improve") or ["Moves too fast", "Time management"])][:2], PINK, "bolt"),
+            ("NEXT STEPS", [str(x) for x in (p.get("next") or ["One slow game a week", "Review every loss"])][:2], ORANGE, "arrow_up")]
+    x0, y0, pw, ph_ = 110, 610, 860, 880
+    a = clamp(t / 0.2)
+    up = (1 - ease_out(t / 0.45)) * 80
+    k.c.save(); k.c.translate(0, up)
+    panel(k, x0, y0, pw, ph_, CREAM, a, 30)
+    k.text("PROGRESS REPORT", x0 + 48, y0 + 66, 46, CREAM, F_BLACK, a, 1, "l")
+    k.text("every quarter", x0 + pw - 48, y0 + 66, 32, MUTED, F_UI2, a, 1, "r")
+    k.line([(x0 + 40, y0 + 112), (x0 + pw - 40, y0 + 112)]); k.stroke(DIM, 3, a)
+    span = max(1.2, d - 1.0)
+    for i, (ttl, items, col, ic) in enumerate(secs):
+        ti = 0.4 + span * i / 3
+        g = t - ti
+        if g <= 0:
+            continue
+        y = y0 + 150 + i * 240
+        ai = clamp(g / 0.2)
+        icon(k, ic, x0 + 78, y + 22, 44, col, ai)
+        k.text(ttl, x0 + 126, y + 22, 40, col, F_BLACK, ai, 1, "l")
+        for j, it in enumerate(items):
+            gj = g - 0.2 - j * 0.25
+            if gj <= 0:
+                continue
+            yy = y + 88 + j * 68
+            k.circle(x0 + 78, yy, 8); k.fill(col, clamp(gj / 0.15))
+            k.text(it, x0 + 110, yy, 40, CREAM, F_UI, clamp(gj / 0.15), 1, "l")
+            bw = (pw - 190) * ease_out(gj / 0.5)
+            k.rrect(x0 + 110, yy + 30, bw, 4, 2); k.fill(col, 0.35)
+    k.c.restore()
+    k.pop()
+
+
+def b_group(k, t, d, p, sd):
+    """A live online class: the coach and a small group of kids of the same level (n = 2-6)."""
+    n = int(clamp(p.get("n", 4), 2, 6))
+    paint_bg(k, "home", sd % 2)
+    k.rrect(0, 0, W, H, 0); k.fill(BG0, 0.55)
+    _cam(k, t, d, 1.0, 1.04, 540, 1050)
+    a = clamp(t / 0.2)
+    x0, y0, pw = 80, 600, 920
+    panel(k, x0, y0, pw, 900, VIOLET, a, 36)
+    k.circle(x0 + 56, y0 + 54, 10); k.fill(PINK, 0.5 + 0.5 * pulse(t, 1.2)); k.text("LIVE CLASS", x0 + 80, y0 + 54, 34, CREAM, F_BLACK, a, 1, "l")
+    k.text("same level", x0 + pw - 40, y0 + 54, 30, MUTED, F_UI2, a, 1, "r")
+    # coach tile with a shared board
+    cx0, cy0, cw, chh = x0 + 36, y0 + 100, pw - 72, 380
+    k.rrect(cx0, cy0, cw, chh, 24); k.fill(mix(BG1, TEAL, 0.2), 0.95 * a, keep=True); k.neon(TEAL, 5, a)
+    k.circle(cx0 + 130, cy0 + 150, 66); k.shape(TEAL, 5, a, 0.4)
+    k.circle(cx0 + 130, cy0 + 132, 24); k.fill(TEAL, a)
+    k.c.new_path(); k.c.arc(cx0 + 130, cy0 + 198, 44, TAU / 2, TAU); k.c.close_path(); k.fill(TEAL, a)
+    for i in range(5):
+        hh = 12 + 30 * abs(math.sin(t * 7 + i * 1.3))
+        k.rrect(cx0 + 70 + i * 26, cy0 + 270 - hh / 2, 12, hh, 6); k.fill(TEAL, a)
+    k.text("Coach", cx0 + 130, cy0 + 334, 34, CREAM, F_UI, a)
+    sq = 40; bx, by = cx0 + cw - 8 * sq - 40, cy0 + 30
+    for r in range(8):
+        for f in range(8):
+            if (r + f) % 2:
+                k.rrect(bx + f * sq, by + r * sq, sq, sq, 2); k.fill(TEAL, 0.16 * a)
+    k.rrect(bx, by, 8 * sq, 8 * sq, 6); k.stroke(TEAL, 3, a)
+    e = ease(seg(t % 2.6, 0.4, 1.2))
+    p0, p1 = (bx + 2.5 * sq, by + 6.5 * sq), (bx + 5.5 * sq, by + 2.5 * sq)
+    k.sprite(piece_sprite("N", 50, ORANGE), *p0); k.sprite(piece_sprite("k", 50, VIOLET), bx + 6.5 * sq, by + 0.5 * sq)
+    k.line([p0, lerp2(p0, p1, e)]); k.neon(ORANGE, 6, a)
+    # kids
+    cols = n if n <= 3 else (n + 1) // 2
+    rows = 1 if n <= 3 else 2
+    tw = (pw - 72 - (cols - 1) * 20) / cols; th = (360 - (rows - 1) * 20) / rows
+    speaker = int(t / 1.3) % n
+    for i in range(n):
+        r, f = divmod(i, cols)
+        tx, ty = x0 + 36 + f * (tw + 20), y0 + 504 + r * (th + 20)
+        ai = clamp((t - 0.2 - i * 0.1) / 0.15)
+        if ai <= 0:
+            continue
+        col = [ORANGE, VIOLET, GOLD, PINK, ORANGE, VIOLET][i]
+        sp = i == speaker
+        k.rrect(tx, ty, tw, th, 20); k.fill(mix(BG1, col, 0.18), 0.95 * ai, keep=True)
+        k.neon(col, 5 if sp else 3, ai * (1 if sp else 0.6), 1 if sp else 0.2)
+        hr = min(th, tw) * 0.2
+        k.circle(tx + tw / 2, ty + th * 0.4, hr); k.fill(col, 0.9 * ai)
+        k.c.new_path(); k.c.arc(tx + tw / 2, ty + th * 0.92, hr * 1.7, TAU / 2, TAU); k.c.close_path(); k.fill(col, 0.9 * ai)
+        if sp:
+            icon(k, "question" if i % 2 else "check", tx + tw - 44, ty + 44, 34, CREAM, ai)
+    k.pop()
+
+
+def b_case(k, t, d, p, sd):
+    """A REAL student's progress: rating from 'frm' to 'to' in 'span', plus up to 3 milestones (filled from cases.json)."""
+    frm, to = int(p.get("frm", 1100)), int(p.get("to", 1800))
+    paint_bg(k, "stage", sd % 2); particles(k, t, sd, 12, GOLD)
+    _cam(k, t, d, 1.0, 1.04, 540, 1050)
+    x0, y0, pw, ph_ = 100, 610, 880, 560
+    a = clamp(t / 0.2)
+    panel(k, x0, y0, pw, ph_, GOLD, a)
+    k.rrect(x0 + 36, y0 + 30, 300, 56, 28); k.fill(GOLD, 0.95 * a); k.text("REAL STUDENT", x0 + 186, y0 + 58, 30, (30, 22, 6), F_BLACK, a)
+    k.text("RATING", x0 + pw - 44, y0 + 58, 30, MUTED, F_BLACK, a, 1, "r")
+    e = ease(seg(t, 0.35, min(2.0, max(1.2, d * 0.5))))
+    gx0, gy0, gw, gh = x0 + 60, y0 + 330, pw - 120, 170
+    pts = []
+    for i in range(41):
+        q = i / 40
+        if q > e:
+            break
+        pts.append((gx0 + gw * q, gy0 + gh - gh * (q ** 1.25) * 0.92 - math.sin(q * 19) * 6))
+    if len(pts) > 1:
+        k.line(pts + [(pts[-1][0], gy0 + gh), (gx0, gy0 + gh)], True); k.fill(TEAL, 0.10)
+        k.line(pts); k.neon(TEAL, 8, a)
+        k.glow_dot(pts[-1][0], pts[-1][1], 60, TEAL, 0.9); k.circle(pts[-1][0], pts[-1][1], 12); k.fill(CREAM, 1)
+    cur = int(round(frm + (to - frm) * e))
+    k.text(str(frm), x0 + 60, y0 + 190, 64, MUTED, F_BLACK, a, 1, "l")
+    icon(k, "arrow_up", x0 + 290, y0 + 186, 60, TEAL, a)
+    k.big(f"{cur}" + ("+" if e >= 1 and p.get("plus") else ""), x0 + pw - 280, y0 + 190, 132, GOLD, a, 1 + 0.04 * (e >= 1) * pulse(t, 1.5))
+    if p.get("span") and e >= 1:
+        g = t - min(2.0, max(1.2, d * 0.5))
+        bs = neon_text(("IN " + str(p["span"])).upper(), 70, TEAL)
+        k.sprite(bs, 540, y0 + ph_ + 78, 0.8 + 0.2 * back(g / 0.3), clamp(g / 0.15))
+    ms = [str(x) for x in (p.get("milestones") or [])][:3]
+    tm0 = min(2.0, max(1.2, d * 0.5)) + 0.5
+    for i, m_ in enumerate(ms):
+        g = t - tm0 - i * 0.45
+        if g > 0:
+            y = y0 + ph_ + 180 + i * 96
+            w = min(W - 160, text_w(m_, 38, F_UI) + 130)
+            k.rrect(540 - w / 2, y - 40, w, 80, 40); k.fill(mix(BG1, GOLD, 0.2), 0.95 * clamp(g / 0.15), keep=True); k.neon(GOLD, 3.5, clamp(g / 0.15), 0.6)
+            icon(k, "star", 540 - w / 2 + 48, y, 40, GOLD, clamp(g / 0.15))
+            k.text(m_, 540 + 26, y, 38, CREAM, F_UI, clamp(g / 0.15))
+    k.pop()
+
+
+def b_ask(k, t, d, p, sd):
+    """A parent asks a question (the 'question' param, max 10 words) in a big speech bubble."""
+    q = str(p.get("question") or "Is my child talented?")
+    paint_bg(k, "home", sd % 2); particles(k, t, sd, 8, VIOLET)
+    _cam(k, t, d, 1.0, 1.05, 540, 1150)
+    floor = 1560
+    par = Person("adult", VIOLET, 138, 1, accent=ORANGE); hp = (250, floor - 2.46 * 138 - 14)
+    J = par.pose(hp, False, 0.04 + 0.01 * math.sin(t * 2), 0.06, add(hp, (150, -330 + math.sin(t * 3) * 10)), None, 0, 0.22)
+    par.draw(k, J, seated=False)
+    k.line([(60, floor + 6), (1020, floor + 6)]); k.stroke(VIOLET, 4, 0.3)
+    g = t - 0.1
+    if g > 0:
+        bubble_text(k, q, 610, 800, CREAM, (-260, 150), clamp(g / 0.15), 0.75 + 0.25 * back(g / 0.3), 60, 560)
+    for i in range(3):
+        ph = (t * 0.5 + i * 0.33) % 1
+        k.big("?", 760 + i * 90, 1280 - ph * 200 + (i % 2) * 50, 90 + i * 20, VIOLET, (1 - ph) * 0.7 * clamp(t - 0.4))
+    kid = Person("child", ORANGE, 84, -1)
+    hk = (860, floor - 1.72 * 84 - 14)
+    kid.draw(k, kid.pose(hk, False, 0.02, 0.1, None, None, 0, 0.1), 0.85, 0.5, seated=False)
+    k.pop()
+
+
+def b_link(k, t, d, p, sd):
+    """Ending for TikTok / YouTube / Facebook: the free training video is linked on our profile."""
+    import brand
+    paint_bg(k, "lab", sd % 2); particles(k, t, sd, 12, ORANGE)
+    _cam(k, t, d, 1.0, 1.04, 540, 1080)
+    x, y, w, h = 230, 600, 620, 960
+    _phone(k, x, y, w, h)
+    a = clamp(t / 0.25)
+    k.circle(x + w / 2, y + 190, 92); k.fill((255, 255, 255), 0.96 * a)
+    k.sprite(logo_sprite(150), x + w / 2, y + 190, 0.78, a)
+    k.text(brand.NAME, x + w / 2, y + 330, 42, CREAM, F_UI, a)
+    k.text("Online chess academy for kids", x + w / 2, y + 392, 30, MUTED, F_UI2, a)
+    for i in range(3):
+        k.rrect(x + 70 + i * 170, y + 450, 140, 14, 7); k.fill(DIM, 0.6 * a)
+    g = t - 0.5
+    by = y + 540
+    if g > 0:
+        pop = 0.8 + 0.2 * back(g / 0.3)
+        k.c.save(); k.c.translate(x + w / 2, by + 60); k.c.scale(pop, pop); k.c.translate(-(x + w / 2), -(by + 60))
+        k.rrect(x + 50, by, w - 100, 120, 60); k.fill(ORANGE, clamp(g / 0.15), keep=True); k.neon(ORANGE, 5, clamp(g / 0.15) * (0.7 + 0.3 * pulse(t, 1.5)))
+        icon(k, "play", x + 104, by + 60, 40, (255, 255, 255), clamp(g / 0.15))
+        k.text("Free training video", x + w / 2 + 36, by + 60, 38, (255, 255, 255), F_BLACK, clamp(g / 0.15))
+        k.c.restore()
+        k.text("for chess parents", x + w / 2, by + 170, 34, MUTED, F_UI2, clamp((g - 0.2) / 0.3))
+    if 0.9 < t:
+        tp = seg(t, 0.9, 1.35); cx, cy = lerp2((x + w - 90, y + h - 130), (x + w / 2 + 120, by + 80), ease(tp))
+        if t < 2.2:
+            k.circle(cx + 14, cy + 18, 30); k.fill(CREAM, 0.9, keep=True); k.stroke((30, 28, 40), 4, 1)
+        if t > 1.35:
+            k.circle(x + w / 2, by + 60, 80 + (t - 1.35) * 240); k.neon(ORANGE, 5, clamp(1 - (t - 1.35) / 0.5))
+    k.pop()
+
+
 BLOCKS = {"hall": b_hall, "coach": b_coach, "home": b_home, "car": b_car, "talk": b_talk, "ladder": b_ladder, "board": b_board,
           "tiles": b_tiles, "line": b_line, "bars": b_bars, "week": b_week, "versus": b_versus, "brain": b_brain,
-          "clock": b_clock, "iceberg": b_iceberg, "big": b_big, "share": b_share, "plan": b_plan}
+          "clock": b_clock, "iceberg": b_iceberg, "big": b_big, "share": b_share, "plan": b_plan,
+          "stat": b_stat, "levels": b_levels, "phases": b_phases, "report": b_report, "group": b_group, "case": b_case,
+          "ask": b_ask, "link": b_link}
 
 
 def draw_scene(k, sc, t, d, sd, words, chunks, t_global, first=False):

@@ -1,16 +1,24 @@
-"""One publishing slot for ChessTalentsFactory: ONE post a day.
+"""One publishing slot for ChessTalentsFactory. TWO posts a day: midday and evening (New York time).
 
-python run_daily.py story [--dry-run]
+python run_daily.py story|storytag [--dry-run]        (story = midday slot, storytag = evening slot)
 
-Weekly calendar (New York date), override with FORMAT_OVERRIDE:
-  Mon animated  Tue animated  Wed carousel  Thu animated  Fri animated  Sat carousel  Sun animated
-  animated   neon-figure explainer with narration (make_animated) - the main format
-  carousel   7-slide advice carousel (make_carousel)              - the most saved format
-  chat / kinetic / challenge / voice   older formats, still available by hand (FORMAT_OVERRIDE)
-TOPIC_OVERRIDE = free text: make today's animated reel about exactly that.
+Every post is an animated explainer (make_animated). SEVEN kinds, about 80 % education / 20 % the academy:
+              midday      evening
+  Mon         problem     METHOD
+  Tue         myth        howto
+  Wed         science     problem
+  Thu         question    RESULTS
+  Fri         problem     myth
+  Sat         howto       science
+  Sun         question    METHOD / RESULTS (alternating weeks)
+  problem / myth / science / howto / question  = useful for any chess parent, no selling
+  METHOD  = how we train      RESULTS = a real student's progress + proven numbers (claims.json, cases.json)
+Override by hand: KIND_OVERRIDE (one of the seven), TOPIC_OVERRIDE (free text), FORMAT_OVERRIDE (carousel, chat,
+kinetic, challenge, voice: the older formats).
 Every engine has an offline fallback (pre-written scripts), so a post always goes out.
-Every post: Instagram (reel with its cover frame, or carousel) + first comment + Story, Facebook Reel,
-YouTube/TikTok when configured.
+Every post: Instagram reel with its cover frame + first comment + Story, Facebook Reel, and TikTok / YouTube Shorts
+when Zernio is configured. Reels that end with "comment PLAN" (the Instagram DM bot) get a second cut ending with
+"link on our profile" for the other platforms.
 """
 import datetime, json, os, random, sys, traceback
 import brand, guard
@@ -45,12 +53,20 @@ if pillar == "proof" and not (guard.has("avg_gain") or guard.has("fide_titles"))
 if pillar == "success" and not guard.cases():
     pillar = "pain"
 
-CALENDAR = {0: "animated", 1: "animated", 2: "carousel", 3: "animated", 4: "animated", 5: "carousel", 6: "animated"}
 FORMATS = ("animated", "carousel", "chat", "kinetic", "challenge", "voice")
 fmt = os.environ.get("FORMAT_OVERRIDE", "auto")
 if fmt not in FORMATS:
-    fmt = "animated" if (os.environ.get("TOPIC_OVERRIDE") or "").strip() else CALENDAR[wd]
-print("format:", fmt, flush=True)
+    fmt = "animated"
+
+# ---- the seven kinds of animated reel: 11 educational + 3 about the academy every week (about 80 / 20)
+KIND_MIDDAY = {0: "problem", 1: "myth", 2: "science", 3: "question", 4: "problem", 5: "howto", 6: "question"}
+KIND_EVENING = {0: "method", 1: "howto", 2: "problem", 3: "results", 4: "myth", 5: "science",
+                6: "method" if us_today.isocalendar()[1] % 2 else "results"}
+ALL_KINDS = ("problem", "myth", "science", "howto", "question", "method", "results")
+kind = os.environ.get("KIND_OVERRIDE", "auto")
+if kind not in ALL_KINDS:
+    kind = "problem" if (os.environ.get("TOPIC_OVERRIDE") or "").strip() else (KIND_MIDDAY if slot == "story" else KIND_EVENING)[wd]
+print("format:", fmt, "| kind:", kind if fmt == "animated" else "-", flush=True)
 
 if not dry and os.environ.get("IG_TOKEN"):      # check the token BEFORE spending minutes and AI calls on a reel
     try:
@@ -144,7 +160,7 @@ if fmt in ("animated", "carousel", "chat", "kinetic", "challenge") and meta is N
                 meta = make_challenge.build(seed, out)
             elif f_ == "animated":
                 import make_animated
-                meta = make_animated.build(seed, out, use_ai=use_ai)
+                meta = make_animated.build(seed, out, kind=kind, use_ai=use_ai)
             else:
                 import make_textreel
                 meta = make_textreel.build(seed, out, style=f_, use_ai=use_ai)
@@ -173,6 +189,8 @@ if summary:  # visible on the run page in GitHub
     with open(summary, "a") as f:
         f.write(f"## {fmt} · {'✅ AI copy' if engine in ('broll', 'ai', 'lichess') else '⚠️ fallback content'} · engine `{engine}`\n\n"
                 + (f"- Topic: `{meta.get('topic')}` · music: `{meta.get('music')}`\n" if fmt != "voice" else "")
+                + (f"- Kind: **{meta.get('kind')}** ({meta.get('pillar')}) · cut for TikTok/YouTube/Facebook: "
+                   f"{'own ending (link on profile)' if meta.get('alt_video') else 'same video'}\n" if fmt == "animated" else "")
                 + (f"- Animated: {meta.get('duration')}s · scenes: {', '.join(meta.get('blocks') or [])} · research: "
                    f"`{meta.get('evidence')}` · narration: `{meta.get('voice_engine')}` · hooks tried: "
                    f"{' | '.join(meta.get('hook_options') or []) or '-'}\n" if fmt == "animated" else "")
@@ -198,8 +216,22 @@ if summary:  # visible on the run page in GitHub
                 + "".join(f"- Error: `{e}`\n" for e in errors))
 caption = open(out.replace(".mp4", ".txt")).read()
 print(caption)
+# Facebook, TikTok and YouTube have no "comment PLAN" DM bot: they get the cut and the caption that point to the profile link
+out_x = meta.get("alt_video") if meta.get("alt_video") and os.path.exists(meta["alt_video"]) else out
+caption_x = meta.get("caption_alt") or caption
 
 if dry:
+    if os.environ.get("ZERNIO_API_KEY"):            # a dry run also tells where TikTok / YouTube would be posted
+        try:
+            import publish_zernio
+            zmsg = publish_zernio.plan()[1]
+        except Exception as e:
+            zmsg = [f"Zernio: {str(e)[:200]}"]
+        print("\n".join(zmsg), flush=True)
+        if summary:
+            open(summary, "a").write("".join(f"- Zernio · {m}\n" for m in zmsg))
+    elif summary:
+        open(summary, "a").write("- TikTok / YouTube: sin configurar (falta el secreto `ZERNIO_API_KEY`)\n")
     print("DRY RUN: not publishing")
     sys.exit(0)
 
@@ -233,17 +265,24 @@ if os.environ.get("FB_REELS", "on") != "off":  # Facebook Reels on the academy P
     try:
         from publish_fb import publish_fb_reel
         from publish_ig import ig_safe
-        meta["facebook"] = publish_fb_reel(ig_safe(out), caption)
+        meta["facebook"] = publish_fb_reel(ig_safe(out_x), caption_x)
     except Exception as e:
         print("Facebook failed:", e); meta["facebook"] = f"error: {str(e)[:200]}"
 
-if os.environ.get("ZERNIO_API_KEY"):  # YouTube Shorts + TikTok via Zernio (never blocks Instagram)
+if os.environ.get("ZERNIO_API_KEY"):  # TikTok + YouTube Shorts via Zernio (never blocks Instagram)
     try:
         from publish_zernio import crosspost as zernio_post
         from publish_ig import ig_safe
-        meta["zernio"] = zernio_post(ig_safe(out), meta.get("hook") or meta.get("headline", ""), caption)
+        meta["zernio"] = zernio_post(ig_safe(out_x), meta.get("story") or meta.get("headline", ""), caption_x)
     except Exception as e:
-        print("Zernio failed:", e); meta["zernio"] = f"error: {e}"
+        print("Zernio failed:", e); meta["zernio"] = f"error: {str(e)[:300]}"
+else:
+    meta["zernio"] = "not configured"
+    print("TikTok / YouTube: not configured (add the ZERNIO_API_KEY secret, see LEEME.md)", flush=True)
+if summary:
+    with open(summary, "a") as f:
+        f.write(f"- Publicado: Instagram ✅ · Story `{meta.get('story_share')}` · Facebook `{meta.get('facebook')}` · "
+                f"TikTok/YouTube `{meta.get('zernio')}`\n")
 
 meta["voice"] = voice_used
 brake = guard.health()
@@ -254,7 +293,7 @@ meta["format"] = fmt
 log({k: meta.get(k) for k in ("engine", "format", "published_as", "topic", "puzzle", "music", "evidence", "voice_engine",
                               "duration", "first_comment", "hook_options", "shape", "footage", "pillar", "voice", "review_score", "arms", "story", "hook", "headline", "location",
                               "permalink", "media_id", "story_share", "facebook", "zernio", "blocks", "cta", "qc",
-                              "case", "remix_of", "director", "agent", "key",
+                              "case", "remix_of", "director", "agent", "key", "kind",
                               "anchor_key", "brand_check")})
 if brake:
     raise SystemExit(f"Published, then the automatic brake engaged: {brake}")
