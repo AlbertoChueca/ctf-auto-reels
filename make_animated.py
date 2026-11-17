@@ -152,8 +152,10 @@ KINDS = {
 6. WHAT THE PARENT GETS - clarity: they always know what their child is working on and why.
 7. LINE - one calm, quotable line about having a plan."""),
     "results": dict(academy=True, goal="Show real, verifiable results of our students without bragging, so a parent trusts the method.",
-                    structure="""1. HOOK - where TODAY'S REAL STUDENT started, told as a short story ("One of our students was stuck at..."). Refer to the child ONLY as "one of our students".
-2. WHAT WAS GOING ON - the pattern we see in many kids (lots of games, no plan...). No invented details about this child.
+                    structure="""1. HOOK - where TODAY'S REAL STUDENT started, stated plainly ("One of our students came to us with a rating of ..."). Refer to the
+   child ONLY as "one of our students". You know NOTHING else about this child: never invent habits, feelings, hours, family
+   or how they trained before.
+2. WHAT WE USUALLY SEE AT THAT LEVEL - a pattern in many kids, clearly about kids in general ("At that level, many kids...").
 3. WHAT CHANGED - one piece of how we train, shown (phases, coach/find, levels, group or report).
 4. THE RESULT - block "case" (its numbers are filled in for you); say them exactly as in the student's facts.
 5. THE BIGGER PICTURE - one or two "stat" scenes with APPROVED CLAIMS (each in its own scene).
@@ -317,6 +319,8 @@ DRAFT:
 _NUMWORD = r"\b(?:one|two|three|four|five|six|seven|eight|nine|ten|twenty|thirty|forty|fifty|hundreds?|thousands?)\b"
 _FACT_NUMS = (r"\b(?:2|two)\s*(?:-|–|to)\s*(?:6|six)\b|\b(?:90|ninety)[- ]minutes?\b|\b(?:6|six)[- ]levels?\b|"
               r"\b(?:3|three)\s+(?:parts|steps|phases|months)\b|\bstep\s+(?:1|2|3|one|two|three)\b")
+_INVENTED = re.compile(r"\b(stuck|grind\w*|plateau\w*|frustrat\w+|cried|crying|tears|hours?|daily|quit\w*|gave up|struggl\w+|"
+                       r"every (?:single )?(?:day|evening|night|week)|nonstop|non-stop|shy|anxious|nervous|bored|parents?|mom|dad)\b", re.I)
 _PERSON = re.compile(r"\b(chueca|alberto|vidyarthi|square\s*(65|sixty))\b", re.I)
 
 
@@ -398,6 +402,12 @@ def validate(sc, kind="problem", ctx=None):
         raise ValueError("a question reel must open with block 'ask' and the parent's question")
     if kind == "results" and case and not any(s["block"] == "case" for s in out):
         raise ValueError("a results reel must include one scene with block 'case'")
+    if kind == "results" and case:                      # nothing invented about the real child: only what the academy published
+        about = " ".join([out[0]["say"]] + [s["say"] for s in out if s["block"] == "case"]).lower()
+        made_up = [m.group(0) for m in _INVENTED.finditer(about) if m.group(0) not in case["blob"].lower()]
+        if made_up:
+            raise ValueError(f"'{made_up[0]}' is an invented detail about the real student; state only the published facts "
+                             "(start rating, end rating, time, titles) and speak about 'many kids' for everything else")
     if kind == "results" and not any(s["block"] == "stat" for s in out) and claims:
         raise ValueError("a results reel must include at least one 'stat' scene with an approved claim")
     blob = " ".join(s["say"] for s in out)
