@@ -118,8 +118,9 @@ KINDS = {
 6. DO THIS INSTEAD - one concrete change.
 7. REFRAME - one quotable line."""),
     "science": dict(academy=False, goal="Tell ONE real study so simply that a parent retells it at dinner, then turn it into something to do with their chess kid.",
-                    structure="""1. HOOK - the surprising result in the parent's world, second person (no study details yet).
-2. THE STUDY - what the researchers did and found, in plain words (this scene uses block "bars"; REQUIRED).
+                    structure="""1. HOOK - the study's surprising result restated in the parent's world, second person (no study details yet). Claim ONLY
+   what the study found: no stronger, no wider.
+2. THE STUDY - what the researchers did and found, in plain words; say "found", never "proved" (this scene uses block "bars"; REQUIRED).
 3. WHAT IT MEANS IN CHESS - show it happening to a child (figures).
 4. THE MISTAKE IT EXPLAINS - what loving parents do that goes against it.
 5. WHAT TO DO - one concrete action for this week.
@@ -426,6 +427,8 @@ def validate(sc, kind="problem", ctx=None):
             texts.append(s["label"]); continue             # their on-screen numbers come from the approved data
         texts += [s["label"]] + [str(v) for k_, v in s["params"].items() if k_ != "source_text" and isinstance(v, str)] + \
                  [str(x) for v in s["params"].values() if isinstance(v, list) for x in v]
+    if re.search(r"\b(proved|proves|scientifically proven|guarantee[sd]?)\b", " ".join(texts), re.I):
+        raise ValueError("no 'proved' and no guarantees: a study 'found' or 'suggests', training 'usually' helps")
     if _PERSON.search(" ".join(texts)):
         raise ValueError("never name a person or a book: say 'at Chess Talents Factory' or 'our coaches'")
     if eid:                                            # only the numbers that appear in the approved finding are allowed
@@ -503,6 +506,10 @@ def context_for(kind, seed):
             mid, q = min(METHOD_ANGLES, key=lambda a: (rec_used.get(a[0], -1), rng.random()))
             topic = {"id": mid, "q": q, "angle": ""}
         tb = f"THE PARENT'S FRUSTRATION THIS REEL ANSWERS: {topic['q']}"
+    elif kind == "science" and not custom:              # the study is the topic (no forced link to an unrelated situation)
+        topic = {"id": None, "q": "", "angle": ""}
+        tb = ("TOPIC: the study you choose from the research list below. Build the whole reel on what it found and what that "
+              "means for a child who plays chess. Do not connect it to engines, apps or anything the study did not look at.")
     else:
         if custom:
             topic = {"id": "custom", "q": custom, "angle": "Decide the honest, practical answer a top youth coach would give."}
