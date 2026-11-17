@@ -208,5 +208,17 @@
 "music": "synth-3",
 "cta": "share",
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "method",
+"topic": "m-online-doubt",
+"evergreen": null,
+"title": "Online Chess With A Plan",
+"music": "synth-3",
+"cta": "keyword",
+"evidence": null,
+"case": null,
+"date": "2026-11-17"
 }
 ]
