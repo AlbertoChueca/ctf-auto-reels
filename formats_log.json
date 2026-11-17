@@ -244,5 +244,17 @@
 "evidence": null,
 "case": "vishva-nanugonda",
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "science",
+"topic": "review-games",
+"evergreen": null,
+"title": "Reviewing Lost Chess Games",
+"music": "synth-4",
+"cta": "share",
+"evidence": "degroot1965",
+"case": null,
+"date": "2026-11-17"
 }
 ]
