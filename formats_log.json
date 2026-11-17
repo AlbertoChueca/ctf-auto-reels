@@ -292,5 +292,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "science",
+"topic": null,
+"evergreen": null,
+"title": "The Mixed Practice Secret",
+"music": "synth-4",
+"cta": "share",
+"evidence": "kornell_bjork2008",
+"case": null,
+"date": "2026-11-17"
 }
 ]
