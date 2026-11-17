@@ -55,8 +55,8 @@ CATALOG = {
     "tiles": ("a grid of n things with k of them marked one by one (n 4-30). icon: game, kid, day or hour",
               {"n": "int", "k": "int", "icon": ["game", "kid", "day", "hour"], "tone": ["bad", "good"]}),
     "line": ("a rating line over the months (no numbers)", {"mode": ["flat", "drop", "rise", "flat_then_rise", "up_down"]}),
-    "bars": ("two bars compared; b is the highlighted one. a and b are heights 0-1. 'big' = 2-4 word takeaway",
-             {"a_label": "text", "b_label": "text", "a": "float", "b": "float", "tone": ["good", "bad"], "big": "text"}),
+    "bars": ("the chart of the ONE study you cite (only allowed in the scene that tells that study; its labels and "
+             "values are filled in for you)", {}),
     "week": ("a training week as 7 bars. binge = everything on Sunday, daily = a little every day, compare = one turns into the other",
              {"mode": ["binge", "daily", "compare"]}),
     "versus": ("two columns: what doesn't work (crossed) vs what works (ticked). max 3 items each, max 4 words each",
@@ -415,6 +415,9 @@ def validate(sc, kind="problem", ctx=None):
     if not eid and re.search(r"\b(stud(y|ies)|research(ers)?|experiments?|scientists?|psychologists?|science (shows|says)|"
                              r"experts? (say|agree)|proven|data shows?|statistic(s|ally)?|percent)\b|%", blob, re.I):
         raise ValueError("it mentions research or statistics without an approved 'evidence' id; remove it or cite one from the list")
+    if sum(s["block"] == "bars" for s in out) > (1 if eid else 0):
+        raise ValueError("block 'bars' is only for the one scene that tells the cited study (a chart implies measured data); "
+                         "use versus, week, line or tiles for your own comparisons")
     if eid:                                            # the cited study gets its real chart and source line
         tgt = next((s for s in out if s["block"] == "bars"), None)
         if tgt is None:
@@ -429,6 +432,7 @@ def validate(sc, kind="problem", ctx=None):
                  [str(x) for v in s["params"].values() if isinstance(v, list) for x in v]
     if re.search(r"\b(proved|proves|scientifically proven|guarantee[sd]?)\b", " ".join(texts), re.I):
         raise ValueError("no 'proved' and no guarantees: a study 'found' or 'suggests', training 'usually' helps")
+    sc_texts = list(texts)
     if _PERSON.search(" ".join(texts)):
         raise ValueError("never name a person or a book: say 'at Chess Talents Factory' or 'our coaches'")
     if eid:                                            # only the numbers that appear in the approved finding are allowed
@@ -437,6 +441,14 @@ def validate(sc, kind="problem", ctx=None):
         def allow(m):
             return " " if m.group(0).lower().rstrip("+") in ok_nums else m.group(0)
         texts = [re.sub(r"\d[\d,]*\+?|" + _NUMWORD, allow, t, flags=re.I) for t in texts]
+    if not aca:                                        # no statistics of our own in an educational reel
+        src = (ev[eid]["finding"] + " " + json.dumps(ev[eid]["viz"])).lower() if eid else ""
+        for m in guard.CLAIM_RE.finditer(" ".join(sc_texts)):
+            n, unit = guard.to_int(m.group(1)), m.group(2).lower()
+            if m.group(1).lower() in src or (n is not None and str(n) in src):
+                continue
+            if "%" in m.group(0) or unit.startswith(("percent", "point", "elo", "rating")) or (n or 99) > 12:
+                raise ValueError(f"'{m.group(0)}' is a statistic that is not in the cited study; say it without the number")
     if aca:
         if re.search(r"world champions\b", " ".join(texts), re.I):
             raise ValueError("there is ONE world champion among our students (see the approved claims), not several")
