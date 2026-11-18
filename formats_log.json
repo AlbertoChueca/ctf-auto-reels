@@ -328,5 +328,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-17"
+},
+{
+"format": "animated",
+"kind": "science",
+"topic": null,
+"evergreen": null,
+"title": "The Tournament Myth",
+"music": "synth-0",
+"cta": "share",
+"evidence": "charness2005",
+"case": null,
+"date": "2026-11-18"
 }
 ]

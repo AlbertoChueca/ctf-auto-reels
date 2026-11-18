@@ -7,6 +7,8 @@
 "level": null,
 "mode": null,
 "engine": "evergreen",
+"format": null,
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DeZYcVFDX0i/",
 "arms": {
@@ -17,8 +19,13 @@
 "pillar": "pain",
 "cta": "comment",
 "agent": null,
+"evidence": null,
 "headline": "Hours of blitz, no progress?",
-"media_id": "18197508442388239"
+"media_id": "18197508442388239",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18130723951752948": {
 "date": "2026-10-12",
@@ -28,6 +35,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 8.4,
 "permalink": "https://www.instagram.com/reel/DeZfa5siEHy/",
 "arms": {
@@ -38,8 +47,13 @@
 "pillar": "pain",
 "cta": "vsl",
 "agent": "storyteller",
+"evidence": null,
 "headline": "Touching The Piece Too Fast",
-"media_id": "18130723951752948"
+"media_id": "18130723951752948",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18435934354183480": {
 "date": "2026-10-12",
@@ -49,6 +63,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 8.9,
 "permalink": "https://www.instagram.com/reel/DeaW3B2jxUD/",
 "arms": {
@@ -59,8 +75,13 @@
 "pillar": "pain",
 "cta": "vsl",
 "agent": "parent_whisperer",
+"evidence": null,
 "headline": "The Silent Drive Home",
-"media_id": "18435934354183480"
+"media_id": "18435934354183480",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18170322232462613": {
 "date": "2026-10-13",
@@ -70,6 +91,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 8.4,
 "permalink": "https://www.instagram.com/reel/DebSXDQCfb-/",
 "arms": {
@@ -80,8 +103,13 @@
 "pillar": "pain",
 "cta": "call",
 "agent": "mythbuster",
+"evidence": null,
 "headline": "Tournament Anxiety Isn't Weakness",
-"media_id": "18170322232462613"
+"media_id": "18170322232462613",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "17968908432172586": {
 "date": "2026-10-13",
@@ -91,6 +119,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 7.4,
 "permalink": "https://www.instagram.com/reel/DecvzDIE7gZ/",
 "arms": {
@@ -101,8 +131,13 @@
 "pillar": "success",
 "cta": "keyword",
 "agent": "storyteller",
+"evidence": null,
 "headline": "The Draw Trap Stalling Ratings",
-"media_id": "17968908432172586"
+"media_id": "17968908432172586",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": "pranav-sathish"
 },
 "17956716660253380": {
 "date": "2026-10-14",
@@ -112,6 +147,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 8.0,
 "permalink": "https://www.instagram.com/reel/DedsZLRCim3/",
 "arms": {
@@ -122,8 +159,13 @@
 "pillar": "key",
 "cta": "call",
 "agent": "analyst",
+"evidence": null,
 "headline": "Stop Analyzing Every Engine Mistake",
-"media_id": "17956716660253380"
+"media_id": "17956716660253380",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18217466956356575": {
 "date": "2026-10-14",
@@ -133,6 +175,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 6.2,
 "permalink": "https://www.instagram.com/reel/DefNc4wja18/",
 "arms": {
@@ -143,8 +187,13 @@
 "pillar": "faq",
 "cta": "call",
 "agent": "trend_scout",
+"evidence": null,
 "headline": "Openings or Tactics First?",
-"media_id": "18217466956356575"
+"media_id": "18217466956356575",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "17905820316578930": {
 "date": "2026-10-15",
@@ -154,6 +203,8 @@
 "level": null,
 "mode": null,
 "engine": "explainer",
+"format": null,
+"topic": null,
 "review_score": 9.0,
 "permalink": "https://www.instagram.com/reel/DegPkjmCmdE/",
 "arms": {
@@ -164,8 +215,13 @@
 "pillar": "success",
 "cta": "call",
 "agent": "parent_whisperer",
+"evidence": null,
 "headline": "Silence in the Car Ride",
-"media_id": "17905820316578930"
+"media_id": "17905820316578930",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": "vyom-vidyarthi"
 },
 "18109592909210921": {
 "date": "2026-10-15",
@@ -175,6 +231,8 @@
 "level": null,
 "mode": null,
 "engine": "evergreen",
+"format": "motion",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DehDVNeAGMR/",
 "arms": {
@@ -186,8 +244,13 @@
 "pillar": "faq",
 "cta": "comment",
 "agent": null,
+"evidence": null,
 "headline": "Groups or private?",
-"media_id": "18109592909210921"
+"media_id": "18109592909210921",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "17890903572455937": {
 "date": "2026-10-15",
@@ -197,6 +260,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 6.8,
 "permalink": "https://www.instagram.com/reel/DehxGMhEUXj/",
 "arms": {
@@ -208,8 +273,13 @@
 "pillar": "pain",
 "cta": "call",
 "agent": "mythbuster",
+"evidence": null,
 "headline": "Tournament Tears Are Not Failure",
-"media_id": "17890903572455937"
+"media_id": "17890903572455937",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "17993281188048040": {
 "date": "2026-10-15",
@@ -219,6 +289,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 8.5,
 "permalink": "https://www.instagram.com/reel/Deh6QnijXOj/",
 "arms": {
@@ -230,8 +302,13 @@
 "pillar": "pain",
 "cta": "call",
 "agent": "mythbuster",
+"evidence": null,
 "headline": "Why Private Lessons Stall",
-"media_id": "17993281188048040"
+"media_id": "17993281188048040",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18121246058471382": {
 "date": "2026-10-15",
@@ -241,6 +318,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 8.7,
 "permalink": "https://www.instagram.com/reel/Deh76jJktLy/",
 "arms": {
@@ -252,8 +331,13 @@
 "pillar": "pain",
 "cta": "call",
 "agent": "trend_scout",
+"evidence": null,
 "headline": "POV: 3 signs solitary training fails",
-"media_id": "18121246058471382"
+"media_id": "18121246058471382",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "17976650814132144": {
 "date": "2026-10-16",
@@ -263,6 +347,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 8.3,
 "permalink": "https://www.instagram.com/reel/Deiz1HWFXWe/",
 "arms": {
@@ -274,8 +360,13 @@
 "pillar": "key",
 "cta": "call",
 "agent": "parent_whisperer",
+"evidence": null,
 "headline": "Endless Fast Games Build Speed?",
-"media_id": "17976650814132144"
+"media_id": "17976650814132144",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18576459424073289": {
 "date": "2026-10-16",
@@ -285,6 +376,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 7.8,
 "permalink": "https://www.instagram.com/reel/DekTKSODkk4/",
 "arms": {
@@ -296,8 +389,13 @@
 "pillar": "faq",
 "cta": "vsl",
 "agent": "analyst",
+"evidence": null,
 "headline": "From 1100 to 1800 in 13 months",
-"media_id": "18576459424073289"
+"media_id": "18576459424073289",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18159468139504147": {
 "date": "2026-10-17",
@@ -307,6 +405,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 7.5,
 "permalink": "https://www.instagram.com/reel/DelXcPNgcBp/",
 "arms": {
@@ -318,8 +418,13 @@
 "pillar": "pain",
 "cta": "comment",
 "agent": "storyteller",
+"evidence": null,
 "headline": "Freezing Under Time Pressure",
-"media_id": "18159468139504147"
+"media_id": "18159468139504147",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18119292178764101": {
 "date": "2026-10-17",
@@ -329,6 +434,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 8.8,
 "permalink": "https://www.instagram.com/reel/DemwCGOgnNO/",
 "arms": {
@@ -340,8 +447,13 @@
 "pillar": "success",
 "cta": "comment",
 "agent": "parent_whisperer",
+"evidence": null,
 "headline": "More Games Equal More Progress?",
-"media_id": "18119292178764101"
+"media_id": "18119292178764101",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": "omya-vidyarthi"
 },
 "18098577419652901": {
 "date": "2026-10-18",
@@ -351,6 +463,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 6.2,
 "permalink": "https://www.instagram.com/reel/Den9OULij5y/",
 "arms": {
@@ -362,8 +476,13 @@
 "pillar": "benefits",
 "cta": "comment",
 "agent": "trend_scout",
+"evidence": null,
 "headline": "What Strong Kids Do Differently",
-"media_id": "18098577419652901"
+"media_id": "18098577419652901",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18113426693164260": {
 "date": "2026-10-18",
@@ -373,6 +492,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "broll",
+"topic": null,
 "review_score": 8.7,
 "permalink": "https://www.instagram.com/reel/DepWLBbiWwK/",
 "arms": {
@@ -384,8 +505,13 @@
 "pillar": "rating",
 "cta": "call",
 "agent": "analyst",
+"evidence": null,
 "headline": "Why Does My Child Move Slowly?",
-"media_id": "18113426693164260"
+"media_id": "18113426693164260",
+"published_as": null,
+"duration": null,
+"kind": null,
+"case": null
 },
 "18118476937951545": {
 "date": "2026-10-19",
@@ -395,14 +521,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "youtube-enough",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/DesLdiQiqEF/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "5 reasons videos will not fix your child's rating",
-"media_id": "18118476937951545"
+"media_id": "18118476937951545",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18097366331135473": {
 "date": "2026-10-20",
@@ -412,14 +547,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "chat",
+"topic": "cheap-coach",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/Deuo0RZAgE8/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "A parent asked us",
-"media_id": "18097366331135473"
+"media_id": "18097366331135473",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 2,
+"like_count": 1
 },
 "17995733163019460": {
 "date": "2026-10-21",
@@ -429,14 +573,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DexOT_0jKZR/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Can your child find the winning move?",
-"media_id": "17995733163019460"
+"media_id": "17995733163019460",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 2
 },
 "18018062309958716": {
 "date": "2026-10-22",
@@ -446,6 +599,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "voice",
+"topic": null,
 "review_score": 9.2,
 "permalink": "https://www.instagram.com/reel/Dezy9QXj2GA/",
 "arms": {
@@ -457,8 +612,15 @@
 "pillar": "remix",
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "The late-game energy crash",
-"media_id": "18018062309958716"
+"media_id": "18018062309958716",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 2
 },
 "18149835712479179": {
 "date": "2026-10-23",
@@ -468,14 +630,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "burnout",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/De2XRxGgRrb/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "5 early signs your child is burning out",
-"media_id": "18149835712479179"
+"media_id": "18149835712479179",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18192082975410571": {
 "date": "2026-10-24",
@@ -485,14 +656,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "kinetic",
+"topic": "wants-quit",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/De4zkk2x6rR/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "POV: Your kid says 'I quit' on the drive home.",
-"media_id": "18192082975410571"
+"media_id": "18192082975410571",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 2,
+"like_count": 1
 },
 "17929461900182669": {
 "date": "2026-10-25",
@@ -502,14 +682,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/De7ZR3ZvYrV/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Show this to your child. Can they find it?",
-"media_id": "17929461900182669"
+"media_id": "17929461900182669",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 2,
+"like_count": 0
 },
 "17963446926235244": {
 "date": "2026-10-26",
@@ -519,14 +708,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "schedule-busy",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/De-Odz8j0Cm/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "5 ways to fit serious chess into your schedule",
-"media_id": "17963446926235244"
+"media_id": "17963446926235244",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 2,
+"like_count": 3
 },
 "17976887181154019": {
 "date": "2026-10-27",
@@ -536,14 +734,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "chat",
+"topic": "chess-friends",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfAum-ivl-z/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Between the rounds",
-"media_id": "17976887181154019"
+"media_id": "17976887181154019",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18121179217948752": {
 "date": "2026-10-28",
@@ -553,14 +760,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfDV1SoTZpL/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Show this to your child. Can they find it?",
-"media_id": "18121179217948752"
+"media_id": "18121179217948752",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18125427589926316": {
 "date": "2026-10-29",
@@ -570,6 +786,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "voice",
+"topic": null,
 "review_score": 8.3,
 "permalink": "https://www.instagram.com/reel/DfF73dKgDtZ/",
 "arms": {
@@ -581,8 +799,15 @@
 "pillar": "remix",
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Does real progress take years?",
-"media_id": "18125427589926316"
+"media_id": "18125427589926316",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "17924677407442690": {
 "date": "2026-10-30",
@@ -592,14 +817,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "what-to-expect-month",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/DfIeAFKCvO6/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "What really happens in month one with a coach",
-"media_id": "17924677407442690"
+"media_id": "17924677407442690",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 2,
+"like_count": 1
 },
 "18190881043365134": {
 "date": "2026-10-31",
@@ -609,14 +843,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "kinetic",
+"topic": "apps-enough",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfK86wtPYy2/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Nobody tells chess parents this about daily chess apps:",
-"media_id": "18190881043365134"
+"media_id": "18190881043365134",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 2,
+"like_count": 2
 },
 "18187932340412583": {
 "date": "2026-11-01",
@@ -626,14 +869,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfNlm2SqOd7/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Can your child find the winning move?",
-"media_id": "18187932340412583"
+"media_id": "18187932340412583",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18250373638311043": {
 "date": "2026-11-02",
@@ -643,14 +895,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "between-rounds",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/DfQfQuaCa2x/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "5 things to do between tournament rounds",
-"media_id": "18250373638311043"
+"media_id": "18250373638311043",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 1
 },
 "18208771120335732": {
 "date": "2026-11-03",
@@ -660,14 +921,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "chat",
+"topic": "draws",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfS3wemNapf/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Tournament text",
-"media_id": "18208771120335732"
+"media_id": "18208771120335732",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18101323592375149": {
 "date": "2026-11-04",
@@ -677,14 +947,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfVdYbZyJhl/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Can your child find the winning move?",
-"media_id": "18101323592375149"
+"media_id": "18101323592375149",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "17868427926676588": {
 "date": "2026-11-05",
@@ -694,6 +973,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "voice",
+"topic": null,
 "review_score": 8.6,
 "permalink": "https://www.instagram.com/reel/DfYDiAuCq3Y/",
 "arms": {
@@ -705,8 +986,15 @@
 "pillar": "remix",
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Hours memorizing chess openings",
-"media_id": "17868427926676588"
+"media_id": "17868427926676588",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 3
 },
 "17956057566270284": {
 "date": "2026-11-06",
@@ -716,14 +1004,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "cheating-online",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/Dfak0YZgN0u/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "5 rules to make online chess safe for kids",
-"media_id": "17956057566270284"
+"media_id": "17956057566270284",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18650226469050812": {
 "date": "2026-11-07",
@@ -733,14 +1030,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "kinetic",
+"topic": "signs-good-coach",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/Dfc_-jnygnW/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "A strong chess player isn't always a great coach.",
-"media_id": "18650226469050812"
+"media_id": "18650226469050812",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 2
 },
 "18036820868891322": {
 "date": "2026-11-08",
@@ -750,14 +1056,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DffmjBqTbJg/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Only one move wins here. Can your child see it?",
-"media_id": "18036820868891322"
+"media_id": "18036820868891322",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "18026288825940873": {
 "date": "2026-11-10",
@@ -767,14 +1082,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "carousel",
+"topic": "talent",
 "review_score": null,
 "permalink": "https://www.instagram.com/p/DfilOvTDLYb/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "5 signs your child has real chess talent",
-"media_id": "18026288825940873"
+"media_id": "18026288825940873",
+"published_as": "carousel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 },
 "17922388170244545": {
 "date": "2026-11-10",
@@ -784,14 +1108,23 @@
 "level": null,
 "mode": null,
 "engine": "ai",
+"format": "chat",
+"topic": "home-practice",
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/Dfk5yYYuhQz/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Practice at home",
-"media_id": "17922388170244545"
+"media_id": "17922388170244545",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 1
 },
 "18111209459569690": {
 "date": "2026-11-11",
@@ -801,14 +1134,23 @@
 "level": null,
 "mode": null,
 "engine": "lichess",
+"format": "challenge",
+"topic": null,
 "review_score": null,
 "permalink": "https://www.instagram.com/reel/DfnkaVPge0T/",
 "arms": null,
 "pillar": null,
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Can your child find the winning move?",
-"media_id": "18111209459569690"
+"media_id": "18111209459569690",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 2
 },
 "18402368410206248": {
 "date": "2026-11-12",
@@ -818,6 +1160,8 @@
 "level": null,
 "mode": null,
 "engine": "broll",
+"format": "voice",
+"topic": null,
 "review_score": 8.0,
 "permalink": "https://www.instagram.com/reel/DfqHAxLhPtt/",
 "arms": {
@@ -829,7 +1173,14 @@
 "pillar": "remix",
 "cta": "keyword",
 "agent": null,
+"evidence": null,
 "headline": "Four hours daily. Zero progress.",
-"media_id": "18402368410206248"
+"media_id": "18402368410206248",
+"published_as": "reel",
+"duration": null,
+"kind": null,
+"case": null,
+"comments_count": 0,
+"like_count": 0
 }
 }
