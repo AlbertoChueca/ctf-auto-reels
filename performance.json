@@ -1182,5 +1182,31 @@
 "case": null,
 "comments_count": 0,
 "like_count": 0
+},
+"18159151846469684": {
+"date": "2026-11-18",
+"slot": "story",
+"story": "The Tournament Myth",
+"hook": "More weekend tournaments won't raise your child's rating. They might actually stall it.",
+"level": null,
+"mode": null,
+"engine": "ai",
+"format": "animated",
+"topic": null,
+"review_score": null,
+"permalink": "https://www.instagram.com/reel/Df5pNFEp-tg/",
+"arms": null,
+"pillar": "education",
+"cta": "share",
+"agent": null,
+"evidence": "charness2005",
+"headline": "Tournament Trap",
+"media_id": "18159151846469684",
+"published_as": "reel",
+"duration": 32.6,
+"kind": "science",
+"case": null,
+"comments_count": 1,
+"like_count": 2
 }
 }

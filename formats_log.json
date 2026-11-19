@@ -340,5 +340,17 @@
 "evidence": "charness2005",
 "case": null,
 "date": "2026-11-18"
+},
+{
+"format": "animated",
+"kind": "results",
+"topic": "results",
+"evergreen": null,
+"title": "From 1100 to National Master",
+"music": "synth-3",
+"cta": "keyword",
+"evidence": null,
+"case": "pranav-sathish",
+"date": "2026-11-19"
 }
 ]
