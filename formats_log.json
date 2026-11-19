@@ -352,5 +352,17 @@
 "evidence": null,
 "case": "pranav-sathish",
 "date": "2026-11-19"
+},
+{
+"format": "animated",
+"kind": "question",
+"topic": "compare-kids",
+"evergreen": null,
+"title": "Why Other Kids Improve Faster",
+"music": "synth-4",
+"cta": "keyword",
+"evidence": null,
+"case": null,
+"date": "2026-11-19"
 }
 ]
