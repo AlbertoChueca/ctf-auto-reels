@@ -376,5 +376,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-20"
+},
+{
+"format": "animated",
+"kind": "problem",
+"topic": "goal-setting",
+"evergreen": null,
+"title": "Setting Chess Goals That Work",
+"music": "synth-2",
+"cta": "share",
+"evidence": null,
+"case": null,
+"date": "2026-11-20"
 }
 ]
