@@ -364,5 +364,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-19"
+},
+{
+"format": "animated",
+"kind": "myth",
+"topic": "lesson-boring",
+"evergreen": null,
+"title": "When Chess Feels Boring",
+"music": "synth-2",
+"cta": "share",
+"evidence": null,
+"case": null,
+"date": "2026-11-20"
 }
 ]
