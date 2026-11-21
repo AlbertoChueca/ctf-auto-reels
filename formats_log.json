@@ -388,5 +388,17 @@
 "evidence": null,
 "case": null,
 "date": "2026-11-20"
+},
+{
+"format": "animated",
+"kind": "science",
+"topic": null,
+"evergreen": null,
+"title": "Practice Beats IQ",
+"music": "synth-1",
+"cta": "keyword",
+"evidence": "bilalic2007",
+"case": null,
+"date": "2026-11-21"
 }
 ]
